@@ -1,0 +1,2691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Grammar Time Machine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   GRAMMAR TIME MACHINE — design tokens & global styles
+   ============================================================ */
+:root {
+  --display: 'Fredoka', system-ui, sans-serif;
+  --body: 'Nunito', system-ui, sans-serif;
+
+  /* Neutrals */
+  --ink: #1F1A14;
+  --ink-soft: #5C5147;
+  --ink-faint: #A89C89;
+  --line: rgba(31, 26, 20, 0.10);
+  --line-strong: rgba(31, 26, 20, 0.22);
+  --paper: #FFFFFF;
+  --paper-dim: rgba(255, 255, 255, 0.82);
+
+  /* Tense color families */
+  --past-bg: #F4E0C7;
+  --past-50: #FBEFD8;
+  --past-200: #F2C885;
+  --past-500: #C77A1F;
+  --past-700: #7E430A;
+
+  --present-bg: #C9F0DC;
+  --present-50: #DEF6E8;
+  --present-200: #7DD8AA;
+  --present-500: #15A35F;
+  --present-700: #0A5C36;
+
+  --future-bg: #DDD3FA;
+  --future-50: #E8E1FA;
+  --future-200: #B5A7F0;
+  --future-500: #6B4EE0;
+  --future-700: #3B2A89;
+
+  /* Form colors */
+  --pos-50: #DEF6E8;  --pos-500: #15A35F; --pos-700: #0A5C36;
+  --neg-50: #FFE0E0;  --neg-500: #D14242; --neg-700: #7C1F1F;
+  --que-50: #DCEAFB;  --que-500: #2D70CC; --que-700: #14406F;
+
+  --gold: #F5B71B;
+  --gold-soft: #FCE8A1;
+
+  --shadow-sm: 0 2px 0 rgba(31, 26, 20, 0.08);
+  --shadow-md: 0 4px 0 rgba(31, 26, 20, 0.12);
+  --shadow-lg: 0 6px 0 rgba(31, 26, 20, 0.18);
+
+  --r-sm: 10px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--body);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #FFF6E1;
+}
+button { font-family: inherit; cursor: pointer; }
+h1, h2, h3, h4 {
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+/* ============================================================
+   LIVING BACKGROUND — shifts based on car position
+   ============================================================ */
+.sky {
+  position: fixed; inset: 0; z-index: -2;
+  pointer-events: none;
+  background: linear-gradient(180deg, #FFE9C4 0%, #FFF6E1 60%, #FFE3B3 100%);
+  transition: background 1s ease;
+}
+.sky.bucket-past {
+  background: linear-gradient(180deg, #F2D6A4 0%, #FBEAC9 50%, #E8B670 100%);
+}
+.sky.bucket-present {
+  background: linear-gradient(180deg, #BDE5FF 0%, #E5F8E8 60%, #C1F0CE 100%);
+}
+.sky.bucket-future {
+  background: linear-gradient(180deg, #6E48D6 0%, #B5A0F5 40%, #FFB1D6 100%);
+}
+
+.scenery {
+  position: fixed; bottom: 0; left: 0; right: 0; height: 200px;
+  z-index: -1; pointer-events: none;
+  opacity: 0.5;
+}
+
+/* ============================================================
+   TOPBAR
+   ============================================================ */
+.app { max-width: 1180px; margin: 0 auto; padding: 18px 18px 60px; }
+
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 18px;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-mark {
+  width: 46px; height: 46px; border-radius: 50%;
+  background: var(--ink); display: grid; place-items: center;
+  box-shadow: var(--shadow-md);
+}
+.brand-mark svg { width: 26px; height: 26px; color: var(--gold); }
+.brand-name { font-family: var(--display); font-size: 22px; font-weight: 600; line-height: 1; }
+.brand-tag { font-size: 12px; color: var(--ink-soft); font-weight: 700; letter-spacing: 0.02em; }
+
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.icon-btn {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--paper); border: 2px solid var(--line-strong);
+  display: grid; place-items: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.icon-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.icon-btn:active { transform: translateY(1px); box-shadow: none; }
+.icon-btn svg { width: 18px; height: 18px; color: var(--ink); }
+.icon-btn.muted svg { opacity: 0.35; }
+
+.star-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--gold-soft); color: var(--past-700);
+  padding: 9px 14px; border-radius: 999px;
+  font-weight: 800; font-size: 14px; box-shadow: var(--shadow-sm);
+  border: 2px solid var(--gold);
+}
+.star-pill svg { width: 16px; height: 16px; color: var(--gold); }
+
+.back-btn {
+  background: var(--paper); border: 2px solid var(--line-strong);
+  border-radius: 999px; padding: 8px 16px;
+  font-weight: 800; font-size: 14px; color: var(--ink);
+  box-shadow: var(--shadow-sm); transition: transform 0.1s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.back-btn:hover { transform: translateY(-1px); }
+.back-btn:active { transform: translateY(1px); box-shadow: none; }
+
+/* ============================================================
+   VIEWS
+   ============================================================ */
+.view { display: none; }
+.view.active { display: block; animation: fadeIn 0.35s cubic-bezier(.2,.8,.2,1); }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   HOME — hero, timeline, mascot panel
+   ============================================================ */
+.hero { text-align: center; margin-bottom: 14px; }
+.hero h1 {
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.05; margin-bottom: 6px;
+}
+.hero h1 .accent {
+  background: linear-gradient(180deg, transparent 64%, var(--gold-soft) 64%);
+  padding: 0 4px;
+}
+.hero p {
+  font-size: 15px; color: var(--ink-soft);
+  max-width: 580px; margin: 0 auto; line-height: 1.5;
+  font-weight: 600;
+}
+
+/* ----- TIMELINE STAGE ----- */
+.stage {
+  background: var(--paper-dim);
+  border: 2px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 18px 16px 20px;
+  box-shadow: var(--shadow-md);
+  margin: 18px 0 14px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Decorative landscape behind timeline */
+.stage-landscape {
+  position: absolute; left: 0; right: 0; top: 18px; height: 110px;
+  pointer-events: none; overflow: hidden;
+  border-radius: var(--r-lg);
+}
+.stage-landscape svg { width: 100%; height: 100%; display: block; }
+
+.timeline-wrap {
+  position: relative;
+  height: 230px;
+  width: 100%;
+  user-select: none;
+}
+
+.tl-track {
+  position: absolute; left: 30px; right: 30px; bottom: 56px;
+  height: 8px;
+  background: var(--ink);
+  border-radius: 4px;
+  opacity: 0.8;
+}
+.tl-track::before, .tl-track::after {
+  content: ''; position: absolute;
+  width: 0; height: 0; top: -7px;
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+}
+.tl-track::before {
+  left: -14px;
+  border-right: 14px solid var(--ink);
+}
+.tl-track::after {
+  right: -14px;
+  border-left: 14px solid var(--ink);
+}
+
+/* Road dashes */
+.tl-road-dash {
+  position: absolute; left: 30px; right: 30px; bottom: 60px;
+  height: 0; pointer-events: none;
+  border-top: 2px dashed rgba(255, 230, 180, 0.55);
+}
+
+/* Stops */
+.tl-stops {
+  position: absolute; left: 30px; right: 30px; bottom: 0; top: 0;
+}
+.tl-stop {
+  position: absolute; bottom: 30px;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  background: none; border: none; color: inherit; padding: 0;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.tl-stop:hover:not(.locked) { transform: translateX(-50%) translateY(-2px); }
+.tl-stop.locked { cursor: not-allowed; opacity: 0.55; }
+
+.tl-stop-dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--paper); border: 3px solid var(--ink);
+  display: grid; place-items: center;
+  box-shadow: var(--shadow-sm);
+  position: relative; z-index: 2;
+}
+.tl-stop-dot svg { width: 12px; height: 12px; }
+.tl-stop.bucket-past .tl-stop-dot { border-color: var(--past-500); background: var(--past-50); }
+.tl-stop.bucket-present .tl-stop-dot { border-color: var(--present-500); background: var(--present-50); }
+.tl-stop.bucket-future .tl-stop-dot { border-color: var(--future-500); background: var(--future-50); }
+.tl-stop.mastered .tl-stop-dot { background: var(--gold); border-color: var(--ink); }
+.tl-stop.mastered .tl-stop-dot::after {
+  content: ''; position: absolute; inset: -8px;
+  border-radius: 50%; border: 2px solid var(--gold);
+  opacity: 0.5;
+}
+.tl-stop.locked .tl-stop-dot { background: #E8DEC9; border-color: var(--ink-faint); }
+.tl-stop.active .tl-stop-dot {
+  transform: scale(1.25);
+  box-shadow: 0 0 0 6px rgba(245, 183, 27, 0.35), var(--shadow-md);
+}
+
+.tl-stop-level {
+  position: absolute; top: -14px;
+  font-size: 10px; font-weight: 800;
+  background: var(--ink); color: #fff;
+  padding: 1px 6px; border-radius: 999px;
+  font-family: var(--display);
+}
+.tl-stop-label {
+  font-size: 10px; font-weight: 800;
+  color: var(--ink); white-space: nowrap;
+  background: rgba(255,255,255,0.85);
+  padding: 2px 6px; border-radius: 6px;
+  margin-top: 4px;
+  max-width: 76px;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.tl-stop.locked .tl-stop-label { background: rgba(255,255,255,0.6); color: var(--ink-soft); }
+.tl-stop.active .tl-stop-label {
+  background: var(--ink); color: #fff;
+  font-size: 11px;
+}
+
+/* Era zone backgrounds */
+.tl-zone {
+  position: absolute; bottom: 30px; top: 24px;
+  border-radius: var(--r-md);
+  pointer-events: none;
+  z-index: 0;
+}
+.tl-zone.past { background: rgba(199, 122, 31, 0.08); }
+.tl-zone.present { background: rgba(21, 163, 95, 0.08); }
+.tl-zone.future { background: rgba(107, 78, 224, 0.08); }
+.tl-zone-label {
+  position: absolute; top: 6px; left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--display); font-size: 13px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  padding: 2px 10px; border-radius: 999px;
+}
+.tl-zone.past .tl-zone-label { color: var(--past-700); background: var(--past-50); }
+.tl-zone.present .tl-zone-label { color: var(--present-700); background: var(--present-50); }
+.tl-zone.future .tl-zone-label { color: var(--future-700); background: var(--future-50); }
+
+/* THE CAR */
+.car {
+  position: absolute; bottom: 47px;
+  width: 96px; height: 56px;
+  transform: translateX(-50%);
+  transition: left 0.9s cubic-bezier(.45,.05,.2,1.1);
+  z-index: 5;
+  pointer-events: none;
+}
+.car svg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  transition: opacity 0.6s ease;
+}
+.car .car-old { opacity: 0; }
+.car .car-mod { opacity: 1; }
+.car .car-fut { opacity: 0; }
+.car.is-past .car-old { opacity: 1; }
+.car.is-past .car-mod { opacity: 0; }
+.car.is-past .car-fut { opacity: 0; }
+.car.is-present .car-old { opacity: 0; }
+.car.is-present .car-mod { opacity: 1; }
+.car.is-present .car-fut { opacity: 0; }
+.car.is-future .car-old { opacity: 0; }
+.car.is-future .car-mod { opacity: 0; }
+.car.is-future .car-fut { opacity: 1; }
+
+/* Subtle bounce while driving */
+.car.driving { animation: drive 0.4s ease-in-out infinite alternate; }
+@keyframes drive {
+  from { transform: translateX(-50%) translateY(0); }
+  to { transform: translateX(-50%) translateY(-2px); }
+}
+/* Smoke / sparkle */
+.car-fx {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* ----- SELECTED TENSE PANEL ----- */
+.now-card {
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 16px 18px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-md);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 16px;
+  align-items: center;
+}
+.now-icon {
+  width: 56px; height: 56px; border-radius: 16px;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,0.08);
+}
+.now-icon svg { width: 28px; height: 28px; }
+.now-info { min-width: 0; }
+.now-eyebrow {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--ink-soft);
+}
+.now-title {
+  font-family: var(--display); font-size: 22px;
+  font-weight: 600; line-height: 1.1;
+  margin-top: 1px;
+}
+.now-tagline {
+  font-size: 13px; color: var(--ink-soft); margin-top: 4px;
+  font-weight: 600;
+}
+.now-cta {
+  background: var(--ink); color: #fff;
+  border: none; padding: 12px 18px;
+  border-radius: var(--r-md);
+  font-family: var(--display); font-weight: 600; font-size: 15px;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.1s, box-shadow 0.1s;
+  white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.now-cta:hover:not(:disabled) { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.now-cta:active:not(:disabled) { transform: translateY(2px); box-shadow: var(--shadow-sm); }
+.now-cta svg { width: 16px; height: 16px; }
+.now-cta:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ----- MASCOT PANEL ----- */
+.mascot-bar {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--gold-soft);
+  border: 2px solid var(--gold);
+  border-radius: var(--r-lg);
+  padding: 12px 16px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 18px;
+}
+.mascot {
+  width: 60px; height: 60px;
+  flex-shrink: 0;
+  position: relative;
+}
+.mascot svg { width: 100%; height: 100%; }
+.mascot-bubble {
+  font-size: 14px; font-weight: 700;
+  color: var(--past-700);
+  line-height: 1.45;
+}
+
+/* ----- LEVEL MAP ----- */
+.levels-section {
+  margin-top: 4px;
+}
+.section-label {
+  font-family: var(--display);
+  font-size: 14px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  margin: 16px 0 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-label::before {
+  content: ''; width: 28px; height: 3px;
+  background: var(--ink); border-radius: 2px;
+}
+
+.levels {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.level-card {
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  transition: opacity 0.3s, filter 0.3s;
+}
+.level-card.locked { opacity: 0.55; filter: saturate(0.4); }
+.level-card.locked::after {
+  content: ''; position: absolute; inset: 0;
+  border-radius: var(--r-lg);
+  pointer-events: none;
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(31,26,20,0.04) 8px, rgba(31,26,20,0.04) 16px);
+}
+.level-head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px;
+}
+.level-num {
+  width: 32px; height: 32px; border-radius: 10px;
+  background: var(--ink); color: #fff;
+  display: grid; place-items: center;
+  font-family: var(--display); font-weight: 600; font-size: 16px;
+}
+.level-title {
+  font-family: var(--display); font-size: 15px; font-weight: 600;
+}
+.level-progress {
+  margin-left: auto;
+  font-size: 12px; font-weight: 800;
+  background: var(--gold-soft); color: var(--past-700);
+  padding: 3px 10px; border-radius: 999px;
+}
+.level-tenses {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;
+}
+.lvl-pill {
+  background: rgba(255,255,255,0.5);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 8px 6px;
+  text-align: center;
+  font-size: 11px; font-weight: 700;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.lvl-pill:hover:not(.locked) { transform: translateY(-1px); }
+.lvl-pill.mastered {
+  background: var(--present-50);
+  border-color: var(--present-500);
+  color: var(--present-700);
+}
+.lvl-pill.active-now {
+  background: var(--gold-soft);
+  border-color: var(--gold);
+  color: var(--past-700);
+  box-shadow: 0 0 0 3px rgba(245,183,27,0.25);
+}
+.lvl-pill.locked { cursor: not-allowed; opacity: 0.6; }
+
+/* ============================================================
+   LESSON VIEW
+   ============================================================ */
+.lesson-head {
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 20px 22px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-md);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.lesson-icon-lg {
+  width: 72px; height: 72px; border-radius: 20px;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+  box-shadow: inset 0 -4px 0 rgba(0,0,0,0.08);
+}
+.lesson-icon-lg svg { width: 36px; height: 36px; }
+.lesson-eyebrow {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--ink-soft);
+}
+.lesson-title {
+  font-family: var(--display); font-size: 30px; font-weight: 600;
+  line-height: 1.05; margin-top: 2px;
+}
+.lesson-tagline {
+  font-size: 15px; color: var(--ink-soft);
+  margin-top: 6px; font-weight: 600; line-height: 1.5;
+}
+
+/* Mascot speech in lesson */
+.speech {
+  background: var(--paper);
+  border: 2px solid var(--gold);
+  border-radius: var(--r-lg);
+  padding: 14px 18px 14px 70px;
+  margin-bottom: 18px;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+  font-weight: 700; font-size: 14px;
+  color: var(--ink); line-height: 1.5;
+}
+.speech::before {
+  content: '';
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px;
+}
+.speech .mascot-inline {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px;
+}
+.speech .mascot-inline svg { width: 100%; height: 100%; }
+
+/* Structure card */
+.structure {
+  background: var(--ink);
+  color: #fff;
+  border-radius: var(--r-lg);
+  padding: 16px 20px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-md);
+}
+.structure-label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+  opacity: 0.65; font-weight: 800; margin-bottom: 8px;
+}
+.structure-rules { display: flex; flex-direction: column; gap: 6px; }
+.structure-rule {
+  font-family: var(--display); font-size: 18px; font-weight: 500;
+  display: flex; align-items: center; gap: 10px;
+}
+.structure-rule .who {
+  background: rgba(255,255,255,0.16); padding: 2px 10px;
+  border-radius: 6px; font-size: 13px; font-weight: 600;
+}
+
+/* Form cards (positive/negative/question) */
+.forms {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  margin-bottom: 18px;
+}
+.form-card {
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 14px 14px 16px;
+  box-shadow: var(--shadow-sm);
+  position: relative; overflow: hidden;
+}
+.form-card-icon {
+  width: 32px; height: 32px; border-radius: 10px;
+  display: grid; place-items: center;
+  margin-bottom: 8px;
+}
+.form-card-icon svg { width: 18px; height: 18px; }
+.form-card-label {
+  font-family: var(--display); font-size: 13px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.form-card-text {
+  font-size: 15px; font-weight: 700;
+  line-height: 1.4;
+}
+.form-card.positive { border-color: var(--pos-500); }
+.form-card.positive .form-card-icon { background: var(--pos-50); color: var(--pos-700); }
+.form-card.positive .form-card-label { color: var(--pos-700); }
+.form-card.negative { border-color: var(--neg-500); }
+.form-card.negative .form-card-icon { background: var(--neg-50); color: var(--neg-700); }
+.form-card.negative .form-card-label { color: var(--neg-700); }
+.form-card.question { border-color: var(--que-500); }
+.form-card.question .form-card-icon { background: var(--que-50); color: var(--que-700); }
+.form-card.question .form-card-label { color: var(--que-700); }
+
+/* Time expressions */
+.tw-section { margin-bottom: 18px; }
+.tw-title {
+  font-family: var(--display); font-size: 14px; font-weight: 700;
+  margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.tw-title::before {
+  content: ''; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--ink);
+}
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  background: var(--paper);
+  border: 2px solid var(--past-200);
+  color: var(--past-700);
+  padding: 6px 12px; border-radius: 999px;
+  font-size: 13px; font-weight: 800;
+  box-shadow: var(--shadow-sm);
+}
+.lesson.t-present .chip { border-color: var(--present-200); color: var(--present-700); }
+.lesson.t-future .chip { border-color: var(--future-200); color: var(--future-700); }
+
+/* Examples */
+.examples-list {
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 22px;
+}
+.example-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: 15px; line-height: 1.4;
+  font-weight: 700;
+}
+.example-row:last-child { border-bottom: none; }
+.example-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+  font-size: 20px;
+}
+.lesson.t-past .example-icon { background: var(--past-50); }
+.lesson.t-present .example-icon { background: var(--present-50); }
+.lesson.t-future .example-icon { background: var(--future-50); }
+
+.example-verb {
+  font-weight: 800;
+  padding: 1px 6px; border-radius: 4px;
+}
+.lesson.t-past .example-verb { background: var(--past-50); color: var(--past-700); }
+.lesson.t-present .example-verb { background: var(--present-50); color: var(--present-700); }
+.lesson.t-future .example-verb { background: var(--future-50); color: var(--future-700); }
+
+/* Practice picker */
+.practice-section {
+  margin-bottom: 22px;
+}
+.games-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+}
+.game-card {
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 16px;
+  text-align: left;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.15s, box-shadow 0.15s;
+  font-family: inherit;
+  color: inherit;
+  cursor: pointer;
+  position: relative;
+}
+.game-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.game-card-icon {
+  width: 44px; height: 44px; border-radius: 14px;
+  display: grid; place-items: center;
+  margin-bottom: 10px;
+}
+.game-card-icon svg { width: 22px; height: 22px; }
+.game-card-name {
+  font-family: var(--display); font-size: 16px; font-weight: 600;
+  margin-bottom: 2px;
+}
+.game-card-desc { font-size: 12px; color: var(--ink-soft); font-weight: 600; }
+.game-card-stars {
+  position: absolute; top: 10px; right: 10px;
+  display: flex; gap: 1px;
+}
+.game-card-stars svg { width: 12px; height: 12px; color: var(--ink-faint); }
+.game-card-stars svg.earned { color: var(--gold); }
+
+/* ============================================================
+   GAMES
+   ============================================================ */
+.game-stage {
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 22px;
+  box-shadow: var(--shadow-md);
+}
+.game-header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 16px; flex-wrap: wrap;
+}
+.game-title {
+  font-family: var(--display); font-size: 22px; font-weight: 600;
+}
+.game-progress {
+  display: flex; align-items: center; gap: 4px;
+}
+.game-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--line-strong);
+  transition: background 0.2s, transform 0.3s;
+}
+.game-dot.active { background: var(--gold); transform: scale(1.3); }
+.game-dot.correct { background: var(--present-500); }
+.game-dot.wrong { background: var(--neg-500); }
+
+.game-prompt {
+  font-size: 18px; font-weight: 700;
+  margin-bottom: 18px;
+  line-height: 1.4;
+  color: var(--ink);
+  background: var(--gold-soft);
+  border: 2px solid var(--gold);
+  padding: 16px 18px;
+  border-radius: var(--r-lg);
+}
+
+/* MCQ options */
+.mcq-options {
+  display: grid; gap: 10px;
+  margin-bottom: 16px;
+}
+.mcq-opt {
+  background: var(--paper);
+  border: 2.5px solid var(--line-strong);
+  border-radius: var(--r-md);
+  padding: 14px 18px;
+  font-family: inherit; color: inherit;
+  font-size: 16px; font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.1s, box-shadow 0.15s, border-color 0.15s;
+}
+.mcq-opt::before {
+  content: attr(data-letter);
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--ink); color: #fff;
+  display: grid; place-items: center;
+  font-family: var(--display); font-weight: 600; font-size: 14px;
+  flex-shrink: 0;
+}
+.mcq-opt:hover:not(:disabled) { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.mcq-opt.right {
+  background: var(--pos-50);
+  border-color: var(--pos-500);
+  color: var(--pos-700);
+  animation: pop 0.4s cubic-bezier(.2,1.4,.3,1);
+}
+.mcq-opt.right::before { background: var(--pos-500); }
+.mcq-opt.bad {
+  background: var(--neg-50);
+  border-color: var(--neg-500);
+  color: var(--neg-700);
+  animation: shake 0.4s;
+}
+.mcq-opt.bad::before { background: var(--neg-500); }
+.mcq-opt:disabled { cursor: default; }
+
+@keyframes pop { 0% { transform: scale(1); } 40% { transform: scale(1.05); } 100% { transform: scale(1); } }
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+/* Build sentence */
+.build-preview {
+  background: var(--present-50);
+  border: 2.5px solid var(--present-500);
+  border-radius: var(--r-lg);
+  padding: 16px 20px;
+  margin-bottom: 14px;
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--present-700);
+  min-height: 30px;
+  text-align: center;
+  line-height: 1.3;
+}
+.build-preview-empty {
+  color: var(--ink-faint);
+  font-style: italic;
+  font-size: 15px;
+  font-weight: 500;
+}
+.build-target {
+  background: var(--gold-soft);
+  border: 2.5px dashed var(--gold);
+  border-radius: var(--r-lg);
+  min-height: 70px;
+  padding: 12px;
+  display: flex; flex-wrap: wrap; gap: 8px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.build-target:empty::before {
+  content: 'tap words below to build your sentence';
+  color: var(--past-700);
+  font-style: italic;
+  font-size: 14px;
+  opacity: 0.7;
+  width: 100%;
+  text-align: center;
+}
+.build-pool-label {
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.build-pool {
+  background: var(--paper);
+  border: 2px dashed var(--line-strong);
+  border-radius: var(--r-lg);
+  min-height: 70px;
+  padding: 12px;
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 16px;
+}
+.word-chip {
+  background: var(--paper);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-md);
+  padding: 10px 16px;
+  font-family: var(--display);
+  font-size: 16px; font-weight: 600;
+  cursor: pointer;
+  user-select: none; -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+}
+.word-chip:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.word-chip:active { transform: translateY(1px); box-shadow: none; }
+.word-chip.in-target {
+  background: var(--present-50);
+  border-color: var(--present-500);
+  color: var(--present-700);
+}
+.build-target.correct { background: var(--pos-50); border-color: var(--pos-500); border-style: solid; }
+.build-target.wrong { animation: shake 0.4s; border-color: var(--neg-500); }
+
+/* Fix the mistake */
+.fix-sentence {
+  background: var(--paper);
+  border: 2.5px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  padding: 18px 20px;
+  font-size: 20px; font-weight: 700;
+  line-height: 1.6;
+  text-align: center;
+  margin-bottom: 14px;
+}
+.fix-word {
+  display: inline-block;
+  padding: 2px 6px; border-radius: 6px;
+  cursor: pointer; transition: background 0.15s, color 0.15s;
+}
+.fix-word:hover { background: var(--gold-soft); }
+.fix-word.targeted {
+  background: var(--neg-50); color: var(--neg-700);
+  text-decoration: line-through wavy var(--neg-500);
+}
+
+.fix-instructions {
+  font-size: 14px; color: var(--ink-soft);
+  font-weight: 700; text-align: center; margin-bottom: 14px;
+}
+
+/* Game footer */
+.game-footer {
+  margin-top: 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+}
+.feedback {
+  font-size: 15px; font-weight: 800;
+  min-height: 24px; flex: 1; min-width: 200px;
+}
+.feedback.win { color: var(--present-700); }
+.feedback.bad { color: var(--neg-700); }
+
+.btn {
+  background: var(--ink); color: #fff;
+  border: none; border-radius: var(--r-md);
+  padding: 10px 20px;
+  font-family: var(--display);
+  font-size: 15px; font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.1s, box-shadow 0.1s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.btn:active:not(:disabled) { transform: translateY(1px); box-shadow: none; }
+.btn.ghost {
+  background: var(--paper); color: var(--ink);
+  border: 2px solid var(--line-strong);
+}
+.btn.go {
+  background: var(--present-500); color: #fff;
+}
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn svg { width: 16px; height: 16px; }
+
+/* ============================================================
+   TOAST + CONFETTI
+   ============================================================ */
+.toast {
+  position: fixed; left: 50%; top: 24px;
+  transform: translate(-50%, -150%);
+  background: var(--ink); color: #fff;
+  padding: 14px 24px; border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg); z-index: 2000;
+  display: flex; align-items: center; gap: 14px;
+  font-weight: 800; font-size: 15px;
+  transition: transform 0.5s cubic-bezier(.2,1.4,.3,1);
+  max-width: 92vw;
+}
+.toast.show { transform: translate(-50%, 0); }
+.toast.celebrate {
+  background: var(--gold); color: var(--past-700);
+  font-family: var(--display); font-size: 17px;
+  padding: 18px 28px;
+}
+.toast svg { width: 24px; height: 24px; flex-shrink: 0; }
+
+.confetti {
+  position: fixed; pointer-events: none;
+  inset: 0; overflow: hidden; z-index: 1500;
+}
+.confetti span {
+  position: absolute;
+  width: 12px; height: 12px;
+  top: -20px; border-radius: 2px;
+  animation: fall 1.8s linear forwards;
+}
+@keyframes fall {
+  to { transform: translateY(110vh) rotate(720deg); opacity: 0.4; }
+}
+
+/* Tense color tokens for views */
+.t-past { --tc-50: var(--past-50); --tc-200: var(--past-200); --tc-500: var(--past-500); --tc-700: var(--past-700); }
+.t-present { --tc-50: var(--present-50); --tc-200: var(--present-200); --tc-500: var(--present-500); --tc-700: var(--present-700); }
+.t-future { --tc-50: var(--future-50); --tc-200: var(--future-200); --tc-500: var(--future-500); --tc-700: var(--future-700); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 880px) {
+  .levels { grid-template-columns: 1fr; }
+  .forms { grid-template-columns: 1fr; }
+  .games-grid { grid-template-columns: 1fr; }
+  .timeline-wrap { height: 260px; }
+  .tl-stop-label { font-size: 9px; max-width: 56px; }
+  .now-card { grid-template-columns: 1fr; text-align: center; }
+  .now-info { text-align: center; }
+}
+@media (max-width: 600px) {
+  .hero h1 { font-size: 26px; }
+  .lesson-title { font-size: 24px; }
+  .stage { padding: 14px 8px 16px; }
+  .timeline-wrap { height: 280px; }
+  .tl-stop-label { display: none; }
+  .tl-stop.active .tl-stop-label { display: block; }
+  .car { width: 76px; height: 44px; bottom: 50px; }
+  .game-stage { padding: 16px; }
+  .game-prompt { font-size: 16px; padding: 12px 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LIVING BACKGROUND -->
+<div class="sky" id="sky"></div>
+
+<div class="app">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/>
+          <polyline points="12 7 12 12 15 14"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name">Grammar Time Machine</div>
+        <div class="brand-tag">Drive through every English tense</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="back-btn" id="back-btn" style="display:none;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
+      <button class="icon-btn" id="sound-btn" title="Sound on/off" aria-label="Toggle sound">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" id="sound-icon"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15 9a3 3 0 0 1 0 6"/><path d="M19 5a8 8 0 0 1 0 14"/></svg>
+      </button>
+      <button class="icon-btn" id="reset-btn" title="Reset progress" aria-label="Reset progress">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+      </button>
+      <div class="star-pill" aria-live="polite">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.4 5.7 21.2l1.7-7L2 9.5l7.1-.6z"/></svg>
+        <span id="star-count">0</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       HOME VIEW
+       ============================================================ -->
+  <section class="view active" id="view-home">
+    <div class="hero">
+      <h1>Drive your <span class="accent">time machine</span> through 12 tenses</h1>
+      <p>Each stop on the timeline is a tense. Park there to learn — then play games to master it and unlock the next one.</p>
+    </div>
+
+    <!-- TIMELINE STAGE -->
+    <div class="stage">
+      <div class="stage-landscape" id="stage-landscape"></div>
+
+      <div class="timeline-wrap" id="timeline-wrap">
+        <!-- zones -->
+        <div class="tl-zone past" id="zone-past"><span class="tl-zone-label">Past</span></div>
+        <div class="tl-zone present" id="zone-present"><span class="tl-zone-label">Present</span></div>
+        <div class="tl-zone future" id="zone-future"><span class="tl-zone-label">Future</span></div>
+
+        <!-- road dashes (decorative) -->
+        <div class="tl-road-dash"></div>
+
+        <!-- timeline track with arrows -->
+        <div class="tl-track"></div>
+
+        <!-- stops -->
+        <div class="tl-stops" id="tl-stops"></div>
+
+        <!-- the car -->
+        <div class="car" id="car">
+          <!-- OLD CAR -->
+          <svg class="car-old" viewBox="0 0 100 56" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="50" cy="50" rx="38" ry="3" fill="rgba(0,0,0,0.18)"/>
+            <!-- body -->
+            <path d="M12 38 L12 28 Q12 22 18 22 L30 22 L36 14 L60 14 L66 22 L82 22 Q88 22 88 28 L88 38 Z" fill="#7C4A1A"/>
+            <!-- roof line darken -->
+            <path d="M36 14 L60 14 L66 22 L30 22 Z" fill="#5C3712"/>
+            <!-- windshield -->
+            <path d="M38 16 L58 16 L62 22 L34 22 Z" fill="#C9DEEB" opacity="0.85"/>
+            <!-- door line -->
+            <line x1="50" y1="22" x2="50" y2="38" stroke="#5C3712" stroke-width="1"/>
+            <!-- headlight -->
+            <circle cx="84" cy="30" r="3" fill="#FFE89A" stroke="#7E430A" stroke-width="1"/>
+            <!-- running board -->
+            <rect x="14" y="38" width="72" height="3" fill="#3D2410"/>
+            <!-- wheels (spoked) -->
+            <g>
+              <circle cx="26" cy="42" r="8" fill="#1F1A14"/>
+              <circle cx="26" cy="42" r="5" fill="#A89C89"/>
+              <circle cx="26" cy="42" r="2" fill="#1F1A14"/>
+              <line x1="21" y1="42" x2="31" y2="42" stroke="#1F1A14" stroke-width="0.8"/>
+              <line x1="26" y1="37" x2="26" y2="47" stroke="#1F1A14" stroke-width="0.8"/>
+            </g>
+            <g>
+              <circle cx="74" cy="42" r="8" fill="#1F1A14"/>
+              <circle cx="74" cy="42" r="5" fill="#A89C89"/>
+              <circle cx="74" cy="42" r="2" fill="#1F1A14"/>
+              <line x1="69" y1="42" x2="79" y2="42" stroke="#1F1A14" stroke-width="0.8"/>
+              <line x1="74" y1="37" x2="74" y2="47" stroke="#1F1A14" stroke-width="0.8"/>
+            </g>
+          </svg>
+
+          <!-- MODERN CAR -->
+          <svg class="car-mod" viewBox="0 0 100 56" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="50" cy="50" rx="38" ry="3" fill="rgba(0,0,0,0.18)"/>
+            <!-- body -->
+            <path d="M10 40 L14 28 Q16 22 22 22 L34 18 Q38 16 44 16 L58 16 Q64 16 70 22 L84 26 Q90 28 90 32 L90 40 Z" fill="#15A35F"/>
+            <!-- darker bottom -->
+            <path d="M10 36 L90 36 L90 40 L10 40 Z" fill="#0A6F40"/>
+            <!-- windows -->
+            <path d="M28 22 L34 18 L58 18 L66 22 Z" fill="#A8D4E8" opacity="0.9"/>
+            <line x1="46" y1="18" x2="46" y2="22" stroke="#0A6F40" stroke-width="1.5"/>
+            <!-- door -->
+            <rect x="30" y="22" width="36" height="14" fill="none" stroke="#0A6F40" stroke-width="0.8" opacity="0.5"/>
+            <!-- headlight -->
+            <ellipse cx="86" cy="30" rx="3.5" ry="2" fill="#FFE89A"/>
+            <!-- taillight -->
+            <ellipse cx="13" cy="32" rx="2" ry="1.5" fill="#E24B4A"/>
+            <!-- wheels -->
+            <g>
+              <circle cx="26" cy="42" r="7.5" fill="#1F1A14"/>
+              <circle cx="26" cy="42" r="3.5" fill="#888"/>
+              <circle cx="26" cy="42" r="1.5" fill="#1F1A14"/>
+            </g>
+            <g>
+              <circle cx="74" cy="42" r="7.5" fill="#1F1A14"/>
+              <circle cx="74" cy="42" r="3.5" fill="#888"/>
+              <circle cx="74" cy="42" r="1.5" fill="#1F1A14"/>
+            </g>
+          </svg>
+
+          <!-- FUTURE CAR -->
+          <svg class="car-fut" viewBox="0 0 100 56" xmlns="http://www.w3.org/2000/svg">
+            <!-- hover glow -->
+            <ellipse cx="50" cy="48" rx="40" ry="5" fill="#F5B71B" opacity="0.4"/>
+            <ellipse cx="50" cy="50" rx="36" ry="3" fill="#FFB1D6" opacity="0.7">
+              <animate attributeName="rx" from="32" to="40" dur="0.8s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" from="0.7" to="0.3" dur="0.8s" repeatCount="indefinite"/>
+            </ellipse>
+            <!-- body angular -->
+            <path d="M8 36 L18 18 L34 12 L66 12 L82 18 L92 36 Z" fill="#6B4EE0"/>
+            <!-- canopy / glass -->
+            <path d="M22 18 L34 12 L66 12 L78 18 L66 22 L34 22 Z" fill="#E8E1FA" opacity="0.85"/>
+            <!-- pilot silhouette -->
+            <circle cx="50" cy="16" r="3" fill="#3B2A89" opacity="0.45"/>
+            <!-- side stripe -->
+            <rect x="8" y="34" width="84" height="3" fill="#F5B71B"/>
+            <!-- thrusters -->
+            <ellipse cx="14" cy="40" rx="6" ry="3" fill="#FFB1D6"/>
+            <ellipse cx="86" cy="40" rx="6" ry="3" fill="#FFB1D6"/>
+            <ellipse cx="14" cy="40" rx="3" ry="1.5" fill="#FFE89A"/>
+            <ellipse cx="86" cy="40" rx="3" ry="1.5" fill="#FFE89A"/>
+            <!-- antenna -->
+            <line x1="50" y1="12" x2="50" y2="6" stroke="#3B2A89" stroke-width="1.5"/>
+            <circle cx="50" cy="6" r="1.8" fill="#F5B71B">
+              <animate attributeName="opacity" from="1" to="0.3" dur="0.6s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOW-PLAYING TENSE PANEL -->
+    <div class="now-card" id="now-card">
+      <div class="now-icon" id="now-icon"></div>
+      <div class="now-info">
+        <div class="now-eyebrow" id="now-eyebrow">Currently parked at</div>
+        <div class="now-title" id="now-title">Simple Present</div>
+        <div class="now-tagline" id="now-tagline">Habits, routines, and facts that are always true.</div>
+      </div>
+      <button class="now-cta" id="now-cta">
+        Open lesson
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+
+    <!-- MASCOT TIP -->
+    <div class="mascot-bar">
+      <div class="mascot" id="home-mascot"></div>
+      <div class="mascot-bubble" id="mascot-tip">Hi! I'm Chrono. Click any glowing stop to drive there!</div>
+    </div>
+
+    <!-- LEVEL MAP -->
+    <div class="levels-section">
+      <div class="section-label">Your journey</div>
+      <div class="levels" id="levels"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       LESSON VIEW
+       ============================================================ -->
+  <section class="view" id="view-lesson">
+    <div class="lesson-head">
+      <div class="lesson-icon-lg" id="lesson-icon"></div>
+      <div>
+        <div class="lesson-eyebrow" id="lesson-eyebrow">Level 1 · Present</div>
+        <div class="lesson-title" id="lesson-title">Simple Present</div>
+        <div class="lesson-tagline" id="lesson-tagline"></div>
+      </div>
+    </div>
+
+    <div class="speech">
+      <div class="mascot-inline" id="lesson-mascot"></div>
+      <span id="lesson-speech">I'm Chrono! This tense is for things that always happen — habits and rules of the world.</span>
+    </div>
+
+    <div class="structure" id="lesson-structure"></div>
+
+    <div class="forms" id="lesson-forms"></div>
+
+    <div class="tw-section">
+      <div class="tw-title">Time expressions to look for</div>
+      <div class="chips" id="lesson-chips"></div>
+    </div>
+
+    <div class="tw-section">
+      <div class="tw-title">Examples</div>
+      <div class="examples-list" id="lesson-examples"></div>
+    </div>
+
+    <div class="practice-section">
+      <div class="tw-title">Practice — master to unlock the next!</div>
+      <div class="games-grid" id="lesson-games"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       GAME VIEW
+       ============================================================ -->
+  <section class="view" id="view-game">
+    <div class="game-stage" id="game-stage">
+      <div class="game-header">
+        <div class="game-title" id="game-title">Practice</div>
+        <div class="game-progress" id="game-progress"></div>
+      </div>
+      <div id="game-body"></div>
+      <div class="game-footer">
+        <div class="feedback" id="game-feedback">Let's go!</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn ghost" id="btn-game-back">Back to lesson</button>
+          <button class="btn" id="btn-game-action" disabled>Next →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ============================================================
+     SCRIPT
+     ============================================================ -->
+<script>
+(function() {
+  'use strict';
+
+  /* -----------------------------------------------------------
+     ICONS — small reusable SVG strings
+     ----------------------------------------------------------- */
+  const ICONS = {
+    simple:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.5"/></svg>',
+    cont:      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"/></svg>',
+    perf:      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+    perfCont:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/><polygon points="14 14 22 18 14 22 14 14"/></svg>',
+
+    plus:      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+    minus:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+    question:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2.5 2-2.5 4"/><line x1="12" y1="17" x2="12" y2="17.01"/></svg>',
+
+    star:      '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.4 5.7 21.2l1.7-7L2 9.5l7.1-.6z"/></svg>',
+    lock:      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="11" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
+    check:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+
+    mcq:       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 1 1 4 2.8c-1 0.4-1 1.2-1 2.2"/><line x1="12" y1="17" x2="12" y2="17.01"/></svg>',
+    build:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="6" height="6" rx="1"/><rect x="11" y="6" width="6" height="6" rx="1"/><rect x="7" y="14" width="6" height="6" rx="1"/></svg>',
+    fix:       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L7.5 19.5l-3.5 1 1-3.5z"/></svg>',
+  };
+
+  /* -----------------------------------------------------------
+     MASCOT — Chrono the Time Robot
+     ----------------------------------------------------------- */
+  const MASCOT_SVG = `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <!-- antenna -->
+      <line x1="32" y1="6" x2="32" y2="14" stroke="#1F1A14" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="32" cy="6" r="3" fill="#F5B71B"/>
+      <!-- head -->
+      <rect x="14" y="14" width="36" height="28" rx="8" fill="#15A35F" stroke="#1F1A14" stroke-width="2.5"/>
+      <!-- clock face -->
+      <circle cx="32" cy="28" r="9" fill="#FFF8EC" stroke="#1F1A14" stroke-width="2"/>
+      <line x1="32" y1="28" x2="32" y2="22" stroke="#1F1A14" stroke-width="2" stroke-linecap="round"/>
+      <line x1="32" y1="28" x2="36" y2="28" stroke="#1F1A14" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="32" cy="28" r="1.5" fill="#1F1A14"/>
+      <!-- ear bolts -->
+      <circle cx="14" cy="28" r="3" fill="#A89C89" stroke="#1F1A14" stroke-width="1.5"/>
+      <circle cx="50" cy="28" r="3" fill="#A89C89" stroke="#1F1A14" stroke-width="1.5"/>
+      <!-- mouth -->
+      <rect x="22" y="38" width="20" height="2" fill="#1F1A14" rx="1"/>
+      <!-- body -->
+      <rect x="20" y="42" width="24" height="14" rx="4" fill="#15A35F" stroke="#1F1A14" stroke-width="2.5"/>
+      <circle cx="26" cy="49" r="1.5" fill="#F5B71B"/>
+      <circle cx="32" cy="49" r="1.5" fill="#E24B4A"/>
+      <circle cx="38" cy="49" r="1.5" fill="#2D70CC"/>
+    </svg>
+  `;
+
+  /* -----------------------------------------------------------
+     TENSE DATA — all 12 tenses with full lesson + practice content
+     ----------------------------------------------------------- */
+  const TENSES = {
+    /* ============== LEVEL 1 — Simple ============== */
+    present_simple: {
+      key: 'present_simple', name: 'Simple Present', bucket: 'present',
+      level: 1, pos: 5, icon: ICONS.simple,
+      tagline: 'Habits, routines, and facts that are always true.',
+      speech: "I'm for things that always happen — daily habits, routines, and facts about the world.",
+      structure: [
+        { who: 'I / You / We / They', form: 'Verb (V1)' },
+        { who: 'He / She / It', form: 'Verb + s/es' },
+      ],
+      forms: {
+        positive: 'I play soccer every day.',
+        negative: 'I do not play soccer every day.',
+        question: 'Do you play soccer every day?',
+      },
+      timeWords: ['every day', 'always', 'usually', 'often', 'sometimes', 'never', 'on Mondays'],
+      examples: [
+        { pre: 'The sun', verb: 'rises', post: 'in the east.', emoji: '☀️' },
+        { pre: 'I', verb: 'play', post: 'soccer every weekend.', emoji: '⚽' },
+        { pre: 'She always', verb: 'drinks', post: 'tea in the morning.', emoji: '🫖' },
+      ],
+      mcq: [
+        { q: 'I ___ to school every day.', opts: ['go', 'went', 'will go'], a: 0, hint: '"Every day" = a habit. Use simple present.' },
+        { q: 'She ___ tea in the morning.', opts: ['drink', 'drinks', 'is drinking'], a: 1, hint: 'For he/she/it, add an -s.' },
+        { q: 'They ___ soccer on weekends.', opts: ['plays', 'played', 'play'], a: 2, hint: 'For they/we/I/you, no -s.' },
+        { q: 'My dog ___ carrots.', opts: ['like', 'likes', 'liking'], a: 1, hint: 'My dog = it. Add -s.' },
+      ],
+      build: [
+        { words: ['I', 'play', 'soccer', 'every', 'weekend'] },
+        { words: ['She', 'always', 'drinks', 'tea'] },
+        { words: ['Birds', 'fly', 'south', 'in', 'winter'] },
+      ],
+      fix: [
+        { sentence: 'She play tennis every day.', wrong: 'play', options: ['plays', 'played', 'is playing'], a: 0, hint: '"She" needs an -s.' },
+        { sentence: 'I goes to school.', wrong: 'goes', options: ['go', 'going', 'gone'], a: 0, hint: '"I" never takes -s.' },
+        { sentence: 'The sun rise in the east.', wrong: 'rise', options: ['rises', 'rose', 'is rising'], a: 0, hint: '"The sun" = it. Add -s.' },
+      ],
+    },
+    past_simple: {
+      key: 'past_simple', name: 'Simple Past', bucket: 'past',
+      level: 1, pos: 4, icon: ICONS.simple,
+      tagline: 'Things that happened before now and are finished.',
+      speech: "Roll back in time! I'm for actions that started AND finished in the past.",
+      structure: [
+        { who: 'All subjects', form: 'Verb + ed' },
+        { who: 'Irregular verbs', form: 'Special past form (go → went)' },
+      ],
+      forms: {
+        positive: 'I played soccer yesterday.',
+        negative: 'I did not play soccer yesterday.',
+        question: 'Did you play soccer yesterday?',
+      },
+      timeWords: ['yesterday', 'last week', 'last year', 'two days ago', 'in 2010', 'when I was 5'],
+      examples: [
+        { pre: 'Yesterday I', verb: 'walked', post: 'to school.', emoji: '🚶' },
+        { pre: 'She', verb: 'ate', post: 'pizza last night.', emoji: '🍕' },
+        { pre: 'We', verb: 'visited', post: 'grandma last weekend.', emoji: '👵' },
+      ],
+      mcq: [
+        { q: 'Yesterday I ___ to school.', opts: ['walk', 'walked', 'will walk'], a: 1, hint: '"Yesterday" = past time.' },
+        { q: 'She ___ a sandwich an hour ago.', opts: ['eats', 'ate', 'eating'], a: 1, hint: '"Eat" is irregular: ate.' },
+        { q: 'We ___ a movie last weekend.', opts: ['watch', 'watched', 'are watching'], a: 1, hint: 'Add -ed for regular verbs.' },
+        { q: 'They ___ soccer two days ago.', opts: ['plays', 'played', 'play'], a: 1, hint: '"Two days ago" = past.' },
+      ],
+      build: [
+        { words: ['Yesterday', 'I', 'walked', 'to', 'school'] },
+        { words: ['She', 'ate', 'pizza', 'last', 'night'] },
+        { words: ['We', 'visited', 'grandma', 'last', 'week'] },
+      ],
+      fix: [
+        { sentence: 'Yesterday she eat pizza.', wrong: 'eat', options: ['ate', 'eats', 'eating'], a: 0, hint: '"Eat" → "ate" in the past.' },
+        { sentence: 'I goed to the park.', wrong: 'goed', options: ['went', 'gone', 'going'], a: 0, hint: '"Go" is irregular: went.' },
+        { sentence: 'They play soccer last weekend.', wrong: 'play', options: ['played', 'plays', 'will play'], a: 0, hint: '"Last weekend" = past.' },
+      ],
+    },
+    future_simple: {
+      key: 'future_simple', name: 'Simple Future', bucket: 'future',
+      level: 1, pos: 9, icon: ICONS.simple,
+      tagline: 'Things that will happen later. Predictions, promises, and plans.',
+      speech: "Zoom into the future! I'm for things that haven't happened yet, but they will.",
+      structure: [
+        { who: 'All subjects', form: 'will + V1' },
+      ],
+      forms: {
+        positive: 'I will play soccer tomorrow.',
+        negative: 'I will not play soccer tomorrow.',
+        question: 'Will you play soccer tomorrow?',
+      },
+      timeWords: ['tomorrow', 'next week', 'next year', 'in two days', 'soon', 'later'],
+      examples: [
+        { pre: 'Tomorrow we', verb: 'will visit', post: 'the zoo.', emoji: '🦁' },
+        { pre: 'I', verb: 'will help', post: 'you next week.', emoji: '🤝' },
+        { pre: 'It', verb: 'will rain', post: 'later today.', emoji: '🌧️' },
+      ],
+      mcq: [
+        { q: 'Tomorrow I ___ a movie.', opts: ['watch', 'watched', 'will watch'], a: 2, hint: '"Tomorrow" = future. Use will.' },
+        { q: 'She ___ ten years old next year.', opts: ['is', 'was', 'will be'], a: 2, hint: 'Future fact about next year.' },
+        { q: 'They ___ to Brazil next month.', opts: ['travel', 'will travel', 'traveled'], a: 1, hint: '"Next month" = future.' },
+        { q: 'I think it ___ rain later.', opts: ['rain', 'will rain', 'rained'], a: 1, hint: 'Predictions use "will".' },
+      ],
+      build: [
+        { words: ['I', 'will', 'help', 'you', 'tomorrow'] },
+        { words: ['We', 'will', 'visit', 'the', 'zoo'] },
+        { words: ['She', 'will', 'arrive', 'soon'] },
+      ],
+      fix: [
+        { sentence: 'Tomorrow I go to the park.', wrong: 'go', options: ['will go', 'went', 'going'], a: 0, hint: '"Tomorrow" = future. Add "will".' },
+        { sentence: 'She will plays tennis tomorrow.', wrong: 'plays', options: ['play', 'played', 'playing'], a: 0, hint: 'After "will" use base verb.' },
+        { sentence: 'They visit grandma next week.', wrong: 'visit', options: ['will visit', 'visited', 'visiting'], a: 0, hint: '"Next week" = future.' },
+      ],
+    },
+
+    /* ============== LEVEL 2 — Continuous ============== */
+    present_continuous: {
+      key: 'present_continuous', name: 'Present Continuous', bucket: 'present',
+      level: 2, pos: 6, icon: ICONS.cont,
+      tagline: 'Things happening right now, at this very moment.',
+      speech: "Watch out — I'm for actions happening RIGHT NOW, while you're speaking!",
+      structure: [
+        { who: 'I', form: 'am + V-ing' },
+        { who: 'He / She / It', form: 'is + V-ing' },
+        { who: 'You / We / They', form: 'are + V-ing' },
+      ],
+      forms: {
+        positive: 'I am playing soccer now.',
+        negative: 'I am not playing soccer now.',
+        question: 'Are you playing soccer now?',
+      },
+      timeWords: ['now', 'right now', 'at this moment', 'currently', 'today', 'this week'],
+      examples: [
+        { pre: 'I', verb: 'am reading', post: 'a book right now.', emoji: '📖' },
+        { pre: 'They', verb: 'are playing', post: 'in the garden.', emoji: '🌳' },
+        { pre: 'She', verb: 'is cooking', post: 'dinner at this moment.', emoji: '🍳' },
+      ],
+      mcq: [
+        { q: 'I ___ a book right now.', opts: ['read', 'am reading', 'will read'], a: 1, hint: '"Right now" = use am + V-ing.' },
+        { q: 'She ___ dinner at the moment.', opts: ['cook', 'cooks', 'is cooking'], a: 2, hint: '"At the moment" = right now.' },
+        { q: 'They ___ in the garden.', opts: ['play', 'plays', 'are playing'], a: 2, hint: '"They" needs "are".' },
+      ],
+      build: [
+        { words: ['I', 'am', 'reading', 'a', 'book'] },
+        { words: ['She', 'is', 'cooking', 'dinner'] },
+      ],
+      fix: [
+        { sentence: 'She is cook dinner now.', wrong: 'cook', options: ['cooking', 'cooks', 'cooked'], a: 0, hint: 'After "is" use V-ing.' },
+        { sentence: 'They is playing soccer.', wrong: 'is', options: ['are', 'am', 'be'], a: 0, hint: '"They" needs "are".' },
+      ],
+    },
+    past_continuous: {
+      key: 'past_continuous', name: 'Past Continuous', bucket: 'past',
+      level: 2, pos: 3, icon: ICONS.cont,
+      tagline: 'Things that were happening at a moment in the past — like a movie scene.',
+      speech: "I show actions in PROGRESS in the past — like rewinding a movie scene.",
+      structure: [
+        { who: 'I / He / She / It', form: 'was + V-ing' },
+        { who: 'You / We / They', form: 'were + V-ing' },
+      ],
+      forms: {
+        positive: 'I was playing when she called.',
+        negative: 'I was not playing when she called.',
+        question: 'Were you playing when she called?',
+      },
+      timeWords: ['while', 'when', 'at 8 pm yesterday', 'all morning', 'this time last week'],
+      examples: [
+        { pre: 'I', verb: 'was sleeping', post: 'when the phone rang.', emoji: '😴' },
+        { pre: 'They', verb: 'were playing', post: 'while it was raining.', emoji: '☔' },
+        { pre: 'She', verb: 'was studying', post: 'all morning.', emoji: '📚' },
+      ],
+      mcq: [
+        { q: 'I ___ when the phone rang.', opts: ['sleep', 'was sleeping', 'will sleep'], a: 1, hint: '"When" + past = was/were + V-ing.' },
+        { q: 'They ___ while it was raining.', opts: ['played', 'were playing', 'will play'], a: 1, hint: '"They" + past progressive = were + V-ing.' },
+        { q: 'She ___ all morning yesterday.', opts: ['studies', 'was studying', 'studied'], a: 1, hint: '"All morning" = ongoing past action.' },
+      ],
+      build: [
+        { words: ['I', 'was', 'sleeping', 'when', 'she', 'called'] },
+        { words: ['They', 'were', 'playing', 'in', 'the', 'park'] },
+      ],
+      fix: [
+        { sentence: 'I were reading at 8 pm.', wrong: 'were', options: ['was', 'am', 'is'], a: 0, hint: '"I" takes "was".' },
+        { sentence: 'They was playing yesterday.', wrong: 'was', options: ['were', 'are', 'will be'], a: 0, hint: '"They" takes "were".' },
+      ],
+    },
+    future_continuous: {
+      key: 'future_continuous', name: 'Future Continuous', bucket: 'future',
+      level: 2, pos: 10, icon: ICONS.cont,
+      tagline: 'Something that will be happening at a specific moment in the future.',
+      speech: "I show actions in PROGRESS in the future — imagine watching tomorrow's movie!",
+      structure: [
+        { who: 'All subjects', form: 'will be + V-ing' },
+      ],
+      forms: {
+        positive: 'I will be sleeping at midnight.',
+        negative: 'I will not be sleeping at midnight.',
+        question: 'Will you be sleeping at midnight?',
+      },
+      timeWords: ['at 3 pm tomorrow', 'this time next week', 'all morning tomorrow', 'while', 'when'],
+      examples: [
+        { pre: 'I', verb: 'will be sleeping', post: 'at midnight tonight.', emoji: '🌙' },
+        { pre: 'They', verb: 'will be flying', post: 'over the ocean tomorrow.', emoji: '✈️' },
+        { pre: 'She', verb: 'will be teaching', post: 'all day next Monday.', emoji: '📝' },
+      ],
+      mcq: [
+        { q: 'At midnight I ___.', opts: ['sleep', 'am sleeping', 'will be sleeping'], a: 2, hint: '"At midnight" + future = will be + V-ing.' },
+        { q: 'This time tomorrow she ___ to Spain.', opts: ['flies', 'will be flying', 'flew'], a: 1, hint: '"This time tomorrow" = future moment.' },
+        { q: 'They ___ all weekend.', opts: ['will work', 'are working', 'will be working'], a: 2, hint: 'Use will be + V-ing for future progress.' },
+      ],
+      build: [
+        { words: ['I', 'will', 'be', 'sleeping', 'at', 'midnight'] },
+        { words: ['She', 'will', 'be', 'teaching', 'tomorrow'] },
+      ],
+      fix: [
+        { sentence: 'I will be sleep at midnight.', wrong: 'sleep', options: ['sleeping', 'sleeps', 'slept'], a: 0, hint: 'After "be" use V-ing.' },
+        { sentence: 'They will being playing tomorrow.', wrong: 'being', options: ['be', 'is', 'are'], a: 0, hint: 'Use "will be" not "will being".' },
+      ],
+    },
+
+    /* ============== LEVEL 3 — Perfect ============== */
+    present_perfect: {
+      key: 'present_perfect', name: 'Present Perfect', bucket: 'present',
+      level: 3, pos: 7, icon: ICONS.perf,
+      tagline: 'Actions that started in the past but matter now.',
+      speech: "I bridge past and present! The action started before, but the effect is HERE NOW.",
+      structure: [
+        { who: 'I / You / We / They', form: 'have + V3 (past participle)' },
+        { who: 'He / She / It', form: 'has + V3' },
+      ],
+      forms: {
+        positive: 'I have visited Paris.',
+        negative: 'I have not visited Paris.',
+        question: 'Have you visited Paris?',
+      },
+      timeWords: ['ever', 'never', 'already', 'yet', 'just', 'since 2020', 'for 3 years'],
+      examples: [
+        { pre: 'I', verb: 'have visited', post: 'Paris three times.', emoji: '🗼' },
+        { pre: 'She', verb: 'has finished', post: 'her homework already.', emoji: '✅' },
+        { pre: 'We', verb: 'have known', post: 'each other for years.', emoji: '👫' },
+      ],
+      mcq: [
+        { q: 'I ___ Paris three times.', opts: ['visit', 'visited', 'have visited'], a: 2, hint: 'Life experience → present perfect.' },
+        { q: 'She ___ her homework already.', opts: ['finishes', 'has finished', 'is finishing'], a: 1, hint: '"Already" → present perfect.' },
+        { q: 'They ___ never seen snow.', opts: ['have', 'has', 'are'], a: 0, hint: '"They" takes "have".' },
+      ],
+      build: [
+        { words: ['I', 'have', 'visited', 'Paris'] },
+        { words: ['She', 'has', 'finished', 'her', 'homework'] },
+      ],
+      fix: [
+        { sentence: 'I has lived here for 5 years.', wrong: 'has', options: ['have', 'had', 'having'], a: 0, hint: '"I" takes "have".' },
+        { sentence: 'She have finished already.', wrong: 'have', options: ['has', 'is', 'will'], a: 0, hint: '"She" takes "has".' },
+      ],
+    },
+    past_perfect: {
+      key: 'past_perfect', name: 'Past Perfect', bucket: 'past',
+      level: 3, pos: 2, icon: ICONS.perf,
+      tagline: 'A past action that finished BEFORE another past action.',
+      speech: "I'm the EARLIEST past — for things that happened before something else in the past.",
+      structure: [
+        { who: 'All subjects', form: 'had + V3 (past participle)' },
+      ],
+      forms: {
+        positive: 'I had finished dinner before she arrived.',
+        negative: 'I had not finished dinner before she arrived.',
+        question: 'Had you finished dinner before she arrived?',
+      },
+      timeWords: ['by the time', 'before', 'after', 'already', 'by Friday'],
+      examples: [
+        { pre: 'I', verb: 'had finished', post: 'dinner before she arrived.', emoji: '🍽️' },
+        { pre: 'She', verb: 'had already left', post: 'when we got there.', emoji: '🚪' },
+        { pre: 'They', verb: 'had never seen', post: 'the ocean before.', emoji: '🌊' },
+      ],
+      mcq: [
+        { q: 'When she arrived, I ___ dinner.', opts: ['finished', 'had finished', 'will finish'], a: 1, hint: 'Earlier past → had + V3.' },
+        { q: 'They ___ already left when we got there.', opts: ['have', 'had', 'were'], a: 1, hint: 'Past perfect uses "had".' },
+        { q: 'She ___ never seen snow before that day.', opts: ['has', 'had', 'have'], a: 1, hint: 'Past + past perfect = had.' },
+      ],
+      build: [
+        { words: ['I', 'had', 'finished', 'before', 'she', 'arrived'] },
+        { words: ['They', 'had', 'never', 'seen', 'snow'] },
+      ],
+      fix: [
+        { sentence: 'I have finished before she arrived.', wrong: 'have', options: ['had', 'has', 'will have'], a: 0, hint: 'Past perfect = had + V3.' },
+        { sentence: 'She had went home already.', wrong: 'went', options: ['gone', 'go', 'going'], a: 0, hint: '"Go" past participle = gone.' },
+      ],
+    },
+    future_perfect: {
+      key: 'future_perfect', name: 'Future Perfect', bucket: 'future',
+      level: 3, pos: 11, icon: ICONS.perf,
+      tagline: 'An action that will be finished by a specific point in the future.',
+      speech: "Look ahead in time! I show what will be DONE by a future moment.",
+      structure: [
+        { who: 'All subjects', form: 'will have + V3 (past participle)' },
+      ],
+      forms: {
+        positive: 'I will have finished by Sunday.',
+        negative: 'I will not have finished by Sunday.',
+        question: 'Will you have finished by Sunday?',
+      },
+      timeWords: ['by next year', 'by 6 pm', 'by then', 'before', 'by the time'],
+      examples: [
+        { pre: 'I', verb: 'will have finished', post: 'my book by Sunday.', emoji: '📕' },
+        { pre: 'She', verb: 'will have graduated', post: 'by next year.', emoji: '🎓' },
+        { pre: 'They', verb: 'will have moved', post: 'before summer.', emoji: '📦' },
+      ],
+      mcq: [
+        { q: 'By Sunday I ___ my book.', opts: ['finish', 'will have finished', 'finished'], a: 1, hint: '"By + future date" = will have + V3.' },
+        { q: 'She ___ by next year.', opts: ['graduates', 'will have graduated', 'graduated'], a: 1, hint: 'Done by future moment.' },
+        { q: 'By 8 pm we ___ dinner.', opts: ['eat', 'will eat', 'will have eaten'], a: 2, hint: 'Use will have + V3.' },
+      ],
+      build: [
+        { words: ['I', 'will', 'have', 'finished', 'by', 'Sunday'] },
+        { words: ['She', 'will', 'have', 'graduated', 'by', 'June'] },
+      ],
+      fix: [
+        { sentence: 'I will finished by Sunday.', wrong: 'finished', options: ['have finished', 'finish', 'finishing'], a: 0, hint: 'Need "will have" + V3.' },
+        { sentence: 'They will have went home.', wrong: 'went', options: ['gone', 'go', 'going'], a: 0, hint: 'Past participle of "go" = gone.' },
+      ],
+    },
+
+    /* ============== LEVEL 4 — Perfect Continuous ============== */
+    present_perfect_continuous: {
+      key: 'present_perfect_continuous', name: 'Present Perfect Continuous', bucket: 'present',
+      level: 4, pos: 8, icon: ICONS.perfCont,
+      tagline: 'Actions that started in the past and are STILL going on now.',
+      speech: "I'm the longest-running tense! Started in the past AND still happening NOW.",
+      structure: [
+        { who: 'I / You / We / They', form: 'have been + V-ing' },
+        { who: 'He / She / It', form: 'has been + V-ing' },
+      ],
+      forms: {
+        positive: 'I have been studying for two hours.',
+        negative: 'I have not been studying for two hours.',
+        question: 'Have you been studying for two hours?',
+      },
+      timeWords: ['for', 'since', 'all day', 'lately', 'recently', 'how long'],
+      examples: [
+        { pre: 'I', verb: 'have been studying', post: 'for two hours.', emoji: '⏰' },
+        { pre: 'She', verb: 'has been working', post: 'all day.', emoji: '💼' },
+        { pre: 'It', verb: 'has been raining', post: 'since morning.', emoji: '☔' },
+      ],
+      mcq: [
+        { q: 'I ___ for two hours.', opts: ['study', 'have studied', 'have been studying'], a: 2, hint: '"For two hours" + still going = present perfect continuous.' },
+        { q: 'She ___ all day.', opts: ['works', 'has worked', 'has been working'], a: 2, hint: '"All day" + ongoing = has been V-ing.' },
+        { q: 'It ___ since morning.', opts: ['rains', 'has rained', 'has been raining'], a: 2, hint: '"Since morning" + still raining.' },
+      ],
+      build: [
+        { words: ['I', 'have', 'been', 'studying', 'for', 'two', 'hours'] },
+        { words: ['She', 'has', 'been', 'working', 'all', 'day'] },
+      ],
+      fix: [
+        { sentence: 'I have been study for hours.', wrong: 'study', options: ['studying', 'studies', 'studied'], a: 0, hint: 'After "been" use V-ing.' },
+        { sentence: 'She have been working all day.', wrong: 'have', options: ['has', 'is', 'had'], a: 0, hint: '"She" takes "has".' },
+      ],
+    },
+    past_perfect_continuous: {
+      key: 'past_perfect_continuous', name: 'Past Perfect Continuous', bucket: 'past',
+      level: 4, pos: 1, icon: ICONS.perfCont,
+      tagline: 'A past action that had been going on for a while before something else happened.',
+      speech: "I'm the deepest past! Action was already in progress for a while when something else happened.",
+      structure: [
+        { who: 'All subjects', form: 'had been + V-ing' },
+      ],
+      forms: {
+        positive: 'I had been waiting for an hour when she arrived.',
+        negative: 'I had not been waiting long when she arrived.',
+        question: 'Had you been waiting long when she arrived?',
+      },
+      timeWords: ['for', 'since', 'by the time', 'before', 'all morning'],
+      examples: [
+        { pre: 'I', verb: 'had been studying', post: 'for hours when she called.', emoji: '📖' },
+        { pre: 'They', verb: 'had been waiting', post: 'all morning for the bus.', emoji: '🚌' },
+        { pre: 'It', verb: 'had been raining', post: 'for days.', emoji: '🌧️' },
+      ],
+      mcq: [
+        { q: 'I ___ for hours when she called.', opts: ['study', 'had studied', 'had been studying'], a: 2, hint: 'Past + ongoing duration = had been + V-ing.' },
+        { q: 'They ___ all morning before the bus came.', opts: ['waited', 'had waited', 'had been waiting'], a: 2, hint: '"All morning" duration before another past event.' },
+        { q: 'It ___ for days when the storm hit.', opts: ['rained', 'had been raining', 'is raining'], a: 1, hint: 'Use had been + V-ing.' },
+      ],
+      build: [
+        { words: ['I', 'had', 'been', 'waiting', 'for', 'an', 'hour'] },
+        { words: ['They', 'had', 'been', 'playing', 'all', 'day'] },
+      ],
+      fix: [
+        { sentence: 'I had been wait for hours.', wrong: 'wait', options: ['waiting', 'waited', 'waits'], a: 0, hint: 'After "been" use V-ing.' },
+        { sentence: 'She has been studying when he called.', wrong: 'has', options: ['had', 'have', 'is'], a: 0, hint: 'Need past: "had".' },
+      ],
+    },
+    future_perfect_continuous: {
+      key: 'future_perfect_continuous', name: 'Future Perfect Continuous', bucket: 'future',
+      level: 4, pos: 12, icon: ICONS.perfCont,
+      tagline: 'An action that will have been going on for some time by a future point.',
+      speech: "I'm the trickiest! By a future time, this action will have been happening for a while.",
+      structure: [
+        { who: 'All subjects', form: 'will have been + V-ing' },
+      ],
+      forms: {
+        positive: 'By next year I will have been studying for ten years.',
+        negative: 'By next year I will not have been studying for ten years.',
+        question: 'By next year, will you have been studying for ten years?',
+      },
+      timeWords: ['by next year for', 'by then for', 'by the time', 'for ___ by'],
+      examples: [
+        { pre: 'By next year I', verb: 'will have been studying', post: 'English for 10 years.', emoji: '🌍' },
+        { pre: 'By 6 pm she', verb: 'will have been cooking', post: 'for three hours.', emoji: '🍲' },
+        { pre: 'By then they', verb: 'will have been waiting', post: 'an hour.', emoji: '⏳' },
+      ],
+      mcq: [
+        { q: 'By June I ___ here for 5 years.', opts: ['live', 'will live', 'will have been living'], a: 2, hint: 'By + future + duration = will have been + V-ing.' },
+        { q: 'By 6 pm she ___ for three hours.', opts: ['cooks', 'will cook', 'will have been cooking'], a: 2, hint: 'Long future action by a moment.' },
+        { q: 'By then they ___ for an hour.', opts: ['wait', 'will wait', 'will have been waiting'], a: 2, hint: 'Use will have been + V-ing.' },
+      ],
+      build: [
+        { words: ['By', 'June', 'I', 'will', 'have', 'been', 'living', 'here'] },
+        { words: ['She', 'will', 'have', 'been', 'cooking', 'for', 'hours'] },
+      ],
+      fix: [
+        { sentence: 'I will have been study for hours.', wrong: 'study', options: ['studying', 'studied', 'studies'], a: 0, hint: 'After "been" use V-ing.' },
+        { sentence: 'She will been working all day.', wrong: 'will been', options: ['will have been', 'has been', 'had been'], a: 0, hint: 'Need "will have been".' },
+      ],
+    },
+  };
+
+  // Tense order on the timeline (left = past, right = future)
+  const TIMELINE_ORDER = [
+    'past_perfect_continuous','past_perfect','past_continuous','past_simple',
+    'present_simple','present_continuous','present_perfect','present_perfect_continuous',
+    'future_simple','future_continuous','future_perfect','future_perfect_continuous',
+  ];
+
+  // Unlock path: Level 1 (3 simple) → Level 2 (3 cont) → Level 3 (3 perf) → Level 4 (3 perf cont)
+  const UNLOCK_PATH = [
+    'present_simple','past_simple','future_simple',
+    'present_continuous','past_continuous','future_continuous',
+    'present_perfect','past_perfect','future_perfect',
+    'present_perfect_continuous','past_perfect_continuous','future_perfect_continuous',
+  ];
+
+  const LEVELS = [
+    { num: 1, title: 'Simple tenses', tenses: ['present_simple','past_simple','future_simple'] },
+    { num: 2, title: 'Continuous tenses', tenses: ['present_continuous','past_continuous','future_continuous'] },
+    { num: 3, title: 'Perfect tenses', tenses: ['present_perfect','past_perfect','future_perfect'] },
+    { num: 4, title: 'Perfect continuous', tenses: ['present_perfect_continuous','past_perfect_continuous','future_perfect_continuous'] },
+  ];
+
+  /* -----------------------------------------------------------
+     STATE
+     ----------------------------------------------------------- */
+  const STORAGE_KEY = 'gtm_v3_state';
+  const state = loadState() || {
+    stars: 0,
+    mastered: {},        // { tense_key: true }
+    starsByTense: {},    // { tense_key: { mcq, build, fix } }
+    sound: true,
+    activeStop: 'present_simple',
+  };
+  const session = {
+    view: 'home',
+    currentTense: null,
+    game: null,
+  };
+
+  function loadState() {
+    try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; }
+    catch(_) { return null; }
+  }
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(_) {}
+  }
+
+  /* -----------------------------------------------------------
+     UNLOCK LOGIC
+     ----------------------------------------------------------- */
+  function isMastered(key) { return !!state.mastered[key]; }
+
+  function isUnlocked(key) {
+    const idx = UNLOCK_PATH.indexOf(key);
+    if (idx === 0) return true;
+    return isMastered(UNLOCK_PATH[idx - 1]);
+  }
+
+  function getNextTense() {
+    return UNLOCK_PATH.find(k => isUnlocked(k) && !isMastered(k)) || null;
+  }
+
+  function getLevelProgress(level) {
+    const lv = LEVELS.find(l => l.num === level);
+    return lv.tenses.filter(k => isMastered(k)).length;
+  }
+
+  function isLevelUnlocked(level) {
+    if (level === 1) return true;
+    const prev = LEVELS.find(l => l.num === level - 1);
+    return prev.tenses.every(k => isMastered(k));
+  }
+
+  /* -----------------------------------------------------------
+     DOM HELPERS
+     ----------------------------------------------------------- */
+  const $ = (sel, root) => (root || document).querySelector(sel);
+  const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+
+  function showView(name) {
+    session.view = name;
+    $$('.view').forEach(v => v.classList.remove('active'));
+    $('#view-' + name).classList.add('active');
+    $('#back-btn').style.display = name === 'home' ? 'none' : '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateStars() {
+    $('#star-count').textContent = state.stars;
+  }
+
+  /* -----------------------------------------------------------
+     AUDIO — simple synthesized beeps
+     ----------------------------------------------------------- */
+  let audioCtx = null;
+  function getAudio() {
+    if (!state.sound) return null;
+    if (!audioCtx) {
+      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(_) { return null; }
+    }
+    return audioCtx;
+  }
+  function beep(type) {
+    const ctx = getAudio();
+    if (!ctx) return;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    if (type === 'good') {
+      o.type = 'sine'; o.frequency.value = 660;
+      g.gain.setValueAtTime(0.001, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + 0.02);
+      o.frequency.exponentialRampToValueAtTime(990, ctx.currentTime + 0.1);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+      o.start(); o.stop(ctx.currentTime + 0.25);
+    } else if (type === 'bad') {
+      o.type = 'square'; o.frequency.value = 220;
+      g.gain.setValueAtTime(0.001, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.02);
+      o.frequency.exponentialRampToValueAtTime(140, ctx.currentTime + 0.18);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
+      o.start(); o.stop(ctx.currentTime + 0.22);
+    } else if (type === 'win') {
+      // little arpeggio
+      [523, 659, 784, 1046].forEach((f, i) => {
+        const oo = ctx.createOscillator(), gg = ctx.createGain();
+        oo.connect(gg); gg.connect(ctx.destination);
+        oo.type = 'sine'; oo.frequency.value = f;
+        const t = ctx.currentTime + i * 0.1;
+        gg.gain.setValueAtTime(0.001, t);
+        gg.gain.exponentialRampToValueAtTime(0.16, t + 0.02);
+        gg.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+        oo.start(t); oo.stop(t + 0.22);
+      });
+    } else if (type === 'click') {
+      o.type = 'triangle'; o.frequency.value = 440;
+      g.gain.setValueAtTime(0.001, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.08, ctx.currentTime + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+      o.start(); o.stop(ctx.currentTime + 0.1);
+    }
+  }
+
+  /* -----------------------------------------------------------
+     HOME — TIMELINE RENDERING
+     ----------------------------------------------------------- */
+  function renderHome() {
+    renderTimeline();
+    renderLevels();
+    renderNowCard();
+    updateMascotTip();
+    updateSky();
+  }
+
+  function renderTimeline() {
+    const stops = $('#tl-stops');
+    stops.innerHTML = '';
+    const N = TIMELINE_ORDER.length;
+    TIMELINE_ORDER.forEach((key, i) => {
+      const t = TENSES[key];
+      const pct = (i / (N - 1)) * 100;
+      const stop = document.createElement('button');
+      stop.className = 'tl-stop bucket-' + t.bucket;
+      stop.style.left = pct + '%';
+      const unlocked = isUnlocked(key);
+      const mastered = isMastered(key);
+      const active = state.activeStop === key;
+      if (!unlocked) stop.classList.add('locked');
+      if (mastered) stop.classList.add('mastered');
+      if (active) stop.classList.add('active');
+      stop.dataset.tense = key;
+
+      const dotInner = mastered ? `<svg viewBox="0 0 24 24" fill="none" stroke="#1F1A14" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+                       : !unlocked ? `<svg viewBox="0 0 24 24" fill="none" stroke="#A89C89" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="11" width="12" height="9" rx="1.5"/><path d="M9 11V8a3 3 0 0 1 6 0v3"/></svg>`
+                       : '';
+
+      stop.innerHTML = `
+        <span class="tl-stop-level">L${t.level}</span>
+        <span class="tl-stop-dot">${dotInner}</span>
+        <span class="tl-stop-label">${t.name}</span>
+      `;
+      if (unlocked) stop.addEventListener('click', () => driveTo(key));
+      stops.appendChild(stop);
+    });
+
+    // Position era zones based on first/last tense in each bucket
+    positionZones();
+    // Position the car
+    positionCar();
+  }
+
+  function positionZones() {
+    const N = TIMELINE_ORDER.length;
+    const buckets = { past: [], present: [], future: [] };
+    TIMELINE_ORDER.forEach((k, i) => {
+      buckets[TENSES[k].bucket].push(i);
+    });
+    ['past','present','future'].forEach(b => {
+      const arr = buckets[b];
+      const first = arr[0] / (N - 1) * 100;
+      const last = arr[arr.length - 1] / (N - 1) * 100;
+      const span = last - first;
+      const pad = 4; // a little extra width past edges
+      const el = $('#zone-' + b);
+      el.style.left = `calc(${Math.max(0, first - pad)}% + 14px)`;
+      el.style.width = `calc(${span + 2 * pad}% - 28px)`;
+    });
+  }
+
+  function positionCar() {
+    const car = $('#car');
+    const idx = TIMELINE_ORDER.indexOf(state.activeStop);
+    const N = TIMELINE_ORDER.length;
+    const pct = (idx / (N - 1)) * 100;
+    // The track is inset 30px left/right
+    const wrap = $('#timeline-wrap');
+    const rect = wrap.getBoundingClientRect();
+    const trackLeft = 30;
+    const trackRight = 30;
+    const trackWidth = rect.width - trackLeft - trackRight;
+    const x = trackLeft + (pct / 100) * trackWidth;
+    car.style.left = x + 'px';
+    // Update car style based on bucket
+    const b = TENSES[state.activeStop].bucket;
+    car.classList.remove('is-past','is-present','is-future');
+    car.classList.add('is-' + b);
+  }
+
+  function driveTo(key) {
+    if (!isUnlocked(key)) return;
+    if (state.activeStop === key) {
+      // Same stop — open lesson
+      openLesson(key);
+      return;
+    }
+    state.activeStop = key;
+    saveState();
+    beep('click');
+
+    // Animate car
+    const car = $('#car');
+    car.classList.add('driving');
+    setTimeout(() => car.classList.remove('driving'), 1000);
+
+    // Re-render
+    renderTimeline();
+    renderNowCard();
+    updateSky();
+    updateMascotTip();
+  }
+
+  function updateSky() {
+    const sky = $('#sky');
+    sky.classList.remove('bucket-past','bucket-present','bucket-future');
+    sky.classList.add('bucket-' + TENSES[state.activeStop].bucket);
+  }
+
+  function renderNowCard() {
+    const t = TENSES[state.activeStop];
+    const iconEl = $('#now-icon');
+    iconEl.innerHTML = t.icon;
+    iconEl.style.background = `var(--${t.bucket}-50)`;
+    iconEl.style.color = `var(--${t.bucket}-700)`;
+
+    $('#now-eyebrow').textContent = `Level ${t.level} · ${t.bucket}`;
+    $('#now-title').textContent = t.name;
+    $('#now-tagline').textContent = t.tagline;
+
+    const cta = $('#now-cta');
+    cta.disabled = !isUnlocked(t.key);
+    cta.onclick = () => openLesson(t.key);
+    if (isMastered(t.key)) {
+      cta.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Review`;
+    } else {
+      cta.innerHTML = `Open lesson <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`;
+    }
+  }
+
+  function updateMascotTip() {
+    const tipEl = $('#mascot-tip');
+    const next = getNextTense();
+    if (!next) {
+      tipEl.textContent = "🏆 You've mastered all 12 tenses! You're a true grammar time-traveler.";
+    } else if (next === state.activeStop) {
+      tipEl.textContent = `You're parked at "${TENSES[next].name}". Tap "Open lesson" to learn it!`;
+    } else {
+      tipEl.textContent = `Drive to "${TENSES[next].name}" — that's your next tense to master.`;
+    }
+    $('#home-mascot').innerHTML = MASCOT_SVG;
+  }
+
+  function renderLevels() {
+    const host = $('#levels');
+    host.innerHTML = '';
+    LEVELS.forEach(lv => {
+      const card = document.createElement('div');
+      card.className = 'level-card';
+      const unlocked = isLevelUnlocked(lv.num);
+      const progress = getLevelProgress(lv.num);
+      if (!unlocked) card.classList.add('locked');
+
+      const tensePills = lv.tenses.map(k => {
+        const t = TENSES[k];
+        const m = isMastered(k);
+        const u = isUnlocked(k);
+        const isActive = state.activeStop === k;
+        let cls = 'lvl-pill';
+        if (m) cls += ' mastered';
+        else if (isActive && u) cls += ' active-now';
+        if (!u) cls += ' locked';
+        return `<button class="${cls}" data-tense="${k}">${t.name.replace('Present ','P. ').replace('Future ','F. ').replace('Past ','Pa. ')}</button>`;
+      }).join('');
+
+      card.innerHTML = `
+        <div class="level-head">
+          <div class="level-num">${lv.num}</div>
+          <div class="level-title">${lv.title}</div>
+          <div class="level-progress">${progress}/3</div>
+        </div>
+        <div class="level-tenses">${tensePills}</div>
+      `;
+      host.appendChild(card);
+    });
+    $$('#levels .lvl-pill').forEach(btn => {
+      const k = btn.dataset.tense;
+      if (isUnlocked(k)) {
+        btn.addEventListener('click', () => driveTo(k));
+      }
+    });
+  }
+
+  /* -----------------------------------------------------------
+     LESSON VIEW
+     ----------------------------------------------------------- */
+  function openLesson(key) {
+    if (!isUnlocked(key)) return;
+    session.currentTense = key;
+    const t = TENSES[key];
+    const view = $('#view-lesson');
+    view.classList.remove('t-past','t-present','t-future');
+    view.classList.add('lesson','t-' + t.bucket);
+
+    const iconEl = $('#lesson-icon');
+    iconEl.innerHTML = t.icon;
+    iconEl.style.background = `var(--${t.bucket}-50)`;
+    iconEl.style.color = `var(--${t.bucket}-700)`;
+
+    $('#lesson-eyebrow').textContent = `Level ${t.level} · ${t.bucket}`;
+    $('#lesson-title').textContent = t.name;
+    $('#lesson-tagline').textContent = t.tagline;
+    $('#lesson-speech').textContent = t.speech;
+    $('#lesson-mascot').innerHTML = MASCOT_SVG;
+
+    // Structure
+    const structHost = $('#lesson-structure');
+    let structInner = `<div class="structure-label">How to build it</div><div class="structure-rules">`;
+    t.structure.forEach(s => {
+      structInner += `<div class="structure-rule"><span class="who">${s.who}</span> → ${s.form}</div>`;
+    });
+    structInner += `</div>`;
+    structHost.innerHTML = structInner;
+
+    // Forms
+    const formsHost = $('#lesson-forms');
+    formsHost.innerHTML = `
+      <div class="form-card positive">
+        <div class="form-card-icon">${ICONS.plus}</div>
+        <div class="form-card-label">Positive</div>
+        <div class="form-card-text">${t.forms.positive}</div>
+      </div>
+      <div class="form-card negative">
+        <div class="form-card-icon">${ICONS.minus}</div>
+        <div class="form-card-label">Negative</div>
+        <div class="form-card-text">${t.forms.negative}</div>
+      </div>
+      <div class="form-card question">
+        <div class="form-card-icon">${ICONS.question}</div>
+        <div class="form-card-label">Question</div>
+        <div class="form-card-text">${t.forms.question}</div>
+      </div>
+    `;
+
+    // Time words
+    const chipHost = $('#lesson-chips');
+    chipHost.innerHTML = '';
+    t.timeWords.forEach(w => {
+      const c = document.createElement('span');
+      c.className = 'chip';
+      c.textContent = w;
+      chipHost.appendChild(c);
+    });
+
+    // Examples
+    const exHost = $('#lesson-examples');
+    exHost.innerHTML = '';
+    t.examples.forEach(ex => {
+      const row = document.createElement('div');
+      row.className = 'example-row';
+      row.innerHTML = `
+        <div class="example-icon">${ex.emoji}</div>
+        <div>${ex.pre} <span class="example-verb">${ex.verb}</span> ${ex.post}</div>
+      `;
+      exHost.appendChild(row);
+    });
+
+    // Practice games
+    renderGameCards(t);
+
+    showView('lesson');
+  }
+
+  function renderGameCards(t) {
+    const host = $('#lesson-games');
+    const stars = state.starsByTense[t.key] || {};
+    const games = [
+      { key: 'mcq', name: 'Multiple choice', desc: 'Pick the correct form. Master here!', icon: ICONS.mcq, color: 'present' },
+      { key: 'build', name: 'Build a sentence', desc: 'Drag words into the right order.', icon: ICONS.build, color: 'past' },
+      { key: 'fix', name: 'Fix the mistake', desc: 'Find and fix the wrong word.', icon: ICONS.fix, color: 'future' },
+    ];
+    host.innerHTML = '';
+    games.forEach(g => {
+      const earned = stars[g.key] || 0;
+      const starsHTML = [1,2,3].map(n => `<svg viewBox="0 0 24 24" fill="currentColor" class="${n <= earned ? 'earned' : ''}"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.4 5.7 21.2l1.7-7L2 9.5l7.1-.6z"/></svg>`).join('');
+      const card = document.createElement('button');
+      card.className = 'game-card';
+      card.innerHTML = `
+        <div class="game-card-icon" style="background: var(--${g.color}-50); color: var(--${g.color}-700);">${g.icon}</div>
+        <div class="game-card-name">${g.name}</div>
+        <div class="game-card-desc">${g.desc}</div>
+        <div class="game-card-stars">${starsHTML}</div>
+      `;
+      card.addEventListener('click', () => startGame(t.key, g.key));
+      host.appendChild(card);
+    });
+  }
+
+  /* -----------------------------------------------------------
+     GAMES
+     ----------------------------------------------------------- */
+  function startGame(tenseKey, gameType) {
+    const t = TENSES[tenseKey];
+    let items;
+    if (gameType === 'mcq') items = t.mcq;
+    else if (gameType === 'build') items = t.build;
+    else if (gameType === 'fix') items = t.fix;
+
+    session.game = {
+      tense: tenseKey,
+      type: gameType,
+      items: items.slice(),
+      idx: 0,
+      correct: 0,
+      mistakes: 0,
+      perfect: true,
+    };
+
+    $('#game-title').textContent = `${t.name} — ${gameType === 'mcq' ? 'Multiple choice' : gameType === 'build' ? 'Build the sentence' : 'Fix the mistake'}`;
+
+    renderGameProgress();
+    renderGameStep();
+    showView('game');
+    beep('click');
+  }
+
+  function renderGameProgress() {
+    const g = session.game;
+    const host = $('#game-progress');
+    host.innerHTML = '';
+    g.items.forEach((_, i) => {
+      const dot = document.createElement('span');
+      dot.className = 'game-dot';
+      if (i < g.idx) dot.classList.add('correct');
+      else if (i === g.idx) dot.classList.add('active');
+      host.appendChild(dot);
+    });
+  }
+
+  function renderGameStep() {
+    const g = session.game;
+    if (g.idx >= g.items.length) {
+      finishGame();
+      return;
+    }
+    const body = $('#game-body');
+    body.innerHTML = '';
+    $('#game-feedback').textContent = '';
+    $('#game-feedback').className = 'feedback';
+    $('#btn-game-action').disabled = true;
+    $('#btn-game-action').textContent = 'Next →';
+    // Default action: advance. renderBuild will override this to checkBuild.
+    $('#btn-game-action').onclick = goToNextStep;
+
+    if (g.type === 'mcq') renderMCQ();
+    else if (g.type === 'build') renderBuild();
+    else if (g.type === 'fix') renderFix();
+
+    renderGameProgress();
+  }
+
+  /* ---------- MCQ ---------- */
+  function renderMCQ() {
+    const g = session.game;
+    const item = g.items[g.idx];
+    const body = $('#game-body');
+    body.innerHTML = `
+      <div class="game-prompt">${item.q.replace('___', '<span style="border-bottom: 3px dashed currentColor; padding: 0 18px;">&nbsp;</span>')}</div>
+      <div class="mcq-options" id="mcq-options"></div>
+    `;
+    const optsHost = $('#mcq-options');
+    item.opts.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'mcq-opt';
+      btn.dataset.letter = String.fromCharCode(65 + i);
+      btn.textContent = opt;
+      btn.addEventListener('click', () => onMCQAnswer(btn, i));
+      optsHost.appendChild(btn);
+    });
+  }
+
+  function onMCQAnswer(btn, idx) {
+    const g = session.game;
+    const item = g.items[g.idx];
+    if (idx === item.a) {
+      btn.classList.add('right');
+      $$('#mcq-options .mcq-opt').forEach(b => b.disabled = true);
+      g.correct++;
+      const phrases = ['Correct!', 'Great!', 'Yes!', 'Perfect!', 'Spot on!'];
+      $('#game-feedback').textContent = phrases[Math.floor(Math.random() * phrases.length)];
+      $('#game-feedback').className = 'feedback win';
+      $('#btn-game-action').disabled = false;
+      beep('good');
+    } else {
+      btn.classList.add('bad');
+      btn.disabled = true;
+      g.mistakes++;
+      g.perfect = false;
+      $('#game-feedback').textContent = item.hint || 'Hmm, try again!';
+      $('#game-feedback').className = 'feedback bad';
+      beep('bad');
+    }
+  }
+
+  /* ---------- BUILD A SENTENCE ---------- */
+  function renderBuild() {
+    const g = session.game;
+    if (!g || !g.items || !g.items[g.idx] || !g.items[g.idx].words) {
+      console.warn('renderBuild called with invalid state', g);
+      return;
+    }
+    const item = g.items[g.idx];
+    const body = $('#game-body');
+    body.innerHTML = `
+      <div class="game-prompt">Tap each word in the right order. Tap a word in the sentence to send it back.</div>
+      <div class="build-preview" id="build-preview"><span class="build-preview-empty">your sentence appears here…</span></div>
+      <div class="build-target" id="build-target" aria-label="Your sentence"></div>
+      <div class="build-pool-label">Words to use:</div>
+      <div class="build-pool" id="build-pool"></div>
+    `;
+    const pool = $('#build-pool');
+    const shuffled = item.words.slice().sort(() => Math.random() - 0.5);
+    shuffled.forEach(word => {
+      const chip = document.createElement('div');
+      chip.className = 'word-chip';
+      chip.textContent = word;
+      chip.dataset.word = word;
+      chip.addEventListener('click', () => moveWordChip(chip));
+      pool.appendChild(chip);
+    });
+    updateBuildPreview();
+    $('#btn-game-action').textContent = 'Check answer';
+    $('#btn-game-action').disabled = false;
+    $('#btn-game-action').onclick = checkBuild;
+  }
+
+  function updateBuildPreview() {
+    const target = $('#build-target');
+    const preview = $('#build-preview');
+    if (!target || !preview) return;
+    const words = Array.from(target.querySelectorAll('.word-chip')).map(c => c.dataset.word);
+    if (words.length === 0) {
+      preview.innerHTML = '<span class="build-preview-empty">your sentence appears here…</span>';
+    } else {
+      preview.textContent = words.join(' ');
+    }
+  }
+
+  function moveWordChip(chip) {
+    const target = $('#build-target');
+    const pool = $('#build-pool');
+    if (chip.parentElement === target) {
+      pool.appendChild(chip);
+      chip.classList.remove('in-target');
+    } else {
+      target.appendChild(chip);
+      chip.classList.add('in-target');
+    }
+    updateBuildPreview();
+  }
+
+  function checkBuild() {
+    const g = session.game;
+    if (!g || !g.items) return;
+    const item = g.items[g.idx];
+    if (!item || !item.words) {
+      console.warn('checkBuild: invalid item', item, 'g:', g);
+      return;
+    }
+    const target = $('#build-target');
+    if (!target) return;
+    const built = $$('.word-chip', target).map(c => c.dataset.word || '');
+    const correct = item.words.join(' ') === built.join(' ');
+
+    if (correct) {
+      target.classList.add('correct');
+      g.correct++;
+      const phrases = ['Perfect sentence!', 'Beautifully built!', 'Great work!', 'Awesome!'];
+      $('#game-feedback').textContent = phrases[Math.floor(Math.random() * phrases.length)];
+      $('#game-feedback').className = 'feedback win';
+      $('#btn-game-action').textContent = 'Next →';
+      $('#btn-game-action').onclick = goToNextStep;
+      beep('good');
+      // Lock chips
+      $$('.word-chip').forEach(c => c.style.pointerEvents = 'none');
+    } else {
+      target.classList.add('wrong');
+      setTimeout(() => target.classList.remove('wrong'), 450);
+      g.mistakes++;
+      g.perfect = false;
+      const yourSentence = built.length ? '"' + built.join(' ') + '"' : '(empty)';
+      $('#game-feedback').textContent = 'You wrote: ' + yourSentence + ' — check the order and try again!';
+      $('#game-feedback').className = 'feedback bad';
+      beep('bad');
+    }
+  }
+
+  /* ---------- FIX THE MISTAKE ---------- */
+  function renderFix() {
+    const g = session.game;
+    const item = g.items[g.idx];
+    const body = $('#game-body');
+
+    // Render sentence with each word clickable; the WRONG word should be tappable to flag
+    const tokens = item.sentence.split(/(\s+)/);
+    const wordHTML = tokens.map(tok => {
+      if (/^\s+$/.test(tok)) return tok;
+      const cleanWord = tok.replace(/[.,!?]$/, '');
+      const punctuation = tok.length > cleanWord.length ? tok.slice(cleanWord.length) : '';
+      const isWrong = cleanWord === item.wrong;
+      return `<span class="fix-word" data-word="${cleanWord}" data-iswrong="${isWrong}">${cleanWord}</span>${punctuation}`;
+    }).join('');
+
+    body.innerHTML = `
+      <div class="fix-instructions">Step 1 — tap the word that's wrong.</div>
+      <div class="fix-sentence" id="fix-sentence">${wordHTML}</div>
+      <div class="mcq-options" id="fix-options" style="display:none;"></div>
+    `;
+
+    $$('.fix-word', body).forEach(w => {
+      w.addEventListener('click', () => onFixWordTap(w));
+    });
+  }
+
+  function onFixWordTap(wordEl) {
+    const g = session.game;
+    const item = g.items[g.idx];
+    const isWrong = wordEl.dataset.iswrong === 'true';
+    if (!isWrong) {
+      wordEl.style.background = 'var(--neg-50)';
+      setTimeout(() => wordEl.style.background = '', 600);
+      g.perfect = false;
+      g.mistakes++;
+      $('#game-feedback').textContent = 'That word is fine! Try another.';
+      $('#game-feedback').className = 'feedback bad';
+      beep('bad');
+      return;
+    }
+    // Correct identification — now show options to fix
+    wordEl.classList.add('targeted');
+    $$('.fix-word').forEach(w => w.style.pointerEvents = 'none');
+    $('.fix-instructions').textContent = 'Step 2 — pick the correct replacement!';
+
+    const optsHost = $('#fix-options');
+    optsHost.style.display = 'grid';
+    optsHost.innerHTML = '';
+    item.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'mcq-opt';
+      btn.dataset.letter = String.fromCharCode(65 + i);
+      btn.textContent = opt;
+      btn.addEventListener('click', () => onFixReplace(btn, i, wordEl));
+      optsHost.appendChild(btn);
+    });
+  }
+
+  function onFixReplace(btn, idx, wordEl) {
+    const g = session.game;
+    const item = g.items[g.idx];
+    if (idx === item.a) {
+      btn.classList.add('right');
+      $$('#fix-options .mcq-opt').forEach(b => b.disabled = true);
+      // Replace word visually
+      wordEl.classList.remove('targeted');
+      wordEl.textContent = item.options[item.a];
+      wordEl.style.background = 'var(--pos-50)';
+      wordEl.style.color = 'var(--pos-700)';
+      wordEl.style.textDecoration = 'none';
+      g.correct++;
+      $('#game-feedback').textContent = 'Fixed! Sentence is correct now.';
+      $('#game-feedback').className = 'feedback win';
+      $('#btn-game-action').disabled = false;
+      beep('good');
+    } else {
+      btn.classList.add('bad');
+      btn.disabled = true;
+      g.perfect = false;
+      g.mistakes++;
+      $('#game-feedback').textContent = item.hint || 'Not quite. Try another!';
+      $('#game-feedback').className = 'feedback bad';
+      beep('bad');
+    }
+  }
+
+  /* ---------- (drag removed — click-only build for reliability) ---------- */
+
+  /* ---------- GAME PROGRESSION ---------- */
+  function goToNextStep() {
+    const g = session.game;
+    g.idx++;
+    renderGameStep();
+  }
+
+  function finishGame() {
+    const g = session.game;
+    const t = TENSES[g.tense];
+    const total = g.items.length;
+
+    // Award stars: 3 for perfect, 2 for one mistake, 1 for completion
+    let earned = 1;
+    if (g.perfect) earned = 3;
+    else if (g.mistakes <= 1) earned = 2;
+
+    state.stars += earned;
+    state.starsByTense[g.tense] = state.starsByTense[g.tense] || {};
+    const existing = state.starsByTense[g.tense][g.type] || 0;
+    state.starsByTense[g.tense][g.type] = Math.max(existing, earned);
+
+    // Mastery rule: complete MCQ perfectly (no mistakes) → master tense
+    let newlyMastered = false;
+    let unlockedNext = null;
+    let newLevel = null;
+
+    if (g.type === 'mcq' && g.perfect && !isMastered(g.tense)) {
+      state.mastered[g.tense] = true;
+      newlyMastered = true;
+      const idx = UNLOCK_PATH.indexOf(g.tense);
+      if (idx >= 0 && idx < UNLOCK_PATH.length - 1) {
+        unlockedNext = UNLOCK_PATH[idx + 1];
+        // Did we unlock a new LEVEL?
+        if (TENSES[unlockedNext].level !== TENSES[g.tense].level) {
+          newLevel = TENSES[unlockedNext].level;
+        }
+      }
+    }
+
+    saveState();
+    updateStars();
+
+    // Build summary screen
+    const body = $('#game-body');
+    const title = newlyMastered
+      ? `🏆 ${t.name} mastered!`
+      : g.perfect
+      ? `🌟 Perfect round!`
+      : g.mistakes <= 1
+      ? `Great job!`
+      : `Round complete!`;
+
+    let unlockMessage = '';
+    if (newLevel) {
+      unlockMessage = `<div style="margin-top: 10px; font-weight: 700; color: var(--past-700);">🎉 Level ${newLevel} unlocked! New tenses await.</div>`;
+    } else if (unlockedNext) {
+      unlockMessage = `<div style="margin-top: 10px; font-weight: 700; color: var(--present-700);">🔓 ${TENSES[unlockedNext].name} is now unlocked!</div>`;
+    } else if (!isMastered(g.tense) && g.type === 'mcq') {
+      unlockMessage = `<div style="margin-top: 10px; font-weight: 700; color: var(--ink-soft);">Tip — get a PERFECT round on multiple choice to master this tense.</div>`;
+    }
+
+    const starHTML = [1,2,3].map(n =>
+      `<svg width="36" height="36" viewBox="0 0 24 24" fill="${n <= earned ? 'var(--gold)' : 'var(--ink-faint)'}"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.4 5.7 21.2l1.7-7L2 9.5l7.1-.6z"/></svg>`
+    ).join('');
+
+    body.innerHTML = `
+      <div style="text-align: center; padding: 20px 0;">
+        <div style="font-family: var(--display); font-size: 26px; font-weight: 600; margin-bottom: 12px;">${title}</div>
+        <div style="display: flex; justify-content: center; gap: 6px; margin-bottom: 16px;">${starHTML}</div>
+        <div style="font-size: 16px; font-weight: 700;">You got ${g.correct} of ${total} correct${g.mistakes ? ` with ${g.mistakes} ${g.mistakes === 1 ? 'mistake' : 'mistakes'}` : ' with no mistakes'}.</div>
+        ${unlockMessage}
+      </div>
+    `;
+    $('#game-feedback').textContent = '';
+    $('#btn-game-action').textContent = 'Back to lesson';
+    $('#btn-game-action').disabled = false;
+    $('#btn-game-action').onclick = () => {
+      session.game = null;
+      openLesson(g.tense);
+    };
+    $('#game-progress').innerHTML = '';
+
+    if (newlyMastered) {
+      celebrate(60);
+      beep('win');
+      showToast(newLevel ? `🎉 Level ${newLevel} unlocked!` : `★ ${t.name} mastered!`, 'celebrate');
+      // After dismissing, also advance the active stop to the next tense
+      if (unlockedNext) {
+        setTimeout(() => { state.activeStop = unlockedNext; saveState(); }, 200);
+      }
+    } else if (g.perfect) {
+      celebrate(20);
+      beep('win');
+    }
+  }
+
+  /* -----------------------------------------------------------
+     TOAST + CONFETTI
+     ----------------------------------------------------------- */
+  let toastTimer = null;
+  function showToast(msg, kind) {
+    const el = $('#toast');
+    el.className = 'toast' + (kind ? ' ' + kind : '');
+    el.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.4 5.7 21.2l1.7-7L2 9.5l7.1-.6z"/></svg> ${msg}`;
+    requestAnimationFrame(() => el.classList.add('show'));
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
+  }
+
+  function celebrate(count) {
+    const colors = ['#C77A1F','#15A35F','#6B4EE0','#D14242','#F5B71B','#2D70CC','#D14282'];
+    const layer = document.createElement('div');
+    layer.className = 'confetti';
+    document.body.appendChild(layer);
+    for (let i = 0; i < (count || 36); i++) {
+      const s = document.createElement('span');
+      s.style.left = Math.random() * 100 + '%';
+      s.style.background = colors[Math.floor(Math.random() * colors.length)];
+      s.style.animationDelay = (Math.random() * 0.4) + 's';
+      s.style.animationDuration = (1.4 + Math.random() * 0.8) + 's';
+      s.style.transform = `rotate(${Math.random() * 360}deg)`;
+      layer.appendChild(s);
+    }
+    setTimeout(() => layer.remove(), 2400);
+  }
+
+  /* -----------------------------------------------------------
+     EVENT WIRING
+     ----------------------------------------------------------- */
+  $('#back-btn').addEventListener('click', () => {
+    if (session.view === 'game') {
+      // Back from game → return to lesson
+      const tense = session.game ? session.game.tense : session.currentTense;
+      session.game = null;
+      if (tense) openLesson(tense);
+      else { showView('home'); renderHome(); }
+    } else {
+      session.currentTense = null;
+      showView('home');
+      renderHome();
+    }
+  });
+
+  $('#btn-game-back').addEventListener('click', () => {
+    const tense = session.game ? session.game.tense : session.currentTense;
+    session.game = null;
+    if (tense) openLesson(tense);
+    else { showView('home'); renderHome(); }
+  });
+
+  // (Note: btn-game-action behavior is fully controlled per-game-state via .onclick —
+  // do NOT add a generic addEventListener here, as it would fire alongside the per-state
+  // handler and double-trigger actions like advancing the game.)
+
+  $('#now-cta').addEventListener('click', () => {
+    if (state.activeStop) openLesson(state.activeStop);
+  });
+
+  $('#sound-btn').addEventListener('click', () => {
+    state.sound = !state.sound;
+    saveState();
+    $('#sound-btn').classList.toggle('muted', !state.sound);
+    if (state.sound) beep('click');
+  });
+  if (!state.sound) $('#sound-btn').classList.add('muted');
+
+  $('#reset-btn').addEventListener('click', () => {
+    if (confirm('Reset all progress? You\'ll start fresh from Simple Present.')) {
+      state.stars = 0;
+      state.mastered = {};
+      state.starsByTense = {};
+      state.activeStop = 'present_simple';
+      saveState();
+      updateStars();
+      renderHome();
+      showToast('Progress reset. Welcome back to the start!');
+    }
+  });
+
+  // Handle window resize for car positioning
+  window.addEventListener('resize', () => {
+    if (session.view === 'home') positionCar();
+  });
+
+  /* -----------------------------------------------------------
+     INIT
+     ----------------------------------------------------------- */
+  // Make sure activeStop is unlocked
+  if (!isUnlocked(state.activeStop)) {
+    state.activeStop = getNextTense() || 'present_simple';
+  }
+  renderHome();
+  updateStars();
+  // Position car after layout settles
+  setTimeout(positionCar, 100);
+})();
+</script>
+</body>
+</html>
