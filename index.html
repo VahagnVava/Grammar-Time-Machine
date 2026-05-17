@@ -1879,6 +1879,175 @@ body { font-size: 18px; }
 }
 
 /* ============================================================
+   CHAMPION'S CHALLENGE — final quiz banner + per-question topic pill
+   ============================================================ */
+.champ-banner {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+  margin: 22px 0 10px;
+  padding: 18px 22px;
+  background: linear-gradient(135deg, #FFE8A8 0%, #FFC940 100%);
+  border: 3px solid #9E4400;
+  border-radius: 22px;
+  box-shadow: 0 6px 0 #9E4400;
+  overflow: hidden;
+  filter: grayscale(0.7) brightness(0.92);
+  transition: filter 0.35s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+.champ-banner.unlocked {
+  filter: none;
+  animation: champShimmer 5s ease-in-out infinite;
+}
+.champ-banner.unlocked:hover { transform: translateY(-2px); box-shadow: 0 8px 0 #9E4400; }
+@keyframes champShimmer {
+  0%, 100% { box-shadow: 0 6px 0 #9E4400, 0 0 0 0 rgba(255,201,64,0); }
+  50%      { box-shadow: 0 6px 0 #9E4400, 0 0 24px 0 rgba(255,201,64,0.6); }
+}
+.champ-banner-glow {
+  position: absolute;
+  inset: -50% -10%;
+  background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 65%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.champ-banner.unlocked .champ-banner-glow { opacity: 1; }
+.champ-banner-icon {
+  font-size: 48px;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+}
+.champ-banner.unlocked .champ-banner-icon {
+  animation: champTrophyBounce 2.2s ease-in-out infinite;
+}
+@keyframes champTrophyBounce {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50%      { transform: translateY(-4px) rotate(2deg); }
+}
+.champ-banner-content { position: relative; z-index: 1; min-width: 0; }
+.champ-banner-eyebrow {
+  font-family: var(--display);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 800;
+  color: #9E4400;
+  opacity: 0.85;
+}
+.champ-banner-title {
+  font-family: var(--display);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-top: 2px;
+  letter-spacing: -0.005em;
+}
+.champ-banner-sub {
+  font-size: 15px;
+  font-weight: 600;
+  color: #7E430A;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+.champ-banner-btn {
+  background: var(--ink);
+  color: #FFE8A8;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 17px;
+  padding: 13px 22px;
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(58,47,34,0.35);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+}
+.champ-banner-btn:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 rgba(58,47,34,0.35);
+}
+.champ-banner-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  background: #7A6B58;
+  border-color: #7A6B58;
+  color: rgba(255,255,255,0.85);
+}
+
+/* Per-question topic pill that tells the kid which tense the question is about */
+.champ-topic {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 14px;
+  background: var(--paper);
+  border: 2px solid var(--line-strong);
+  color: var(--ink);
+  margin-bottom: 12px;
+  letter-spacing: 0.01em;
+}
+.champ-topic.bucket-past    { background: #FFEAD0; border-color: #FF8A3D; color: #9E4400; }
+.champ-topic.bucket-present { background: #E5F8DE; border-color: #4FC44F; color: #1F6B1F; }
+.champ-topic.bucket-future  { background: #DFF0FE; border-color: #2C9CFF; color: #0C5A9E; }
+.champ-topic strong { font-weight: 800; }
+
+/* Big celebration medal on the champion results screen */
+.champ-medal {
+  font-size: 72px;
+  line-height: 1;
+  margin-bottom: 4px;
+  animation: champMedalDrop 0.7s cubic-bezier(.5,1.6,.4,1);
+  filter: drop-shadow(0 4px 0 rgba(58,47,34,0.18));
+}
+@keyframes champMedalDrop {
+  0%   { transform: translateY(-40px) rotate(-180deg); opacity: 0; }
+  60%  { transform: translateY(8px) rotate(15deg); opacity: 1; }
+  100% { transform: translateY(0) rotate(0); }
+}
+.champ-newbest {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 17px;
+  color: #9E4400;
+  background: var(--gold-soft);
+  border: 2.5px dashed var(--gold);
+  border-radius: 14px;
+  padding: 10px 18px;
+  margin-top: 6px;
+  animation: champNewBestPop 0.5s cubic-bezier(.5,1.4,.4,1);
+}
+@keyframes champNewBestPop {
+  0%   { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 600px) {
+  .champ-banner {
+    grid-template-columns: auto 1fr;
+    grid-template-areas: "icon content" "btn btn";
+    gap: 14px;
+    padding: 16px 18px;
+  }
+  .champ-banner-icon { grid-area: icon; font-size: 40px; }
+  .champ-banner-content { grid-area: content; }
+  .champ-banner-btn { grid-area: btn; width: 100%; justify-self: stretch; }
+  .champ-banner-title { font-size: 20px; }
+  .champ-banner-sub { font-size: 14px; }
+  .champ-medal { font-size: 60px; }
+}
+
+/* ============================================================
    ADVENTURE PASS — micro-gameplay polish
    Streak badge, flying score pops, answer pop/shake,
    staggered lesson reveal — without changing any layout.
@@ -2784,6 +2953,18 @@ body { font-size: 18px; }
         <span id="now-cta-text">Start lesson</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
+    </div>
+
+    <!-- CHAMPION'S CHALLENGE — locked until all 12 tenses mastered -->
+    <div class="champ-banner" id="champ-banner">
+      <div class="champ-banner-glow"></div>
+      <div class="champ-banner-icon" id="champ-banner-icon">🏆</div>
+      <div class="champ-banner-content">
+        <div class="champ-banner-eyebrow" id="champ-banner-eyebrow">Final challenge</div>
+        <div class="champ-banner-title" id="champ-banner-title">Champion's Challenge</div>
+        <div class="champ-banner-sub" id="champ-banner-sub">Master all 12 tenses to unlock</div>
+      </div>
+      <button class="champ-banner-btn" id="champ-banner-btn" disabled>🔒 Locked</button>
     </div>
 
     <!-- RECAP STATS -->
@@ -4160,6 +4341,7 @@ body { font-size: 18px; }
     updateMascotTip();
     renderWorldRecap();
     updateOnboarding();
+    renderChampionBanner();
   }
 
   function renderHighwayBackgrounds() {
@@ -4807,6 +4989,82 @@ body { font-size: 18px; }
   }
 
   /* -----------------------------------------------------------
+     CHAMPION'S CHALLENGE — comprehensive quiz across all 12 tenses,
+     unlocked once every tense is mastered.
+     ----------------------------------------------------------- */
+  function renderChampionBanner() {
+    const banner = $('#champ-banner');
+    if (!banner) return;
+    const masteredCount = TIMELINE_ORDER.filter(k => isMastered(k)).length;
+    const allMastered = masteredCount === TIMELINE_ORDER.length;
+    const eyebrow = $('#champ-banner-eyebrow');
+    const title = $('#champ-banner-title');
+    const sub = $('#champ-banner-sub');
+    const btn = $('#champ-banner-btn');
+    const icon = $('#champ-banner-icon');
+
+    if (allMastered) {
+      banner.classList.add('unlocked');
+      icon.textContent = '🏆';
+      eyebrow.textContent = 'Final challenge unlocked';
+      title.textContent = "Champion's Challenge";
+      const best = state.championBest || 0;
+      sub.textContent = best > 0
+        ? `Best score: ${best}/12 · Test all 12 tenses in one quiz!`
+        : 'One question from each of the 12 tenses. Can you ace them all?';
+      btn.disabled = false;
+      btn.textContent = best > 0 ? '🚗 Play again' : '🚗 Start the challenge';
+      btn.onclick = () => { startChampionChallenge(); };
+    } else {
+      banner.classList.remove('unlocked');
+      icon.textContent = '🔒';
+      eyebrow.textContent = `Locked · ${masteredCount} / 12 tenses mastered`;
+      title.textContent = "Champion's Challenge";
+      sub.textContent = `Master all 12 tenses across the three worlds to unlock the final quiz.`;
+      btn.disabled = true;
+      btn.textContent = `🔒 ${12 - masteredCount} to go`;
+      btn.onclick = null;
+    }
+  }
+
+  // Build a list of 12 MCQ questions (one random pick from each tense) and start a champion-mode game.
+  function startChampionChallenge() {
+    const items = TIMELINE_ORDER.map(key => {
+      const t = TENSES[key];
+      const pick = t.mcq[Math.floor(Math.random() * t.mcq.length)];
+      return Object.assign({}, pick, {
+        _champTense: key,
+        _champTenseName: t.name,
+        _champBucket: t.bucket,
+        _champEmoji: WORLDS[t.bucket].emoji,
+        _champWorldName: WORLDS[t.bucket].name,
+      });
+    });
+    // Shuffle so the order isn't predictable
+    for (let i = items.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [items[i], items[j]] = [items[j], items[i]];
+    }
+    session.game = {
+      tense: null,
+      type: 'mcq',
+      items,
+      idx: 0,
+      correct: 0,
+      mistakes: 0,
+      perfect: true,
+      streak: 0,
+      maxStreak: 0,
+      isChampion: true,
+    };
+    $('#game-title').textContent = "🏆 Champion's Challenge — All 12 tenses";
+    renderGameProgress();
+    renderGameStep();
+    showView('game');
+    beep('click');
+  }
+
+  /* -----------------------------------------------------------
      GAMES
      ----------------------------------------------------------- */
   function startGame(tenseKey, gameType) {
@@ -4911,7 +5169,11 @@ body { font-size: 18px; }
     const reviewBadge = item._isReview
       ? `<div class="review-badge">🔁 Review: ${item._reviewTenseName}</div>`
       : '';
+    const champTopic = item._champTense
+      ? `<div class="champ-topic bucket-${item._champBucket}">${item._champEmoji} ${item._champWorldName} · <strong>${item._champTenseName}</strong></div>`
+      : '';
     body.innerHTML = `
+      ${champTopic}
       ${reviewBadge}
       <div class="game-prompt">${item.q.replace('___', '<span style="border-bottom: 3px dashed currentColor; padding: 0 18px;">&nbsp;</span>')}</div>
       <div class="mcq-options" id="mcq-options"></div>
@@ -5198,8 +5460,58 @@ body { font-size: 18px; }
 
   function finishGame() {
     const g = session.game;
-    const t = TENSES[g.tense];
     const total = g.items.length;
+
+    // === CHAMPION'S CHALLENGE — special end-of-game flow ===
+    if (g.isChampion) {
+      const score = g.correct;
+      const pct = score / total;
+      let rank;
+      if (pct === 1)        rank = { medal: '🏆', title: 'GRAND CHAMPION!',  sub: 'Perfect score — you mastered every tense!' };
+      else if (pct >= 10/12) rank = { medal: '🥇', title: 'Time Master',      sub: `${score}/${total} — excellent run!` };
+      else if (pct >= 8/12)  rank = { medal: '🥈', title: 'Time Traveler',    sub: `${score}/${total} — solid! Try again for a higher rank.` };
+      else                   rank = { medal: '🚗', title: 'Keep practicing!', sub: `${score}/${total} — every champion replays! Give it another shot.` };
+
+      // Persist best score + perfect flag
+      const prevBest = state.championBest || 0;
+      const newBest = Math.max(prevBest, score);
+      state.championBest = newBest;
+      if (pct === 1) state.championPerfect = true;
+      saveState();
+
+      const body = $('#game-body');
+      body.innerHTML = `
+        <div class="celebrate">
+          <div class="champ-medal">${rank.medal}</div>
+          <div class="celebrate-title">${rank.title}</div>
+          <div class="celebrate-subtitle">${rank.sub}</div>
+          <div class="celebrate-score">You answered ${score} of ${total} correctly${g.maxStreak >= 3 ? ` · best streak: 🔥 ${g.maxStreak}` : ''}</div>
+          ${newBest > prevBest ? `<div class="champ-newbest">🎉 New best score!</div>` : ''}
+        </div>
+      `;
+      $('#game-feedback').textContent = '';
+      const actionBtn = $('#btn-game-action');
+      actionBtn.disabled = false;
+      actionBtn.textContent = pct === 1 ? '🏠 Back to home' : '🔁 Try again';
+      actionBtn.onclick = () => {
+        if (pct === 1) { session.game = null; showView('home'); renderHome(); }
+        else { startChampionChallenge(); }
+      };
+      const stayLink = $('#btn-game-stay');
+      if (stayLink) stayLink.style.display = 'none';
+      $('#game-progress').innerHTML = '';
+
+      celebrate(pct === 1 ? 180 : pct >= 10/12 ? 90 : 40);
+      beep('win');
+      if (pct === 1) {
+        showToast(`🏆 Grand Champion! Perfect 12/12!`, 'celebrate');
+      } else if (newBest > prevBest) {
+        showToast(`🎉 New best score: ${score}/${total}`, 'celebrate');
+      }
+      return;
+    }
+
+    const t = TENSES[g.tense];
 
     // Award stars: 3 for perfect, 2 for one mistake, 1 for completion
     let earned = 1;
