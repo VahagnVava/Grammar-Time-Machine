@@ -1879,6 +1879,102 @@ body { font-size: 18px; }
 }
 
 /* ============================================================
+   WHEN-TO-USE-IT CARD — the headline rule shown first in every lesson
+   ============================================================ */
+.usage-card {
+  margin: 12px 0 22px;
+  padding: 22px 24px 18px;
+  background: linear-gradient(135deg, #FFFCF1 0%, #FFF1D2 100%);
+  border: 2.5px solid var(--gold);
+  border-radius: 22px;
+  box-shadow: 0 4px 0 var(--past-700), 0 8px 20px rgba(158,68,0,0.10);
+  position: relative;
+}
+.usage-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.usage-card-icon {
+  font-size: 28px;
+  line-height: 1;
+  animation: usageBulb 2.4s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+@keyframes usageBulb {
+  0%, 100% { transform: scale(1) rotate(0); }
+  50%      { transform: scale(1.12) rotate(-4deg); }
+}
+.usage-card-eyebrow {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--past-700);
+}
+.usage-card-rule {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.35;
+  color: var(--ink);
+  margin-bottom: 14px;
+  letter-spacing: -0.005em;
+}
+.usage-card-cases {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.usage-card-cases li {
+  position: relative;
+  padding: 8px 12px 8px 32px;
+  background: rgba(255,255,255,0.7);
+  border-radius: 12px;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ink);
+  font-weight: 500;
+}
+.usage-card-cases li::before {
+  content: '✓';
+  position: absolute;
+  left: 10px; top: 8px;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--present-500);
+}
+.usage-card-cases li em {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--past-700);
+}
+.usage-card-tip {
+  font-family: var(--body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--past-700);
+  background: rgba(255,201,64,0.15);
+  border: 2px dashed var(--gold);
+  border-radius: 12px;
+  padding: 10px 14px;
+  line-height: 1.5;
+}
+@media (max-width: 600px) {
+  .usage-card { padding: 18px 18px 14px; border-radius: 18px; }
+  .usage-card-rule { font-size: 19px; }
+  .usage-card-cases li { font-size: 15px; padding: 7px 10px 7px 28px; }
+  .usage-card-cases li::before { left: 8px; }
+  .usage-card-tip { font-size: 13px; }
+}
+
+/* ============================================================
    CHAMPION'S CHALLENGE — final quiz banner + per-question topic pill
    ============================================================ */
 .champ-banner {
@@ -2989,6 +3085,17 @@ body { font-size: 18px; }
       <span id="lesson-speech">I'm Chrono! This tense is for things that always happen — habits and rules of the world.</span>
     </div>
 
+    <!-- WHEN TO USE IT — appears first so kids learn the rule before the form -->
+    <div class="usage-card" id="lesson-usage" style="display:none;">
+      <div class="usage-card-head">
+        <div class="usage-card-icon">💡</div>
+        <div class="usage-card-eyebrow" id="lesson-usage-eyebrow">When to use it</div>
+      </div>
+      <div class="usage-card-rule" id="lesson-usage-rule"></div>
+      <ul class="usage-card-cases" id="lesson-usage-cases"></ul>
+      <div class="usage-card-tip" id="lesson-usage-tip"></div>
+    </div>
+
     <div class="structure" id="lesson-structure"></div>
 
     <div class="forms" id="lesson-forms"></div>
@@ -3134,6 +3241,16 @@ body { font-size: 18px; }
       level: 1, pos: 5, icon: ICONS.simple,
       tagline: 'Habits, routines, and facts that are always true.',
       speech: "I'm for things that always happen — daily habits, routines, and facts about the world.",
+      usage: {
+        headline: 'When to use Present Simple',
+        oneLine: 'For things that happen AGAIN AND AGAIN — habits, facts, and routines.',
+        cases: [
+          'Things you do regularly: <em>"I brush my teeth every morning."</em>',
+          'Facts that are always true: <em>"The Earth goes around the Sun."</em>',
+          'How often you do something: <em>"She sometimes plays tennis."</em>'
+        ],
+        tip: '🔎 Spot it: words like "every day", "always", "usually", "never" — that\'s present simple!',
+      },
       structure: [
         { who: 'I / You / We / They', form: 'Verb (V1)' },
         { who: 'He / She / It', form: 'Verb + s/es' },
@@ -3206,6 +3323,16 @@ body { font-size: 18px; }
       level: 1, pos: 4, icon: ICONS.simple,
       tagline: 'Things that happened before now and are finished.',
       speech: "Roll back in time! I'm for actions that started AND finished in the past.",
+      usage: {
+        headline: 'When to use Past Simple',
+        oneLine: 'When something STARTED and ENDED in the past — and you can say WHEN.',
+        cases: [
+          'A finished action: <em>"I ate pizza yesterday."</em>',
+          'At a specific past time: <em>"She visited Spain in 2019."</em>',
+          'Past habits with a time: <em>"I played soccer when I was 7."</em>'
+        ],
+        tip: '🔎 Spot it: "yesterday", "last week", "two days ago", "in 2020" — the time is done!',
+      },
       structure: [
         { who: 'All subjects', form: 'Verb + ed' },
         { who: 'Irregular verbs', form: 'Special past form (go → went)' },
@@ -3310,6 +3437,16 @@ body { font-size: 18px; }
       level: 1, pos: 9, icon: ICONS.simple,
       tagline: 'Things that will happen later. Predictions, promises, and plans.',
       speech: "Zoom into the future! I'm for things that haven't happened yet, but they will.",
+      usage: {
+        headline: 'When to use Future Simple',
+        oneLine: 'For things that WILL happen later — decisions, promises, and predictions.',
+        cases: [
+          'A decision you just made: <em>"I will help you carry that."</em>',
+          'A prediction about later: <em>"I think it will rain tomorrow."</em>',
+          'A promise: <em>"I will always remember this."</em>'
+        ],
+        tip: '🔎 Spot it: "tomorrow", "next week", "soon" — and the magic word "will"!',
+      },
       structure: [
         { who: 'All subjects', form: 'will + V1' },
       ],
@@ -3358,6 +3495,16 @@ body { font-size: 18px; }
       level: 2, pos: 6, icon: ICONS.cont,
       tagline: 'Things happening right now, at this very moment.',
       speech: "Watch out — I'm for actions happening RIGHT NOW, while you're speaking!",
+      usage: {
+        headline: 'When to use Present Continuous',
+        oneLine: 'For things happening RIGHT NOW, while you\'re speaking.',
+        cases: [
+          'At this very moment: <em>"I am eating breakfast right now."</em>',
+          'A temporary thing this week: <em>"She is studying for her test this week."</em>',
+          'A trend that\'s changing: <em>"The weather is getting warmer."</em>'
+        ],
+        tip: '🔎 Spot it: "now", "right now", "at the moment" — and a verb ending in -ing!',
+      },
       structure: [
         { who: 'I', form: 'am + V-ing' },
         { who: 'He / She / It', form: 'is + V-ing' },
@@ -3433,6 +3580,16 @@ body { font-size: 18px; }
       level: 2, pos: 3, icon: ICONS.cont,
       tagline: 'Things that were happening at a moment in the past — like a movie scene.',
       speech: "I show actions in PROGRESS in the past — like rewinding a movie scene.",
+      usage: {
+        headline: 'When to use Past Continuous',
+        oneLine: 'For an action that was IN THE MIDDLE of happening at a past moment.',
+        cases: [
+          'Mid-action at a past time: <em>"At 8pm yesterday, I was watching TV."</em>',
+          'Action interrupted by another: <em>"I was sleeping when the phone rang."</em>',
+          'Two things happening together: <em>"She was reading while he was cooking."</em>'
+        ],
+        tip: '🎬 Think of it like a movie scene — you\'re inside the moment, watching it happen.',
+      },
       structure: [
         { who: 'I / He / She / It', form: 'was + V-ing' },
         { who: 'You / We / They', form: 'were + V-ing' },
@@ -3480,6 +3637,16 @@ body { font-size: 18px; }
       level: 2, pos: 10, icon: ICONS.cont,
       tagline: 'Something that will be happening at a specific moment in the future.',
       speech: "I show actions in PROGRESS in the future — imagine watching tomorrow's movie!",
+      usage: {
+        headline: 'When to use Future Continuous',
+        oneLine: 'For an action that WILL BE in the middle of happening at a future moment.',
+        cases: [
+          'Mid-action at a future time: <em>"At 9pm tomorrow, I will be watching the game."</em>',
+          'Planned ongoing activity: <em>"Next week we will be travelling in Italy."</em>',
+          'Polite asks: <em>"Will you be using the kitchen later?"</em>'
+        ],
+        tip: '🚀 Imagine a future moment, then zoom IN — what\'s happening AT that exact time?',
+      },
       structure: [
         { who: 'All subjects', form: 'will be + V-ing' },
       ],
@@ -3528,6 +3695,16 @@ body { font-size: 18px; }
       level: 3, pos: 7, icon: ICONS.perf,
       tagline: 'Actions that started in the past but matter now.',
       speech: "I bridge past and present! The action started before, but the effect is HERE NOW.",
+      usage: {
+        headline: 'When to use Present Perfect',
+        oneLine: 'For things that started in the past but STILL MATTER NOW — no specific "when".',
+        cases: [
+          'Life experiences (any time): <em>"I have visited Paris."</em>',
+          'Just finished, still relevant: <em>"She has just finished her homework."</em>',
+          'Unfinished situations: <em>"I have lived here for 5 years."</em> (still living here)'
+        ],
+        tip: '🔎 Spot it: "ever", "never", "already", "yet", "just", "for", "since" — and "have/has + V3".',
+      },
       structure: [
         { who: 'I / You / We / They', form: 'have + V3 (past participle)' },
         { who: 'He / She / It', form: 'has + V3' },
@@ -3610,6 +3787,16 @@ body { font-size: 18px; }
       level: 3, pos: 2, icon: ICONS.perf,
       tagline: 'A past action that finished BEFORE another past action.',
       speech: "I'm the EARLIEST past — for things that happened before something else in the past.",
+      usage: {
+        headline: 'When to use Past Perfect',
+        oneLine: 'For something that FINISHED before another past action — the EARLIER of two pasts.',
+        cases: [
+          'Earlier of two past events: <em>"I had eaten before she arrived."</em>',
+          'Cause of a past result: <em>"He was tired because he had run a marathon."</em>',
+          'Done by a past deadline: <em>"By 8pm, the movie had ended."</em>'
+        ],
+        tip: '⏪ When telling a story with two past actions, the FIRST one uses had + V3.',
+      },
       structure: [
         { who: 'All subjects', form: 'had + V3 (past participle)' },
       ],
@@ -3691,6 +3878,16 @@ body { font-size: 18px; }
       level: 3, pos: 11, icon: ICONS.perf,
       tagline: 'An action that will be finished by a specific point in the future.',
       speech: "Look ahead in time! I show what will be DONE by a future moment.",
+      usage: {
+        headline: 'When to use Future Perfect',
+        oneLine: 'For something that WILL BE FINISHED by a specific future moment.',
+        cases: [
+          'Done by a future deadline: <em>"By Friday, I will have finished my project."</em>',
+          'Future achievements: <em>"By 2030, she will have graduated."</em>',
+          'Done before another future event: <em>"By the time he arrives, I will have cleaned the house."</em>'
+        ],
+        tip: '⏰ Spot it: "by + future time" + "will have + V3". Think: "DONE by then."',
+      },
       structure: [
         { who: 'All subjects', form: 'will have + V3 (past participle)' },
       ],
@@ -3739,6 +3936,16 @@ body { font-size: 18px; }
       level: 4, pos: 8, icon: ICONS.perfCont,
       tagline: 'Actions that started in the past and are STILL going on now.',
       speech: "I'm the longest-running tense! Started in the past AND still happening NOW.",
+      usage: {
+        headline: 'When to use Present Perfect Continuous',
+        oneLine: 'For something that STARTED in the past and is STILL HAPPENING NOW.',
+        cases: [
+          'Ongoing duration: <em>"I have been studying for 3 hours."</em> (still studying)',
+          'Just stopped, visible result: <em>"She\'s tired — she has been running."</em>',
+          'Repeated until now: <em>"We have been meeting every Monday since June."</em>'
+        ],
+        tip: '🔎 Spot it: "for + duration" or "since + start time" — and "have been + V-ing".',
+      },
       structure: [
         { who: 'I / You / We / They', form: 'have been + V-ing' },
         { who: 'He / She / It', form: 'has been + V-ing' },
@@ -3786,6 +3993,16 @@ body { font-size: 18px; }
       level: 4, pos: 1, icon: ICONS.perfCont,
       tagline: 'A past action that had been going on for a while before something else happened.',
       speech: "I'm the deepest past! Action was already in progress for a while when something else happened.",
+      usage: {
+        headline: 'When to use Past Perfect Continuous',
+        oneLine: 'For something that had been HAPPENING FOR A WHILE before another past moment.',
+        cases: [
+          'Duration leading up to a past event: <em>"I had been waiting for 2 hours when she arrived."</em>',
+          'Cause of a past result: <em>"He was wet because it had been raining."</em>',
+          'Long-running past activity: <em>"She had been working there for 5 years before she quit."</em>'
+        ],
+        tip: '⏪ Like past perfect, but with -ING — emphasizes HOW LONG it lasted before the past event.',
+      },
       structure: [
         { who: 'All subjects', form: 'had been + V-ing' },
       ],
@@ -3832,6 +4049,15 @@ body { font-size: 18px; }
       level: 4, pos: 12, icon: ICONS.perfCont,
       tagline: 'An action that will have been going on for some time by a future point.',
       speech: "I'm the trickiest! By a future time, this action will have been happening for a while.",
+      usage: {
+        headline: 'When to use Future Perfect Continuous',
+        oneLine: 'For an action that WILL HAVE BEEN HAPPENING for a while by a future moment.',
+        cases: [
+          'Duration up to a future point: <em>"By 2030, I will have been working here for 10 years."</em>',
+          'Long-running activity reaching the future: <em>"Next May, she will have been studying English for 6 years."</em>'
+        ],
+        tip: '🏆 The longest sentence builder in English! Pattern: "will have been + V-ing + for + duration".',
+      },
       structure: [
         { who: 'All subjects', form: 'will have been + V-ing' },
       ],
@@ -4732,6 +4958,26 @@ body { font-size: 18px; }
 
     // Show the world splash when entering a new bucket
     maybeShowWorldSplash(t.bucket);
+
+    // "When to use it" — kid-friendly usage rule, shown only if data exists
+    const usageEl = $('#lesson-usage');
+    if (t.usage) {
+      $('#lesson-usage-eyebrow').textContent = t.usage.headline || 'When to use it';
+      $('#lesson-usage-rule').textContent = t.usage.oneLine || '';
+      const casesHost = $('#lesson-usage-cases');
+      casesHost.innerHTML = '';
+      (t.usage.cases || []).forEach(c => {
+        const li = document.createElement('li');
+        // Allow inline <em> emphasis from data, otherwise use plain text
+        li.innerHTML = c;
+        casesHost.appendChild(li);
+      });
+      $('#lesson-usage-tip').textContent = t.usage.tip || '';
+      $('#lesson-usage-tip').style.display = t.usage.tip ? '' : 'none';
+      usageEl.style.display = '';
+    } else {
+      usageEl.style.display = 'none';
+    }
 
     // Structure — render as colorful building blocks
     const structHost = $('#lesson-structure');
