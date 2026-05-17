@@ -4286,7 +4286,9 @@ body { font-size: 18px; }
     if (title) title.textContent = t.name;
     if (tagline) tagline.textContent = t.tagline;
 
-    const stars = state.starsByTense && state.starsByTense[t.key] ? state.starsByTense[t.key] : 0;
+    // Best earned stars across the three game types for this tense (0–3)
+    const tenseStarsObj = (state.starsByTense && state.starsByTense[t.key]) || {};
+    const stars = Object.values(tenseStarsObj).reduce((m, v) => Math.max(m, v || 0), 0);
     if (starsHost) {
       starsHost.innerHTML = [0,1,2].map(n => `<span class="hwy-star ${n < stars ? 'on' : ''}"></span>`).join('') + ` <span class="now-stars-text">${stars}/3 stars</span>`;
     }
