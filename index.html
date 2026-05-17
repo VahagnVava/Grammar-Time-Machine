@@ -15,45 +15,52 @@
   --display: 'Fredoka', system-ui, sans-serif;
   --body: 'Nunito', system-ui, sans-serif;
 
-  /* Neutrals */
-  --ink: #1F1A14;
-  --ink-soft: #5C5147;
-  --ink-faint: #A89C89;
-  --line: rgba(31, 26, 20, 0.10);
-  --line-strong: rgba(31, 26, 20, 0.22);
+  /* Neutrals — warm dark brown text on soft cream */
+  --bg: #FAF6EE;
+  --ink: #3A2F22;
+  --ink-soft: #7A6B58;
+  --ink-faint: #B5A89A;
+  --line: rgba(58, 47, 34, 0.10);
+  --line-strong: rgba(58, 47, 34, 0.18);
   --paper: #FFFFFF;
-  --paper-dim: rgba(255, 255, 255, 0.82);
+  --paper-dim: rgba(255, 255, 255, 0.85);
 
-  /* Tense color families */
-  --past-bg: #F4E0C7;
-  --past-50: #FBEFD8;
-  --past-200: #F2C885;
-  --past-500: #C77A1F;
-  --past-700: #7E430A;
+  /* Past — warm orange */
+  --past-bg: #FFDDB8;
+  --past-50: #FFEAD0;
+  --past-200: #FFB870;
+  --past-500: #FF8A3D;
+  --past-700: #9E4400;
 
-  --present-bg: #C9F0DC;
-  --present-50: #DEF6E8;
-  --present-200: #7DD8AA;
-  --present-500: #15A35F;
-  --present-700: #0A5C36;
+  /* Present — fresh green */
+  --present-bg: #D2F0CC;
+  --present-50: #E5F8DE;
+  --present-200: #8FE08F;
+  --present-500: #4FC44F;
+  --present-700: #1F6B1F;
 
-  --future-bg: #DDD3FA;
-  --future-50: #E8E1FA;
-  --future-200: #B5A7F0;
-  --future-500: #6B4EE0;
-  --future-700: #3B2A89;
+  /* Future — sky blue (replaces muted teal) */
+  --future-bg: #C8E5FF;
+  --future-50: #DFF0FE;
+  --future-200: #7AC1F5;
+  --future-500: #2C9CFF;
+  --future-700: #0C5A9E;
 
-  /* Form colors */
-  --pos-50: #DEF6E8;  --pos-500: #15A35F; --pos-700: #0A5C36;
-  --neg-50: #FFE0E0;  --neg-500: #D14242; --neg-700: #7C1F1F;
-  --que-50: #DCEAFB;  --que-500: #2D70CC; --que-700: #14406F;
+  /* Form colors — softer, less neon */
+  --pos-50: #E5F8DE;  --pos-500: #4FC44F; --pos-700: #1F6B1F;
+  --neg-50: #FCE5E5;  --neg-500: #FF5A5A; --neg-700: #A02020;
+  --que-50: #DFF0FE;  --que-500: #2C9CFF; --que-700: #0C5A9E;
 
-  --gold: #F5B71B;
-  --gold-soft: #FCE8A1;
+  /* Gold — softer than the old neon yellow */
+  --gold: #FFC940;
+  --gold-soft: #FFE8A8;
 
-  --shadow-sm: 0 2px 0 rgba(31, 26, 20, 0.08);
-  --shadow-md: 0 4px 0 rgba(31, 26, 20, 0.12);
-  --shadow-lg: 0 6px 0 rgba(31, 26, 20, 0.18);
+  /* Shadows — keep chunky offset style but translucent rather than solid black */
+  --shadow-sm: 0 2px 4px rgba(58, 47, 34, 0.07);
+  --shadow-md: 0 4px 10px rgba(58, 47, 34, 0.10);
+  --shadow-lg: 0 8px 18px rgba(58, 47, 34, 0.12);
+  --shadow-pop: 0 5px 0 rgba(58, 47, 34, 0.12);
+  --shadow-pop-lg: 0 7px 0 rgba(58, 47, 34, 0.14);
 
   --r-sm: 10px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px;
 }
@@ -65,7 +72,7 @@ body {
   color: var(--ink);
   min-height: 100vh;
   overflow-x: hidden;
-  background: #FFF6E1;
+  background: var(--bg);
 }
 button { font-family: inherit; cursor: pointer; }
 h1, h2, h3, h4 {
@@ -76,22 +83,22 @@ h1, h2, h3, h4 {
 }
 
 /* ============================================================
-   LIVING BACKGROUND — shifts based on car position
+   LIVING BACKGROUND — subtle warm tint behind the page
    ============================================================ */
 .sky {
   position: fixed; inset: 0; z-index: -2;
   pointer-events: none;
-  background: linear-gradient(180deg, #FFE9C4 0%, #FFF6E1 60%, #FFE3B3 100%);
+  background: var(--bg);
   transition: background 1s ease;
 }
 .sky.bucket-past {
-  background: linear-gradient(180deg, #F2D6A4 0%, #FBEAC9 50%, #E8B670 100%);
+  background: linear-gradient(180deg, #FFEAD0 0%, #FAF6EE 60%, #F2E2C9 100%);
 }
 .sky.bucket-present {
-  background: linear-gradient(180deg, #BDE5FF 0%, #E5F8E8 60%, #C1F0CE 100%);
+  background: linear-gradient(180deg, #E5F8DE 0%, #FAF6EE 60%, #D2F0CC 100%);
 }
 .sky.bucket-future {
-  background: linear-gradient(180deg, #6E48D6 0%, #B5A0F5 40%, #FFB1D6 100%);
+  background: linear-gradient(180deg, #DFF0FE 0%, #FAF6EE 60%, #C8E5FF 100%);
 }
 
 .scenery {
@@ -576,7 +583,7 @@ h1, h2, h3, h4 {
 
 /* Structure card — colorful building blocks instead of dark formula text */
 .structure {
-  background: linear-gradient(135deg, #FFF8E8 0%, #FFEDB8 100%);
+  background: linear-gradient(135deg, #FAF6EE 0%, #FFE8A8 100%);
   color: var(--ink);
   border: 3px solid var(--past-200);
   border-radius: 22px;
@@ -594,45 +601,45 @@ h1, h2, h3, h4 {
 }
 .rule-row {
   display: flex; flex-wrap: wrap; align-items: stretch;
-  gap: 12px; justify-content: center;
+  gap: 14px; justify-content: center;
 }
 .block {
   background: #fff;
-  border: 4px solid var(--ink);
-  border-radius: 18px;
-  padding: 8px 16px 10px;
-  box-shadow: 0 6px 0 rgba(0,0,0,0.22);
+  border: 2px solid var(--line-strong);
+  border-radius: 16px;
+  padding: 10px 18px 12px;
+  box-shadow: 0 3px 0 rgba(58,47,34,0.08);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: 2px;
-  min-width: 120px;
+  gap: 4px;
+  min-width: 110px;
   text-align: center;
-  transition: transform 0.15s, box-shadow 0.15s;
+  transition: transform 0.25s cubic-bezier(.3,1.2,.4,1), box-shadow 0.25s ease;
   position: relative;
 }
 .block:hover {
-  transform: translateY(-3px) rotate(-1deg);
-  box-shadow: 0 9px 0 rgba(0,0,0,0.22);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 0 rgba(58,47,34,0.10);
 }
 .block-tag {
   font-family: var(--display);
   font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  background: rgba(255,255,255,0.7);
-  border: 2px solid currentColor;
+  background: rgba(255,255,255,0.6);
+  border: 1.5px solid currentColor;
   border-radius: 999px;
-  padding: 2px 8px;
-  margin-bottom: 4px;
-  opacity: 0.95;
+  padding: 2px 9px;
+  margin-bottom: 2px;
+  opacity: 0.85;
 }
 .block-icon {
   font-size: 22px;
   line-height: 1;
-  margin: 2px 0;
+  margin: 4px 0 2px;
 }
 .block-text {
   font-family: var(--display);
@@ -641,79 +648,78 @@ h1, h2, h3, h4 {
   line-height: 1.15;
 }
 .block-subj {
-  background: linear-gradient(135deg, #DCEEFF 0%, #6BA8E0 100%);
-  color: #0A3A6E;
+  background: linear-gradient(135deg, #EAF3FB 0%, #BEDBF0 100%);
+  color: #1A4878;
 }
 .block-aux {
-  background: linear-gradient(135deg, #FFF1C8 0%, #F2A93A 100%);
-  color: #6E3D04;
+  background: linear-gradient(135deg, #FFEAD0 0%, #FFB870 100%);
+  color: #9E4400;
 }
 .block-verb {
-  background: linear-gradient(135deg, #E0F8C8 0%, #7CC757 100%);
-  color: #1F4209;
+  background: linear-gradient(135deg, #E5F0E0 0%, #A8CDA0 100%);
+  color: #2F5828;
 }
 .block-other {
-  background: linear-gradient(135deg, #FAEAFF 0%, #B689E0 100%);
-  color: #3B2A89;
+  background: linear-gradient(135deg, #DFF0FE 0%, #7AC1F5 100%);
+  color: #0C5A9E;
 }
 .rule-plus {
   font-family: var(--display);
-  font-weight: 800;
-  font-size: 32px;
-  color: var(--ink);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--ink-soft);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: var(--gold-soft);
-  border: 3px solid var(--ink);
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
   border-radius: 50%;
   align-self: center;
-  box-shadow: 0 3px 0 rgba(0,0,0,0.18);
   user-select: none;
 }
 
-/* Time-expression chips — vivid emoji + bucket-color */
-.chips { display: flex; flex-wrap: wrap; gap: 12px; }
+/* Time-expression chips — vivid emoji, lighter chrome */
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
 .chip {
   background: #fff;
-  border: 4px solid var(--ink);
+  border: 2px solid var(--line-strong);
   border-radius: 999px;
-  padding: 10px 18px 10px 14px;
+  padding: 8px 16px 8px 12px;
   font-family: var(--display);
   font-weight: 700;
-  font-size: 18px;
+  font-size: 17px;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 4px 0 rgba(0,0,0,0.2);
-  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 2px 0 rgba(58,47,34,0.06);
+  transition: transform 0.2s cubic-bezier(.3,1.2,.4,1), box-shadow 0.2s ease;
 }
-.chip:hover { transform: translateY(-2px); box-shadow: 0 5px 0 rgba(0,0,0,0.18); }
+.chip:hover { transform: translateY(-2px); box-shadow: 0 4px 0 rgba(58,47,34,0.08); }
 .chip-emoji {
   font-size: 22px;
   line-height: 1;
 }
 .chip-text { line-height: 1; }
-.chip-past    { background: #FFEAC9; border-color: #B86E0F; color: #6E3D04; }
-.chip-present { background: #D6F5E2; border-color: #0E7B47; color: #07522D; }
-.chip-future  { background: #ECE3FF; border-color: #5235BF; color: #2D1E66; }
+.chip-past    { background: #FFEAD0; border-color: #FF8A3D; color: #9E4400; }
+.chip-present { background: #E5F8DE; border-color: #4FC44F; color: #1F6B1F; }
+.chip-future  { background: #DFF0FE; border-color: #2C9CFF; color: #0C5A9E; }
 
 /* Review badge for spaced-repetition questions */
 .review-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: linear-gradient(135deg, #FFE3A6 0%, #F5B71B 100%);
-  color: #6E3D04;
+  background: linear-gradient(135deg, #FFE8A8 0%, #FFC940 100%);
+  color: #9E4400;
   padding: 6px 14px;
   border-radius: 999px;
-  border: 3px solid #B86E0F;
+  border: 3px solid #9E4400;
   font-family: var(--display);
   font-weight: 700;
   font-size: 14px;
-  box-shadow: 0 3px 0 #B86E0F;
+  box-shadow: 0 3px 0 #9E4400;
   margin-bottom: 14px;
   animation: reviewBadgePop 0.4s cubic-bezier(.5,1.5,.4,1);
 }
@@ -729,57 +735,58 @@ h1, h2, h3, h4 {
 }
 .form-card {
   background: var(--paper);
-  border: 2px solid var(--line);
+  border: 2px solid var(--line-strong);
   border-radius: var(--r-lg);
-  padding: 14px 14px 16px;
+  padding: 18px 18px 20px;
   box-shadow: var(--shadow-sm);
   position: relative; overflow: hidden;
+  transition: transform 0.2s cubic-bezier(.3,1.2,.4,1), box-shadow 0.2s ease;
+}
+.form-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 .form-card-icon {
   width: 32px; height: 32px; border-radius: 10px;
   display: grid; place-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 .form-card-icon svg { width: 18px; height: 18px; }
 .form-card-label {
   font-family: var(--display); font-size: 13px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.05em;
-  margin-bottom: 4px;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  margin-bottom: 6px;
+  opacity: 0.85;
 }
 .form-card-text {
   font-size: 15px; font-weight: 700;
-  line-height: 1.4;
+  line-height: 1.45;
 }
-.form-card.positive { border-color: var(--pos-500); }
+.form-card.positive { border-left: 4px solid var(--pos-500); }
 .form-card.positive .form-card-icon { background: var(--pos-50); color: var(--pos-700); }
 .form-card.positive .form-card-label { color: var(--pos-700); }
-.form-card.negative { border-color: var(--neg-500); }
+.form-card.negative { border-left: 4px solid var(--neg-500); }
 .form-card.negative .form-card-icon { background: var(--neg-50); color: var(--neg-700); }
 .form-card.negative .form-card-label { color: var(--neg-700); }
-.form-card.question { border-color: var(--que-500); }
+.form-card.question { border-left: 4px solid var(--que-500); }
 .form-card.question .form-card-icon { background: var(--que-50); color: var(--que-700); }
 .form-card.question .form-card-label { color: var(--que-700); }
 
-/* Time expressions */
-.tw-section { margin-bottom: 18px; }
+/* Section rhythm — generous breathing room between sections */
+.tw-section { margin-bottom: 32px; }
 .tw-title {
-  font-family: var(--display); font-size: 14px; font-weight: 700;
-  margin-bottom: 8px;
-  display: flex; align-items: center; gap: 8px;
+  font-family: var(--display); font-size: 18px; font-weight: 700;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+  color: var(--ink);
 }
 .tw-title::before {
-  content: ''; width: 6px; height: 6px;
-  border-radius: 50%; background: var(--ink);
+  content: ''; width: 8px; height: 8px;
+  border-radius: 50%; background: var(--past-500);
+  flex-shrink: 0;
 }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip {
-  background: var(--paper);
-  border: 2px solid var(--past-200);
-  color: var(--past-700);
-  padding: 6px 12px; border-radius: 999px;
-  font-size: 13px; font-weight: 800;
-  box-shadow: var(--shadow-sm);
-}
+.lesson.t-present .tw-title::before { background: var(--present-500); }
+.lesson.t-future .tw-title::before { background: var(--future-500); }
 .lesson.t-present .chip { border-color: var(--present-200); color: var(--present-700); }
 .lesson.t-future .chip { border-color: var(--future-200); color: var(--future-700); }
 
@@ -1144,7 +1151,7 @@ h1, h2, h3, h4 {
 /* Mascot greeting bar */
 .adv-mascot-bar {
   display: flex; align-items: center; gap: 16px;
-  background: linear-gradient(135deg, #FFF8E8 0%, #FFEDB8 100%);
+  background: linear-gradient(135deg, #FAF6EE 0%, #FFE8A8 100%);
   border: 3px solid var(--past-200);
   border-radius: 22px;
   padding: 14px 18px;
@@ -1236,9 +1243,9 @@ h1, h2, h3, h4 {
   pointer-events: none;
 }
 .hwy-zone span { font-size: 22px; }
-.hwy-zone-past    { left: calc(16.67% - 50px); color: var(--past-700);    background: var(--past-50); }
-.hwy-zone-present { left: calc(50% - 60px);    color: var(--present-700); background: var(--present-50); }
-.hwy-zone-future  { left: calc(83.33% - 60px); color: var(--future-700);  background: var(--future-50); }
+.hwy-zone-past    { left: calc(16.67% - 65px); color: var(--past-700);    background: var(--past-50); }
+.hwy-zone-present { left: calc(50% - 65px);    color: var(--present-700); background: var(--present-50); }
+.hwy-zone-future  { left: calc(83.33% - 75px); color: var(--future-700);  background: var(--future-50); }
 
 /* The road */
 .hwy-road {
@@ -1618,55 +1625,56 @@ body { font-size: 18px; }
    IRREGULAR VERBS — tap-to-reveal flip cards
    ============================================================ */
 .lesson-helper {
-  font-size: 16px;
+  font-size: 15px;
   color: var(--ink-soft);
-  font-weight: 600;
-  margin: 4px 0 14px;
-  line-height: 1.4;
+  font-weight: 500;
+  margin: 6px 0 22px;
+  line-height: 1.5;
 }
 .irreg-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  column-gap: 10px;
+  row-gap: 18px;
 }
 .irreg-pair {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 .irreg-card {
   width: 100%;
   background: #fff;
-  border: 4px solid var(--ink);
-  border-radius: 16px;
-  padding: 14px 10px;
+  border: 2px solid var(--line-strong);
+  border-radius: 14px;
+  padding: 11px 8px;
   font-family: var(--display);
   text-align: center;
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-  box-shadow: 0 5px 0 rgba(0,0,0,0.18);
-  transition: transform 0.1s, box-shadow 0.1s;
+  box-shadow: 0 2px 0 rgba(58,47,34,0.07);
+  transition: transform 0.2s cubic-bezier(.3,1.2,.4,1), box-shadow 0.2s ease;
 }
-.irreg-card:hover { transform: translateY(-2px); box-shadow: 0 7px 0 rgba(0,0,0,0.18); }
-.irreg-card:active { transform: translateY(2px); box-shadow: 0 3px 0 rgba(0,0,0,0.18); }
+.irreg-card:hover { transform: translateY(-2px); box-shadow: 0 4px 0 rgba(58,47,34,0.10); }
+.irreg-card:active { transform: translateY(1px); box-shadow: 0 1px 0 rgba(58,47,34,0.06); }
 .irreg-base {
-  background: linear-gradient(135deg, #DCEEFF 0%, #6BA8E0 100%);
-  color: #0A3A6E;
+  background: linear-gradient(135deg, #EAF3FB 0%, #BEDBF0 100%);
+  color: #1A4878;
 }
 .irreg-past {
-  background: linear-gradient(135deg, #FFEAC9 0%, #F2A93A 100%);
-  color: #6E3D04;
+  background: linear-gradient(135deg, #FFEAD0 0%, #FFB870 100%);
+  color: #9E4400;
   perspective: 800px;
   position: relative;
-  min-height: 76px;
+  min-height: 64px;
   padding: 0;
 }
 .irreg-flipper {
   position: relative;
   width: 100%;
-  min-height: 76px;
+  min-height: 64px;
   transform-style: preserve-3d;
   transition: transform 0.55s cubic-bezier(.5,1.4,.4,1);
 }
@@ -1678,39 +1686,37 @@ body { font-size: 18px; }
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 14px 10px;
+  padding: 11px 8px;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  border-radius: 12px;
+  border-radius: 10px;
 }
-.irreg-front {
-  /* visible by default */
-}
+.irreg-front { /* visible by default */ }
 .irreg-back {
   transform: rotateY(180deg);
-  background: linear-gradient(135deg, #FFE89A 0%, #F5B71B 100%);
-  color: #6E3D04;
-  border-radius: 12px;
+  background: linear-gradient(135deg, #FFE8A8 0%, #FFC940 100%);
+  color: #9E4400;
+  border-radius: 10px;
 }
 .irreg-label {
-  font-size: 11px;
+  font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   font-weight: 700;
-  opacity: 0.75;
-  margin-bottom: 2px;
+  opacity: 0.7;
+  margin-bottom: 3px;
 }
 .irreg-word {
-  font-size: 24px;
-  font-weight: 800;
+  font-size: 20px;
+  font-weight: 700;
   line-height: 1.1;
 }
 .irreg-arrow {
-  font-size: 20px;
-  color: var(--ink-soft);
-  font-weight: 800;
+  font-size: 16px;
+  color: var(--ink-faint);
+  font-weight: 700;
   line-height: 1;
-  opacity: 0.6;
+  opacity: 0.55;
 }
 
 /* ============================================================
@@ -1770,7 +1776,7 @@ body { font-size: 18px; }
   align-items: center;
   gap: 14px;
   margin-top: 4px;
-  background: linear-gradient(135deg, #DBF3E6 0%, #B0E5C8 100%);
+  background: linear-gradient(135deg, #E5F8DE 0%, #8FE08F 100%);
   border: 4px solid var(--present-500);
   border-radius: 18px;
   padding: 14px 22px;
@@ -1779,9 +1785,9 @@ body { font-size: 18px; }
   text-align: left;
 }
 .celebrate-unlock.celebrate-level {
-  background: linear-gradient(135deg, #FFE3A6 0%, #F2A93A 100%);
+  background: linear-gradient(135deg, #FFE8A8 0%, #FFC940 100%);
   border-color: var(--gold);
-  box-shadow: 0 6px 0 #B86E0F;
+  box-shadow: 0 6px 0 #9E4400;
 }
 .celebrate-unlock-icon {
   font-size: 36px;
@@ -1795,7 +1801,7 @@ body { font-size: 18px; }
   font-weight: 800;
   color: var(--present-700);
 }
-.celebrate-unlock.celebrate-level .celebrate-unlock-eyebrow { color: #6E3D04; }
+.celebrate-unlock.celebrate-level .celebrate-unlock-eyebrow { color: #9E4400; }
 .celebrate-unlock-text {
   font-family: var(--display);
   font-size: 20px;
@@ -1809,7 +1815,7 @@ body { font-size: 18px; }
   font-weight: 600;
   color: var(--ink-soft);
   background: var(--gold-soft);
-  border: 3px dashed #B86E0F;
+  border: 3px dashed #9E4400;
   border-radius: 14px;
   padding: 12px 18px;
   margin-top: 4px;
@@ -1830,7 +1836,7 @@ body { font-size: 18px; }
 .mastery-badge-ring {
   position: absolute; inset: 0;
   border-radius: 50%;
-  background: conic-gradient(from 0deg, #FFE89A, #F5B71B, #FFE89A, #F5B71B, #FFE89A);
+  background: conic-gradient(from 0deg, #FFE8A8, #FFC940, #FFE8A8, #FFC940, #FFE8A8);
   border: 5px solid var(--past-700);
   box-shadow: 0 8px 0 var(--past-700), 0 0 40px rgba(245,183,27,0.5);
   animation: badgeSpin 6s linear infinite;
@@ -1868,9 +1874,701 @@ body { font-size: 18px; }
   100% { transform: scale(1) rotate(0); }
 }
 @keyframes badgeSpin {
-  from { background: conic-gradient(from 0deg, #FFE89A, #F5B71B, #FFE89A, #F5B71B, #FFE89A); }
-  to   { background: conic-gradient(from 360deg, #FFE89A, #F5B71B, #FFE89A, #F5B71B, #FFE89A); }
+  from { background: conic-gradient(from 0deg, #FFE8A8, #FFC940, #FFE8A8, #FFC940, #FFE8A8); }
+  to   { background: conic-gradient(from 360deg, #FFE8A8, #FFC940, #FFE8A8, #FFC940, #FFE8A8); }
 }
+
+/* ============================================================
+   ADVENTURE PASS — micro-gameplay polish
+   Streak badge, flying score pops, answer pop/shake,
+   staggered lesson reveal — without changing any layout.
+   ============================================================ */
+
+/* Floating streak badge on the game stage */
+.streak-badge {
+  position: fixed;
+  top: 80px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #FFEAD0 0%, #FFB870 100%);
+  color: var(--past-700);
+  border: 2.5px solid var(--past-700);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-family: var(--display);
+  font-weight: 800;
+  box-shadow: 0 4px 0 var(--past-700);
+  z-index: 1100;
+  opacity: 0;
+  transform: translateY(-12px) scale(0.85);
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(.5,1.6,.4,1), opacity 0.25s ease;
+}
+.streak-badge.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.streak-badge.hot {
+  background: linear-gradient(135deg, #FFD685 0%, #FF8A3D 100%);
+  border-color: var(--past-700);
+  animation: streakHot 0.7s ease-in-out infinite;
+}
+@keyframes streakHot {
+  0%, 100% { transform: scale(1) rotate(-1deg); }
+  50%      { transform: scale(1.06) rotate(1deg); }
+}
+.streak-flame { font-size: 20px; line-height: 1; }
+.streak-num   { font-size: 22px; line-height: 1; }
+.streak-label {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-left: 2px;
+}
+
+/* Flying +N score pop that floats up from a correct answer */
+.score-pop {
+  position: fixed;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 28px;
+  color: var(--gold);
+  text-shadow:
+    -2px -2px 0 var(--ink), 2px -2px 0 var(--ink),
+    -2px 2px 0 var(--ink),  2px 2px 0 var(--ink);
+  pointer-events: none;
+  z-index: 2200;
+  animation: scorePopFly 1.2s cubic-bezier(.3,.7,.4,1) forwards;
+}
+@keyframes scorePopFly {
+  0%   { transform: translate(-50%, 0) scale(0.6); opacity: 0; }
+  18%  { transform: translate(-50%, -8px) scale(1.25); opacity: 1; }
+  100% { transform: translate(-50%, -64px) scale(1); opacity: 0; }
+}
+
+/* Pop animation on the correct MCQ option when picked */
+.mcq-opt.pop-correct { animation: optPopCorrect 0.45s cubic-bezier(.4,1.7,.4,1); }
+@keyframes optPopCorrect {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+/* Subtle horizontal shake on a wrong option */
+.mcq-opt.shake-bad { animation: optShakeBad 0.35s ease-in-out; }
+@keyframes optShakeBad {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(2px); }
+}
+
+/* STAGGERED LESSON REVEAL — sections slide up and fade in one by one */
+.lesson .tw-section,
+.lesson .lesson-head,
+.lesson .scenery,
+.lesson .forms,
+.lesson .practice-section,
+.lesson .lesson-advance {
+  animation: sectionReveal 0.55s cubic-bezier(.3,1.3,.4,1) backwards;
+}
+.lesson .lesson-head      { animation-delay: 0.00s; }
+.lesson .scenery          { animation-delay: 0.06s; }
+.lesson .forms            { animation-delay: 0.12s; }
+.lesson .tw-section:nth-of-type(1) { animation-delay: 0.18s; }
+.lesson .tw-section:nth-of-type(2) { animation-delay: 0.24s; }
+.lesson .tw-section:nth-of-type(3) { animation-delay: 0.30s; }
+.lesson .tw-section:nth-of-type(4) { animation-delay: 0.36s; }
+.lesson .tw-section:nth-of-type(5) { animation-delay: 0.42s; }
+.lesson .tw-section:nth-of-type(6) { animation-delay: 0.48s; }
+.lesson .practice-section { animation-delay: 0.54s; }
+.lesson .lesson-advance   { animation-delay: 0.60s; }
+@keyframes sectionReveal {
+  0%   { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   REFACTOR PASS — game-like polish per UI brief
+   ============================================================ */
+/* "Say it / Flip it / Ask it" subtitle */
+.form-card-sub {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 2px 0 6px;
+}
+
+/* Paginated verb cards: page wrapper + footer */
+.irreg-page {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  column-gap: 10px;
+  row-gap: 18px;
+  margin-bottom: 18px;
+}
+.irreg-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 4px 0;
+  border-top: 1.5px dashed var(--line-strong);
+  flex-wrap: wrap;
+}
+.irreg-progress {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+.irreg-more-btn {
+  background: var(--ink);
+  color: #FFF8E8;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 15px;
+  padding: 11px 22px;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(58,47,34,0.25);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+.irreg-more-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 0 rgba(58,47,34,0.25);
+}
+.irreg-more-btn:active { transform: translateY(0); box-shadow: 0 1px 0 rgba(58,47,34,0.25); }
+.irreg-more-btn.ghost {
+  background: transparent;
+  color: var(--ink);
+  box-shadow: 0 3px 0 rgba(58,47,34,0.10);
+}
+.irreg-more-btn.ghost:hover { box-shadow: 0 5px 0 rgba(58,47,34,0.12); background: rgba(58,47,34,0.04); }
+
+/* Bigger, more immersive homepage road */
+.hwy { height: 400px; }
+
+/* Stronger active station — bolder scale and richer glow */
+.hwy-station.active .hwy-station-circle {
+  transform: scale(1.22);
+  box-shadow:
+    0 4px 0 rgba(0,0,0,0.30),
+    0 0 0 5px var(--ink),
+    0 0 28px rgba(255,255,255,0.85),
+    0 0 56px var(--gold);
+}
+.hwy-station.active .hwy-station-label {
+  background: var(--gold);
+  color: var(--past-700);
+  border-color: var(--past-700);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+/* Clearer locked state — desaturate + dim */
+.hwy-station.locked {
+  filter: grayscale(0.7) brightness(0.78);
+  opacity: 0.75;
+}
+.hwy-station.locked .hwy-station-circle {
+  background: #BAA88F !important;
+  color: rgba(58,47,34,0.7);
+  border-color: #7A6B58 !important;
+}
+.hwy-station.locked .hwy-station-label {
+  background: rgba(58,47,34,0.10);
+  color: var(--ink-soft);
+}
+
+/* Mastered station: gold ring */
+.hwy-station.mastered .hwy-station-circle {
+  background: var(--gold) !important;
+  color: var(--past-700);
+  border-color: var(--past-700) !important;
+  box-shadow: 0 4px 0 var(--past-700), 0 0 0 3px var(--gold-soft) inset;
+}
+
+/* "Next" station that's unlocked-but-not-mastered: subtle pulsing glow */
+.hwy-station.next:not(.active) .hwy-station-circle {
+  animation: nextPulse 2s ease-in-out infinite;
+}
+@keyframes nextPulse {
+  0%, 100% { box-shadow: 0 4px 0 rgba(0,0,0,0.25), 0 0 0 0 rgba(217,164,65,0.55); }
+  50%      { box-shadow: 0 4px 0 rgba(0,0,0,0.25), 0 0 0 8px rgba(217,164,65,0); }
+}
+
+/* Game cards — more prominent, bigger CTA feel */
+.game-card {
+  border-width: 2.5px;
+  padding: 22px 18px 20px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.game-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 0 rgba(58,47,34,0.10), 0 14px 24px rgba(58,47,34,0.10);
+  border-color: var(--ink);
+}
+.game-card .game-card-icon {
+  width: 56px; height: 56px; border-radius: 16px;
+  font-size: 26px;
+  box-shadow: 0 3px 0 rgba(58,47,34,0.10);
+}
+.game-card .game-card-name {
+  font-size: 19px;
+  font-weight: 800;
+  margin-top: 4px;
+}
+.game-card .game-card-desc {
+  font-weight: 500;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+/* Form cards — match the bolder game-card style */
+.form-card {
+  padding: 20px 20px 22px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.form-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(58,47,34,0.10);
+  border-color: var(--line-strong);
+}
+.form-card-label {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 0;
+  letter-spacing: -0.01em;
+}
+.form-card-text {
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+/* ============================================================
+   SPELLING RULES — quirky -s / -ed / -ing patterns per tense
+   ============================================================ */
+.spelling-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.spelling-rule {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  padding: 16px 18px 14px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.spelling-rule:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(58,47,34,0.08);
+}
+.spelling-rule-title {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--ink);
+  margin-bottom: 12px;
+  line-height: 1.35;
+}
+.spelling-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.spelling-example {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-family: var(--display);
+  font-size: 16px;
+  transition: transform 0.18s ease;
+}
+.spelling-example:hover { transform: translateY(-1px); }
+.spelling-base {
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+.spelling-arrow {
+  color: var(--ink-faint);
+  font-weight: 800;
+  font-size: 14px;
+}
+.spelling-form {
+  color: var(--present-700);
+  font-weight: 800;
+}
+
+/* "Stay and review" secondary link on the celebration screen */
+.btn-game-stay {
+  background: none;
+  border: none;
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  margin-top: 10px;
+  padding: 6px 12px;
+  transition: color 0.18s ease;
+}
+.btn-game-stay:hover { color: var(--ink); }
+
+/* ============================================================
+   LESSON ADVANCE PANEL — "drive to next" CTA at lesson bottom
+   ============================================================ */
+.lesson-advance {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: linear-gradient(135deg, #E5F8DE 0%, #8FE08F 100%);
+  border: 3px solid var(--present-500);
+  border-radius: 22px;
+  padding: 22px 26px;
+  box-shadow: 0 5px 0 var(--present-700);
+  margin: 36px 0 16px;
+  animation: advanceSlide 0.5s cubic-bezier(.4,1.4,.5,1);
+}
+.advance-icon {
+  font-size: 48px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.advance-content { flex: 1; min-width: 0; }
+.advance-eyebrow {
+  font-family: var(--display);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 800;
+  color: var(--present-700);
+  margin-bottom: 4px;
+}
+.advance-title {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 14px;
+  line-height: 1.2;
+}
+.advance-btn {
+  background: var(--ink);
+  color: #FFF8E8;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 18px;
+  padding: 14px 22px;
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(58,47,34,0.30);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.advance-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 rgba(58,47,34,0.30);
+}
+.advance-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 0 rgba(58,47,34,0.30);
+}
+@keyframes advanceSlide {
+  0%   { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@media (max-width: 600px) {
+  .lesson-advance {
+    flex-direction: column;
+    text-align: center;
+    padding: 18px 18px 20px;
+    gap: 8px;
+  }
+  .advance-btn { width: 100%; }
+}
+
+/* ============================================================
+   RANK BADGE — persistent XP indicator in topbar
+   ============================================================ */
+.rank-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #FFE8A8 0%, #E5C078 100%);
+  border: 2px solid #FF8A3D;
+  border-radius: 14px;
+  padding: 6px 12px 7px;
+  box-shadow: 0 2px 6px rgba(58,47,34,0.10);
+  min-width: 158px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.rank-badge:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(58,47,34,0.14); }
+.rank-emoji {
+  font-size: 26px;
+  line-height: 1;
+  animation: rankPulse 3s ease-in-out infinite;
+}
+@keyframes rankPulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.08); }
+}
+.rank-badge.level-up .rank-emoji {
+  animation: rankLevelUp 0.6s cubic-bezier(.5,1.6,.4,1);
+}
+@keyframes rankLevelUp {
+  0%   { transform: scale(0.5) rotate(-30deg); }
+  60%  { transform: scale(1.3) rotate(15deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+.rank-meta { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+.rank-title {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 13px;
+  color: #9E4400;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+.rank-bar {
+  height: 6px;
+  background: rgba(126, 82, 16, 0.18);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.rank-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #FFC940 0%, #FF8A3D 100%);
+  border-radius: 999px;
+  transition: width 0.7s cubic-bezier(.5,1.2,.4,1);
+}
+.rank-progress {
+  font-size: 10px;
+  color: #9E4400;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* ============================================================
+   ONBOARDING ARROW — first-visit nudge above the first station
+   ============================================================ */
+.onboarding-arrow {
+  position: absolute;
+  z-index: 30;
+  transform: translateX(-50%);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  animation: onboardBounce 1.1s ease-in-out infinite;
+  top: 8px;
+}
+.onboarding-bubble {
+  background: var(--ink);
+  color: #FFF8E8;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 16px;
+  padding: 8px 16px;
+  border-radius: 14px;
+  white-space: nowrap;
+  box-shadow: 0 4px 0 rgba(58,47,34,0.25);
+  border: 2px solid var(--gold);
+}
+.onboarding-pointer {
+  color: var(--ink);
+  font-size: 22px;
+  line-height: 0.7;
+  margin-top: -3px;
+  text-shadow: 0 2px 0 var(--gold);
+}
+@keyframes onboardBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(-6px); }
+}
+
+/* ============================================================
+   START-HERE PILL — recommended game on lesson page
+   ============================================================ */
+.game-card { position: relative; }
+.start-here-pill {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  background: linear-gradient(135deg, #FFC940 0%, #FF8A3D 100%);
+  color: #FFF8E8;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 2px solid #9E4400;
+  box-shadow: 0 2px 0 rgba(126,82,16,0.4);
+  text-transform: uppercase;
+  z-index: 2;
+  animation: pillWiggle 2.5s ease-in-out infinite;
+}
+@keyframes pillWiggle {
+  0%, 90%, 100% { transform: rotate(0); }
+  92%           { transform: rotate(-4deg); }
+  95%           { transform: rotate(4deg); }
+  97%           { transform: rotate(-2deg); }
+}
+
+/* ============================================================
+   POLISH PASS — visual hierarchy, breathing room, calmer surfaces
+   Goal: feel like a modern learning app, not a worksheet.
+   Only color/spacing/weight/transition refinements — no layout changes.
+   ============================================================ */
+
+/* MORE BREATHING ROOM between major lesson sections */
+.lesson .tw-section { margin-bottom: 40px; }
+.lesson .tw-section:last-child { margin-bottom: 24px; }
+
+/* SECTION TITLES — clearer hierarchy, more weight, more gap below */
+.tw-title {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 18px;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+.tw-title::before {
+  width: 10px; height: 10px;
+}
+
+/* HELPER / SUBTITLE TEXT under sections — softer */
+.lesson-helper {
+  font-size: 15px;
+  color: var(--ink-soft);
+  font-weight: 500;
+  margin: -8px 0 20px;
+  line-height: 1.6;
+  max-width: 640px;
+}
+
+/* LESSON HEAD — more space below it before the formula appears */
+.lesson-head { margin-bottom: 32px; }
+.lesson-tagline { margin-top: 8px; line-height: 1.55; max-width: 720px; }
+
+/* EXAMPLES LIST — drop heavy border, use a flatter card surface */
+.examples-list {
+  border: none;
+  background: rgba(255,255,255,0.6);
+  box-shadow: none;
+  border-radius: 18px;
+}
+.example-row {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  font-weight: 600;
+}
+.example-row:last-child { border-bottom: none; }
+.example-icon {
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+  width: 40px; height: 40px;
+}
+
+/* VERB PRACTICE — calmer rhythm, lighter cards */
+.lesson-irreg + * { margin-top: 4px; }
+.irreg-grid {
+  column-gap: 10px;
+  row-gap: 16px;
+}
+.irreg-card {
+  padding: 11px 8px 12px;
+  border-width: 2px;
+  border-color: var(--line-strong);
+  box-shadow: 0 1px 3px rgba(58,47,34,0.06);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.irreg-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(58,47,34,0.10);
+}
+.irreg-card:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(58,47,34,0.06);
+}
+.irreg-word { font-size: 19px; letter-spacing: -0.005em; }
+.irreg-label { font-size: 10px; opacity: 0.55; margin-bottom: 2px; }
+.irreg-arrow { font-size: 14px; opacity: 0.4; }
+.irreg-base {
+  background: linear-gradient(135deg, #DFF0FE 0%, #7AC1F5 100%);
+}
+.irreg-past {
+  background: linear-gradient(135deg, #FFEAD0 0%, #FFB870 100%);
+}
+.irreg-back {
+  background: linear-gradient(135deg, #FFE8A8 0%, #FFC940 100%);
+}
+
+/* FORM CARDS — slightly lighter borders */
+.form-card {
+  border-width: 1.5px;
+  border-color: var(--line);
+  box-shadow: var(--shadow-sm);
+}
+
+/* "How to build it" formula blocks — drop the busy bordered tag pill, simplify */
+.block { box-shadow: 0 2px 6px rgba(58,47,34,0.06); }
+.block-tag {
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  opacity: 0.55;
+  margin-bottom: 1px;
+}
+.block-icon { font-size: 18px; margin: 1px 0; }
+.block-text { font-size: 16px; letter-spacing: -0.005em; }
+
+/* CHIPS — a touch lighter */
+.chip { box-shadow: 0 1px 3px rgba(58,47,34,0.06); border-width: 2px; }
+.chip:hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(58,47,34,0.10); }
+.chip-emoji { font-size: 20px; }
+
+/* SUBTLE INTERACTIONS — gentle lift on tap-targets */
+.btn, .now-cta-v2, .game-card, .mcq-opt {
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+.game-card:hover { transform: translateY(-2px); }
+.mcq-opt:not(:disabled):hover { transform: translateY(-2px); }
+
+/* SPEECH BUBBLE — calmer */
+.speech { line-height: 1.55; }
+.speech-name { opacity: 0.7; }
+
+/* PRACTICE SECTION HEADER */
+.practice-section .tw-title { margin-bottom: 16px; }
+.practice-section { margin-top: 8px; }
+
+/* CARD HOVER SOFTNESS — more polished feel everywhere */
+.now-card-v2 { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+
 
 /* ============================================================
    RESPONSIVE
@@ -1886,6 +2584,10 @@ body { font-size: 18px; }
   .now-stars-v2 { justify-content: center; }
   .now-cta-v2 { width: 100%; justify-content: center; }
   .lesson-title { font-size: 32px; }
+  .rank-badge { min-width: auto; padding: 5px 10px 6px; gap: 8px; }
+  .rank-title { font-size: 12px; }
+  .rank-progress { font-size: 9px; }
+  .rank-bar { height: 5px; }
 }
 @media (max-width: 600px) {
   body { font-size: 16px; }
@@ -1917,6 +2619,11 @@ body { font-size: 18px; }
   .recap-lbl { font-size: 11px; }
   .adv-mascot-figure { width: 56px; height: 56px; }
   .adv-mascot-figure svg { width: 42px; height: 42px; }
+  .rank-badge .rank-meta { display: none; }
+  .rank-badge { padding: 6px 10px; min-width: auto; }
+  .rank-emoji { font-size: 22px; }
+  .onboarding-bubble { font-size: 14px; padding: 6px 12px; }
+  .onboarding-pointer { font-size: 18px; }
   .adv-mascot-bubble { font-size: 15px; }
   .btn { font-size: 16px; padding: 12px 18px; }
 }
@@ -1944,6 +2651,14 @@ body { font-size: 18px; }
       </div>
     </div>
     <div class="topbar-right">
+      <div class="rank-badge" id="rank-badge" title="Your Grammar Driver Rank">
+        <div class="rank-emoji" id="rank-emoji">🥉</div>
+        <div class="rank-meta">
+          <div class="rank-title" id="rank-title">Cadet</div>
+          <div class="rank-bar"><div class="rank-bar-fill" id="rank-bar-fill"></div></div>
+          <div class="rank-progress" id="rank-progress">0 / 12 tenses</div>
+        </div>
+      </div>
       <button class="back-btn" id="back-btn" style="display:none;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
         Back
@@ -1986,13 +2701,13 @@ body { font-size: 18px; }
 
         <!-- era zone tags above the road -->
         <div class="hwy-zone hwy-zone-past">
-          <span>🦖</span> Past
+          <span>🦖</span> Dino Valley
         </div>
         <div class="hwy-zone hwy-zone-present">
-          <span>☀️</span> Present
+          <span>🏙️</span> Green City
         </div>
         <div class="hwy-zone hwy-zone-future">
-          <span>🚀</span> Future
+          <span>🚀</span> Tomorrow Land
         </div>
 
         <!-- the road -->
@@ -2005,6 +2720,12 @@ body { font-size: 18px; }
         <!-- station nodes -->
         <div class="hwy-stations" id="hwy-stations"></div>
 
+        <!-- first-visit onboarding arrow (shown only when state.hasStarted is false) -->
+        <div class="onboarding-arrow" id="onboarding-arrow" style="display:none;">
+          <div class="onboarding-bubble">Tap to start! 🚗</div>
+          <div class="onboarding-pointer">▼</div>
+        </div>
+
         <!-- the car -->
         <div class="hwy-car" id="hwy-car">
           <!-- Vintage car (past) -->
@@ -2014,7 +2735,7 @@ body { font-size: 18px; }
             <path d="M36 14 L60 14 L66 22 L30 22 Z" fill="#5C3712"/>
             <path d="M38 16 L58 16 L62 22 L34 22 Z" fill="#C9DEEB" opacity="0.85"/>
             <line x1="50" y1="22" x2="50" y2="38" stroke="#5C3712" stroke-width="1"/>
-            <circle cx="84" cy="30" r="3" fill="#FFE89A" stroke="#7E430A" stroke-width="1"/>
+            <circle cx="84" cy="30" r="3" fill="#FFE8A8" stroke="#9E4400" stroke-width="1"/>
             <rect x="14" y="38" width="72" height="3" fill="#3D2410"/>
             <g><circle cx="26" cy="42" r="8" fill="#1F1A14"/><circle cx="26" cy="42" r="5" fill="#A89C89"/><circle cx="26" cy="42" r="2" fill="#1F1A14"/></g>
             <g><circle cx="74" cy="42" r="8" fill="#1F1A14"/><circle cx="74" cy="42" r="5" fill="#A89C89"/><circle cx="74" cy="42" r="2" fill="#1F1A14"/></g>
@@ -2025,26 +2746,26 @@ body { font-size: 18px; }
             <path d="M10 40 L14 28 Q16 22 22 22 L34 18 Q38 16 44 16 L58 16 Q64 16 70 22 L84 26 Q90 28 90 32 L90 40 Z" fill="#15A35F"/>
             <path d="M10 36 L90 36 L90 40 L10 40 Z" fill="#0A6F40"/>
             <path d="M28 22 L34 18 L58 18 L66 22 Z" fill="#A8D4E8" opacity="0.9"/>
-            <ellipse cx="86" cy="30" rx="3.5" ry="2" fill="#FFE89A"/>
+            <ellipse cx="86" cy="30" rx="3.5" ry="2" fill="#FFE8A8"/>
             <ellipse cx="13" cy="32" rx="2" ry="1.5" fill="#E24B4A"/>
             <g><circle cx="26" cy="42" r="7.5" fill="#1F1A14"/><circle cx="26" cy="42" r="3.5" fill="#888"/></g>
             <g><circle cx="74" cy="42" r="7.5" fill="#1F1A14"/><circle cx="74" cy="42" r="3.5" fill="#888"/></g>
           </svg>
           <!-- Future car -->
           <svg class="hwy-car-svg car-future" viewBox="0 0 100 56" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="50" cy="48" rx="40" ry="5" fill="#F5B71B" opacity="0.4"/>
-            <ellipse cx="50" cy="50" rx="36" ry="3" fill="#FFB1D6" opacity="0.7">
+            <ellipse cx="50" cy="48" rx="40" ry="5" fill="#FFC940" opacity="0.4"/>
+            <ellipse cx="50" cy="50" rx="36" ry="3" fill="#8FE08F" opacity="0.7">
               <animate attributeName="rx" from="32" to="40" dur="0.8s" repeatCount="indefinite"/>
               <animate attributeName="opacity" from="0.7" to="0.3" dur="0.8s" repeatCount="indefinite"/>
             </ellipse>
             <path d="M8 36 L18 18 L34 12 L66 12 L82 18 L92 36 Z" fill="#6B4EE0"/>
             <path d="M22 18 L34 12 L66 12 L78 18 L66 22 L34 22 Z" fill="#E8E1FA" opacity="0.85"/>
             <circle cx="50" cy="16" r="3" fill="#3B2A89" opacity="0.45"/>
-            <rect x="8" y="34" width="84" height="3" fill="#F5B71B"/>
-            <ellipse cx="14" cy="40" rx="6" ry="3" fill="#FFB1D6"/>
-            <ellipse cx="86" cy="40" rx="6" ry="3" fill="#FFB1D6"/>
+            <rect x="8" y="34" width="84" height="3" fill="#FFC940"/>
+            <ellipse cx="14" cy="40" rx="6" ry="3" fill="#8FE08F"/>
+            <ellipse cx="86" cy="40" rx="6" ry="3" fill="#8FE08F"/>
             <line x1="50" y1="12" x2="50" y2="6" stroke="#3B2A89" stroke-width="1.5"/>
-            <circle cx="50" cy="6" r="1.8" fill="#F5B71B"><animate attributeName="opacity" from="1" to="0.3" dur="0.6s" repeatCount="indefinite"/></circle>
+            <circle cx="50" cy="6" r="1.8" fill="#FFC940"><animate attributeName="opacity" from="1" to="0.3" dur="0.6s" repeatCount="indefinite"/></circle>
           </svg>
         </div>
       </div>
@@ -2101,15 +2822,31 @@ body { font-size: 18px; }
       <div class="examples-list" id="lesson-examples"></div>
     </div>
 
+    <div class="tw-section" id="lesson-spelling-section" style="display:none;">
+      <div class="tw-title">📝 Spelling rules</div>
+      <p class="lesson-helper" id="lesson-spelling-intro">A few spelling tricks for this tense.</p>
+      <div class="spelling-rules" id="lesson-spelling"></div>
+    </div>
+
     <div class="tw-section" id="lesson-irreg-section" style="display:none;">
-      <div class="tw-title">🎯 Tricky irregular verbs — tap to reveal!</div>
-      <p class="lesson-helper">Some verbs don't follow the +ed rule. Tap the cards to test yourself.</p>
+      <div class="tw-title" id="lesson-irreg-title">🎯 Tricky irregular verbs — tap to reveal!</div>
+      <p class="lesson-helper" id="lesson-irreg-helper">Some verbs don't follow the +ed rule. Tap the cards to test yourself.</p>
       <div class="irreg-grid" id="lesson-irreg"></div>
     </div>
 
     <div class="practice-section">
-      <div class="tw-title">Practice — master to unlock the next!</div>
+      <div class="tw-title">🎮 Time to play — master to unlock the next stop!</div>
       <div class="games-grid" id="lesson-games"></div>
+    </div>
+
+    <!-- Shown only when this tense is mastered: a clear "drive to next" CTA -->
+    <div class="lesson-advance" id="lesson-advance" style="display:none;">
+      <div class="advance-icon" id="advance-icon">🎉</div>
+      <div class="advance-content">
+        <div class="advance-eyebrow" id="advance-eyebrow">You've mastered this!</div>
+        <div class="advance-title" id="advance-title">Ready for the next one?</div>
+        <button class="advance-btn" id="advance-btn">🚗 Drive to next →</button>
+      </div>
     </div>
   </section>
 
@@ -2136,6 +2873,18 @@ body { font-size: 18px; }
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
+
+<!-- World splash banner — slides down briefly when entering a new bucket -->
+<div class="world-splash" id="world-splash" aria-hidden="true">
+  <div class="world-splash-card">
+    <div class="world-splash-emoji" id="world-splash-emoji">🦕</div>
+    <div class="world-splash-content">
+      <div class="world-splash-eyebrow">Welcome to</div>
+      <div class="world-splash-title" id="world-splash-title">Dino Valley</div>
+      <div class="world-splash-tagline" id="world-splash-tagline">Where time began</div>
+    </div>
+  </div>
+</div>
 
 <!-- ============================================================
      SCRIPT
@@ -2173,7 +2922,7 @@ body { font-size: 18px; }
     <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <!-- antenna -->
       <line x1="32" y1="6" x2="32" y2="14" stroke="#1F1A14" stroke-width="2.5" stroke-linecap="round"/>
-      <circle cx="32" cy="6" r="3" fill="#F5B71B"/>
+      <circle cx="32" cy="6" r="3" fill="#FFC940"/>
       <!-- head -->
       <rect x="14" y="14" width="36" height="28" rx="8" fill="#15A35F" stroke="#1F1A14" stroke-width="2.5"/>
       <!-- clock face -->
@@ -2188,7 +2937,7 @@ body { font-size: 18px; }
       <rect x="22" y="38" width="20" height="2" fill="#1F1A14" rx="1"/>
       <!-- body -->
       <rect x="20" y="42" width="24" height="14" rx="4" fill="#15A35F" stroke="#1F1A14" stroke-width="2.5"/>
-      <circle cx="26" cy="49" r="1.5" fill="#F5B71B"/>
+      <circle cx="26" cy="49" r="1.5" fill="#FFC940"/>
       <circle cx="32" cy="49" r="1.5" fill="#E24B4A"/>
       <circle cx="38" cy="49" r="1.5" fill="#2D70CC"/>
     </svg>
@@ -2214,6 +2963,31 @@ body { font-size: 18px; }
         question: 'Do you play soccer every day?',
       },
       timeWords: ['every day', 'always', 'usually', 'often', 'sometimes', 'never', 'on Mondays'],
+      spellingRules: {
+        intro: "For he / she / it, add -s. Watch out for these patterns:",
+        rules: [
+          { title: 'Most verbs: just add -s', examples: [
+            { base: 'play', form: 'plays' },
+            { base: 'eat',  form: 'eats' },
+            { base: 'sing', form: 'sings' },
+          ]},
+          { title: 'Verbs ending in -ch, -sh, -x, -ss, -o: add -es', examples: [
+            { base: 'watch', form: 'watches' },
+            { base: 'wash',  form: 'washes' },
+            { base: 'go',    form: 'goes' },
+            { base: 'kiss',  form: 'kisses' },
+          ]},
+          { title: 'Consonant + y: change y to -ies', examples: [
+            { base: 'study', form: 'studies' },
+            { base: 'try',   form: 'tries' },
+            { base: 'cry',   form: 'cries' },
+          ]},
+          { title: 'Vowel + y: just add -s', examples: [
+            { base: 'play', form: 'plays' },
+            { base: 'enjoy', form: 'enjoys' },
+          ]},
+        ]
+      },
       examples: [
         { pre: 'The sun', verb: 'rises', post: 'in the east.', emoji: '☀️' },
         { pre: 'I', verb: 'play', post: 'soccer every weekend.', emoji: '⚽' },
@@ -2261,6 +3035,31 @@ body { font-size: 18px; }
         question: 'Did you play soccer yesterday?',
       },
       timeWords: ['yesterday', 'last week', 'last year', 'two days ago', 'in 2010', 'when I was 5'],
+      spellingRules: {
+        intro: "Regular verbs add -ed. Watch out for these patterns:",
+        rules: [
+          { title: 'Most verbs: just add -ed', examples: [
+            { base: 'play', form: 'played' },
+            { base: 'walk', form: 'walked' },
+            { base: 'jump', form: 'jumped' },
+          ]},
+          { title: 'Verbs ending in -e: just add -d', examples: [
+            { base: 'like',  form: 'liked' },
+            { base: 'dance', form: 'danced' },
+            { base: 'smile', form: 'smiled' },
+          ]},
+          { title: 'Short consonant-vowel-consonant verbs: double the last letter', examples: [
+            { base: 'stop', form: 'stopped' },
+            { base: 'plan', form: 'planned' },
+            { base: 'rob',  form: 'robbed' },
+          ]},
+          { title: 'Consonant + y: change y to -ied', examples: [
+            { base: 'study', form: 'studied' },
+            { base: 'try',   form: 'tried' },
+            { base: 'cry',   form: 'cried' },
+          ]},
+        ]
+      },
       irregularVerbs: [
         { base: 'be',     past: 'was / were' },
         { base: 'have',   past: 'had' },
@@ -2389,6 +3188,33 @@ body { font-size: 18px; }
         question: 'Are you playing soccer now?',
       },
       timeWords: ['now', 'right now', 'at this moment', 'currently', 'today', 'this week'],
+      spellingRules: {
+        intro: "To make -ing forms, follow these spelling rules:",
+        rules: [
+          { title: 'Most verbs: just add -ing', examples: [
+            { base: 'play', form: 'playing' },
+            { base: 'eat',  form: 'eating' },
+            { base: 'go',   form: 'going' },
+          ]},
+          { title: 'Verbs ending in -e: drop the e, add -ing', examples: [
+            { base: 'make',  form: 'making' },
+            { base: 'take',  form: 'taking' },
+            { base: 'write', form: 'writing' },
+            { base: 'dance', form: 'dancing' },
+          ]},
+          { title: 'Short consonant-vowel-consonant verbs: double the last letter', examples: [
+            { base: 'run',  form: 'running' },
+            { base: 'sit',  form: 'sitting' },
+            { base: 'swim', form: 'swimming' },
+            { base: 'stop', form: 'stopping' },
+          ]},
+          { title: 'Verbs ending in -ie: change to -ying', examples: [
+            { base: 'die', form: 'dying' },
+            { base: 'lie', form: 'lying' },
+            { base: 'tie', form: 'tying' },
+          ]},
+        ]
+      },
       examples: [
         { pre: 'I', verb: 'am reading', post: 'a book right now.', emoji: '📖' },
         { pre: 'They', verb: 'are playing', post: 'in the garden.', emoji: '🌳' },
@@ -2531,6 +3357,41 @@ body { font-size: 18px; }
         question: 'Have you visited Paris?',
       },
       timeWords: ['ever', 'never', 'already', 'yet', 'just', 'since 2020', 'for 3 years'],
+      irregularTitle: '🎯 Past participles (V3) — tap to reveal!',
+      irregularHelper: 'After have / has we use the V3 form. Some look like the past tense, others change again!',
+      pastFormLabel: 'V3',
+      irregularVerbs: [
+        { base: 'be',     past: 'been' },
+        { base: 'have',   past: 'had' },
+        { base: 'do',     past: 'done' },
+        { base: 'go',     past: 'gone' },
+        { base: 'see',    past: 'seen' },
+        { base: 'say',    past: 'said' },
+        { base: 'get',    past: 'gotten' },
+        { base: 'make',   past: 'made' },
+        { base: 'know',   past: 'known' },
+        { base: 'take',   past: 'taken' },
+        { base: 'come',   past: 'come' },
+        { base: 'give',   past: 'given' },
+        { base: 'find',   past: 'found' },
+        { base: 'think',  past: 'thought' },
+        { base: 'tell',   past: 'told' },
+        { base: 'eat',    past: 'eaten' },
+        { base: 'run',    past: 'run' },
+        { base: 'write',  past: 'written' },
+        { base: 'read',   past: 'read' },
+        { base: 'leave',  past: 'left' },
+        { base: 'feel',   past: 'felt' },
+        { base: 'buy',    past: 'bought' },
+        { base: 'bring',  past: 'brought' },
+        { base: 'drive',  past: 'driven' },
+        { base: 'drink',  past: 'drunk' },
+        { base: 'swim',   past: 'swum' },
+        { base: 'fly',    past: 'flown' },
+        { base: 'ride',   past: 'ridden' },
+        { base: 'sleep',  past: 'slept' },
+        { base: 'fall',   past: 'fallen' },
+      ],
       examples: [
         { pre: 'I', verb: 'have visited', post: 'Paris three times.', emoji: '🗼' },
         { pre: 'She', verb: 'has finished', post: 'her homework already.', emoji: '✅' },
@@ -2577,6 +3438,41 @@ body { font-size: 18px; }
         question: 'Had you finished dinner before she arrived?',
       },
       timeWords: ['by the time', 'before', 'after', 'already', 'by Friday'],
+      irregularTitle: '🎯 Past participles (V3) — tap to reveal!',
+      irregularHelper: 'After had we use the V3 form. Same list as Present Perfect — practice makes perfect!',
+      pastFormLabel: 'V3',
+      irregularVerbs: [
+        { base: 'be',     past: 'been' },
+        { base: 'have',   past: 'had' },
+        { base: 'do',     past: 'done' },
+        { base: 'go',     past: 'gone' },
+        { base: 'see',    past: 'seen' },
+        { base: 'say',    past: 'said' },
+        { base: 'get',    past: 'gotten' },
+        { base: 'make',   past: 'made' },
+        { base: 'know',   past: 'known' },
+        { base: 'take',   past: 'taken' },
+        { base: 'come',   past: 'come' },
+        { base: 'give',   past: 'given' },
+        { base: 'find',   past: 'found' },
+        { base: 'think',  past: 'thought' },
+        { base: 'tell',   past: 'told' },
+        { base: 'eat',    past: 'eaten' },
+        { base: 'run',    past: 'run' },
+        { base: 'write',  past: 'written' },
+        { base: 'read',   past: 'read' },
+        { base: 'leave',  past: 'left' },
+        { base: 'feel',   past: 'felt' },
+        { base: 'buy',    past: 'bought' },
+        { base: 'bring',  past: 'brought' },
+        { base: 'drive',  past: 'driven' },
+        { base: 'drink',  past: 'drunk' },
+        { base: 'swim',   past: 'swum' },
+        { base: 'fly',    past: 'flown' },
+        { base: 'ride',   past: 'ridden' },
+        { base: 'sleep',  past: 'slept' },
+        { base: 'fall',   past: 'fallen' },
+      ],
       examples: [
         { pre: 'I', verb: 'had finished', post: 'dinner before she arrived.', emoji: '🍽️' },
         { pre: 'She', verb: 'had already left', post: 'when we got there.', emoji: '🚪' },
@@ -2799,6 +3695,14 @@ body { font-size: 18px; }
   };
 
   // Tense order on the timeline (left = past, right = future)
+  // Themed worlds — each bucket has a destination name + emoji + tagline.
+  // Used in mascot tips, lesson eyebrows, world splash, and unlock callouts.
+  const WORLDS = {
+    past:    { name: 'Dino Valley',   emoji: '🦕', tagline: 'Where time began',     color: 'var(--past-500)'    },
+    present: { name: 'Green City',    emoji: '🏙️', tagline: 'Right here, right now', color: 'var(--present-500)' },
+    future:  { name: 'Tomorrow Land', emoji: '🚀', tagline: 'Where time is going',   color: 'var(--future-500)'  },
+  };
+
   const TIMELINE_ORDER = [
     'past_perfect_continuous','past_perfect','past_continuous','past_simple',
     'present_simple','present_continuous','present_perfect','present_perfect_continuous',
@@ -2860,6 +3764,11 @@ body { font-size: 18px; }
     return UNLOCK_PATH.find(k => isUnlocked(k) && !isMastered(k)) || null;
   }
 
+  // True if every tense in the bucket has now been mastered
+  function isWorldComplete(bucket) {
+    return TIMELINE_ORDER.filter(k => TENSES[k].bucket === bucket).every(k => isMastered(k));
+  }
+
   function getLevelProgress(level) {
     const lv = LEVELS.find(l => l.num === level);
     return lv.tenses.filter(k => isMastered(k)).length;
@@ -2887,6 +3796,60 @@ body { font-size: 18px; }
 
   function updateStars() {
     $('#star-count').textContent = state.stars;
+    updateRank();
+  }
+
+  /* -----------------------------------------------------------
+     RANK — XP loop tied to mastered tense count.
+     5 ranks across 12 tenses for a satisfying progression curve.
+     ----------------------------------------------------------- */
+  const RANKS = [
+    { min: 0,  emoji: '🥉', title: 'Cadet' },
+    { min: 2,  emoji: '🥈', title: 'Driver' },
+    { min: 5,  emoji: '🚗', title: 'Pilot' },
+    { min: 8,  emoji: '🏎️', title: 'Master' },
+    { min: 11, emoji: '🏆', title: 'Champion' },
+  ];
+  let _lastRankIdx = -1;
+  function updateRank() {
+    const mastered = TIMELINE_ORDER.filter(k => isMastered(k)).length;
+    let rankIdx = 0;
+    for (let i = RANKS.length - 1; i >= 0; i--) {
+      if (mastered >= RANKS[i].min) { rankIdx = i; break; }
+    }
+    const r = RANKS[rankIdx];
+    const badge = $('#rank-badge');
+    if (!badge) return;
+    $('#rank-emoji').textContent = r.emoji;
+    $('#rank-title').textContent = r.title;
+    $('#rank-progress').textContent = `${mastered} / 12 tenses`;
+    $('#rank-bar-fill').style.width = (mastered / 12 * 100) + '%';
+    // Trigger a one-shot level-up animation when the rank changes
+    if (_lastRankIdx !== -1 && rankIdx > _lastRankIdx) {
+      badge.classList.remove('level-up');
+      void badge.offsetWidth; // restart animation
+      badge.classList.add('level-up');
+      setTimeout(() => badge.classList.remove('level-up'), 700);
+    }
+    _lastRankIdx = rankIdx;
+  }
+
+  /* -----------------------------------------------------------
+     ONBOARDING — show a bouncing arrow above the first station
+     until the kid taps any station for the first time.
+     ----------------------------------------------------------- */
+  function updateOnboarding() {
+    const arrow = $('#onboarding-arrow');
+    if (!arrow) return;
+    const masteredAny = TIMELINE_ORDER.some(k => isMastered(k));
+    const hasStarted = state.hasStarted || masteredAny;
+    if (hasStarted) { arrow.style.display = 'none'; return; }
+    // Point at the active stop (= the next unmastered) on the highway
+    const idx = TIMELINE_ORDER.indexOf(state.activeStop);
+    if (idx < 0) { arrow.style.display = 'none'; return; }
+    const pct = ((idx + 0.5) / 12) * 100;
+    arrow.style.left = pct + '%';
+    arrow.style.display = '';
   }
 
   /* -----------------------------------------------------------
@@ -2957,7 +3920,7 @@ body { font-size: 18px; }
       title: 'Green City',
       subtitle: 'The Present World',
       lockedTitle: '',  // never locked
-      colorMain: '#15A35F', colorSoft: '#DBF3E6', colorDeep: '#0A5C36',
+      colorMain: '#15A35F', colorSoft: '#E5F8DE', colorDeep: '#0A5C36',
       tagline: 'Things happening right now and every day.',
     },
     {
@@ -2998,7 +3961,7 @@ body { font-size: 18px; }
           </defs>
           <rect width="800" height="280" fill="url(#sky-present)"/>
           <!-- sun -->
-          <circle cx="660" cy="58" r="34" fill="#FFE89A"/>
+          <circle cx="660" cy="58" r="34" fill="#FFE8A8"/>
           <circle cx="660" cy="58" r="26" fill="#FFCF4E"/>
           <!-- rolling hills -->
           <path d="M0 200 Q 100 160 200 190 Q 300 220 420 175 Q 540 130 680 180 Q 760 210 800 195 L 800 280 L 0 280 Z" fill="#7DD8AA"/>
@@ -3006,15 +3969,15 @@ body { font-size: 18px; }
           <!-- buildings -->
           <g opacity="0.85">
             <rect x="60" y="150" width="34" height="60" fill="#5A7BB8" rx="2"/>
-            <rect x="64" y="158" width="6" height="6" fill="#FFE89A"/>
-            <rect x="76" y="158" width="6" height="6" fill="#FFE89A"/>
-            <rect x="64" y="172" width="6" height="6" fill="#FFE89A"/>
+            <rect x="64" y="158" width="6" height="6" fill="#FFE8A8"/>
+            <rect x="76" y="158" width="6" height="6" fill="#FFE8A8"/>
+            <rect x="64" y="172" width="6" height="6" fill="#FFE8A8"/>
             <rect x="100" y="135" width="40" height="75" fill="#7790C8" rx="2"/>
             <polygon points="100,135 120,118 140,135" fill="#3D5A99"/>
-            <rect x="106" y="146" width="6" height="6" fill="#FFE89A"/>
-            <rect x="120" y="146" width="6" height="6" fill="#FFE89A"/>
-            <rect x="106" y="162" width="6" height="6" fill="#FFE89A"/>
-            <rect x="120" y="162" width="6" height="6" fill="#FFE89A"/>
+            <rect x="106" y="146" width="6" height="6" fill="#FFE8A8"/>
+            <rect x="120" y="146" width="6" height="6" fill="#FFE8A8"/>
+            <rect x="106" y="162" width="6" height="6" fill="#FFE8A8"/>
+            <rect x="120" y="162" width="6" height="6" fill="#FFE8A8"/>
             <rect x="146" y="160" width="28" height="50" fill="#5A7BB8" rx="2"/>
           </g>
           <!-- trees -->
@@ -3050,7 +4013,7 @@ body { font-size: 18px; }
           <rect width="800" height="280" fill="url(#sky-past)"/>
           <!-- volcano in distance -->
           <polygon points="40,210 130,90 220,210" fill="#A86434"/>
-          <polygon points="80,210 130,90 180,210" fill="#7E430A"/>
+          <polygon points="80,210 130,90 180,210" fill="#9E4400"/>
           <ellipse cx="130" cy="92" rx="18" ry="6" fill="#E24B4A"/>
           <!-- mountains -->
           <polygon points="200,210 320,110 440,210" fill="#C68B5A"/>
@@ -3106,8 +4069,8 @@ body { font-size: 18px; }
         <svg class="biome-scene" viewBox="0 0 800 280" preserveAspectRatio="xMidYMid slice">
           <defs>
             <radialGradient id="sky-future" cx="0.6" cy="0.3" r="0.9">
-              <stop offset="0" stop-color="#5840B8"/>
-              <stop offset="1" stop-color="#1A0F40"/>
+              <stop offset="0" stop-color="#2C9CFF"/>
+              <stop offset="1" stop-color="#0C5A9E"/>
             </radialGradient>
           </defs>
           <rect width="800" height="280" fill="url(#sky-future)"/>
@@ -3126,34 +4089,34 @@ body { font-size: 18px; }
           </g>
           <!-- planet -->
           <g>
-            <circle cx="660" cy="80" r="44" fill="#FFB1D6"/>
-            <ellipse cx="660" cy="80" rx="60" ry="12" fill="none" stroke="#F5B71B" stroke-width="4" opacity="0.85"/>
-            <ellipse cx="660" cy="78" rx="58" ry="11" fill="none" stroke="#F5B71B" stroke-width="2" opacity="0.6"/>
-            <ellipse cx="652" cy="68" rx="10" ry="6" fill="#E07AB8"/>
-            <ellipse cx="672" cy="92" rx="8" ry="5" fill="#E07AB8"/>
+            <circle cx="660" cy="80" r="44" fill="#7AC1F5"/>
+            <ellipse cx="660" cy="80" rx="60" ry="12" fill="none" stroke="#FFC940" stroke-width="4" opacity="0.85"/>
+            <ellipse cx="660" cy="78" rx="58" ry="11" fill="none" stroke="#FFC940" stroke-width="2" opacity="0.6"/>
+            <ellipse cx="652" cy="68" rx="10" ry="6" fill="#2C9CFF"/>
+            <ellipse cx="672" cy="92" rx="8" ry="5" fill="#2C9CFF"/>
           </g>
           <!-- small moon -->
-          <circle cx="100" cy="160" r="14" fill="#A8A8C8"/>
-          <circle cx="96" cy="156" r="3" fill="#7878A0"/>
-          <circle cx="104" cy="164" r="2" fill="#7878A0"/>
+          <circle cx="100" cy="160" r="14" fill="#D6E8F5"/>
+          <circle cx="96" cy="156" r="3" fill="#5C7C9C"/>
+          <circle cx="104" cy="164" r="2" fill="#5C7C9C"/>
           <!-- floating platforms -->
           <g>
-            <ellipse cx="300" cy="225" rx="58" ry="9" fill="#3B2A89" opacity="0.85"/>
-            <ellipse cx="300" cy="220" rx="58" ry="9" fill="#6B4EE0"/>
+            <ellipse cx="300" cy="225" rx="58" ry="9" fill="#0C5A9E" opacity="0.85"/>
+            <ellipse cx="300" cy="220" rx="58" ry="9" fill="#2C9CFF"/>
           </g>
           <g>
-            <ellipse cx="500" cy="240" rx="68" ry="10" fill="#3B2A89" opacity="0.85"/>
-            <ellipse cx="500" cy="235" rx="68" ry="10" fill="#6B4EE0"/>
+            <ellipse cx="500" cy="240" rx="68" ry="10" fill="#0C5A9E" opacity="0.85"/>
+            <ellipse cx="500" cy="235" rx="68" ry="10" fill="#2C9CFF"/>
           </g>
           <!-- space station -->
           <g transform="translate(400,180)">
-            <rect x="-32" y="-8" width="64" height="16" rx="4" fill="#B5A7F0"/>
-            <rect x="-26" y="-6" width="52" height="4" fill="#FFE89A" opacity="0.9"/>
+            <rect x="-32" y="-8" width="64" height="16" rx="4" fill="#7AC1F5"/>
+            <rect x="-26" y="-6" width="52" height="4" fill="#FFE8A8" opacity="0.9"/>
             <rect x="-18" y="-18" width="36" height="10" rx="3" fill="#E8E3FA"/>
-            <line x1="-32" y1="0" x2="-44" y2="0" stroke="#B5A7F0" stroke-width="3"/>
-            <line x1="32" y1="0" x2="44" y2="0" stroke="#B5A7F0" stroke-width="3"/>
-            <circle cx="-44" cy="0" r="3" fill="#F5B71B"/>
-            <circle cx="44" cy="0" r="3" fill="#F5B71B"/>
+            <line x1="-32" y1="0" x2="-44" y2="0" stroke="#7AC1F5" stroke-width="3"/>
+            <line x1="32" y1="0" x2="44" y2="0" stroke="#7AC1F5" stroke-width="3"/>
+            <circle cx="-44" cy="0" r="3" fill="#FFC940"/>
+            <circle cx="44" cy="0" r="3" fill="#FFC940"/>
           </g>
           <!-- shooting star -->
           <g>
@@ -3164,12 +4127,12 @@ body { font-size: 18px; }
           <!-- a UFO drifting across the sky -->
           <g>
             <g class="ufo">
-              <ellipse cx="0" cy="2" rx="14" ry="3" fill="#3B2A89"/>
-              <ellipse cx="0" cy="0" rx="11" ry="4" fill="#B5A7F0"/>
-              <circle cx="-5" cy="-1" r="1.4" fill="#FFE89A"/>
-              <circle cx="0" cy="-1" r="1.4" fill="#FFE89A"/>
-              <circle cx="5" cy="-1" r="1.4" fill="#FFE89A"/>
-              <ellipse cx="0" cy="-3" rx="6" ry="2.5" fill="#E8E1FA"/>
+              <ellipse cx="0" cy="2" rx="14" ry="3" fill="#0C5A9E"/>
+              <ellipse cx="0" cy="0" rx="11" ry="4" fill="#7AC1F5"/>
+              <circle cx="-5" cy="-1" r="1.4" fill="#FFE8A8"/>
+              <circle cx="0" cy="-1" r="1.4" fill="#FFE8A8"/>
+              <circle cx="5" cy="-1" r="1.4" fill="#FFE8A8"/>
+              <ellipse cx="0" cy="-3" rx="6" ry="2.5" fill="#DFF0FE"/>
               <animateTransform attributeName="transform" type="translate" values="-30,140; 830,90; 830,90" keyTimes="0; 0.92; 1" dur="22s" repeatCount="indefinite"/>
             </g>
           </g>
@@ -3178,7 +4141,7 @@ body { font-size: 18px; }
             <g transform="translate(660,80)">
               <g>
                 <rect x="-3" y="-1" width="6" height="2" fill="#FFFFFF"/>
-                <line x1="-6" y1="0" x2="6" y2="0" stroke="#FFE89A" stroke-width="0.8"/>
+                <line x1="-6" y1="0" x2="6" y2="0" stroke="#FFE8A8" stroke-width="0.8"/>
                 <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="9s" repeatCount="indefinite"/>
               </g>
             </g>
@@ -3196,6 +4159,7 @@ body { font-size: 18px; }
     renderNowCard();
     updateMascotTip();
     renderWorldRecap();
+    updateOnboarding();
   }
 
   function renderHighwayBackgrounds() {
@@ -3262,6 +4226,7 @@ body { font-size: 18px; }
       openLesson(key);
       return;
     }
+    state.hasStarted = true;
     state.activeStop = key;
     saveState();
     beep('click');
@@ -3274,6 +4239,7 @@ body { font-size: 18px; }
     renderHighwayStations();
     renderNowCard();
     updateMascotTip();
+    updateOnboarding();
   }
 
   // Position the car at the active station's percentage
@@ -3344,15 +4310,39 @@ body { font-size: 18px; }
   function updateMascotTip() {
     const tipEl = $('#mascot-tip');
     const next = getNextTense();
+    const masteredAny = TIMELINE_ORDER.some(k => isMastered(k));
     if (!next) {
       tipEl.textContent = "🏆 You've conquered all 12 tenses! You're a true Grammar Time Champion!";
+    } else if (!state.hasStarted && !masteredAny) {
+      tipEl.textContent = `👋 Hi! I'm Chrono — your time-travel buddy. Let's explore Dino Valley, Green City, and Tomorrow Land! Tap a glowing station to begin.`;
     } else if (next === state.activeStop) {
-      tipEl.textContent = `🚗 Ready to power up ${shortenTenseName(TENSES[next].name)}? Hit "Start lesson" below!`;
+      const w = WORLDS[TENSES[next].bucket];
+      tipEl.textContent = `${w.emoji} You're parked in ${w.name}. Ready to power up ${shortenTenseName(TENSES[next].name)}?`;
     } else {
       const t = TENSES[next];
-      tipEl.textContent = `🌟 Next stop: ${shortenTenseName(t.name)}! Tap the glowing station to drive there.`;
+      const w = WORLDS[t.bucket];
+      tipEl.textContent = `🌟 Next stop in ${w.name}: ${shortenTenseName(t.name)}! Tap the glowing station to drive there.`;
     }
     $('#home-mascot').innerHTML = MASCOT_SVG;
+  }
+
+  // Show the world splash banner when entering a new bucket (different
+  // world from the last lesson). Called from openLesson.
+  let _lastSplashBucket = null;
+  function maybeShowWorldSplash(bucket) {
+    if (_lastSplashBucket === bucket) return;
+    _lastSplashBucket = bucket;
+    const w = WORLDS[bucket];
+    if (!w) return;
+    const splash = $('#world-splash');
+    if (!splash) return;
+    $('#world-splash-emoji').textContent = w.emoji;
+    $('#world-splash-title').textContent = w.name;
+    $('#world-splash-tagline').textContent = w.tagline;
+    splash.classList.remove('show');
+    void splash.offsetWidth;
+    splash.classList.add('show');
+    setTimeout(() => splash.classList.remove('show'), 2200);
   }
 
   function renderWorldRecap() {
@@ -3536,6 +4526,8 @@ body { font-size: 18px; }
 
   function openLesson(key) {
     if (!isUnlocked(key)) return;
+    state.hasStarted = true;
+    saveState();
     session.currentTense = key;
     const t = TENSES[key];
     const view = $('#view-lesson');
@@ -3547,11 +4539,15 @@ body { font-size: 18px; }
     iconEl.style.background = `var(--${t.bucket}-50)`;
     iconEl.style.color = `var(--${t.bucket}-700)`;
 
-    $('#lesson-eyebrow').textContent = `Level ${t.level} · ${t.bucket}`;
+    const world = WORLDS[t.bucket];
+    $('#lesson-eyebrow').innerHTML = `Level ${t.level} · <span style="color: ${world.color};">${world.emoji} ${world.name}</span>`;
     $('#lesson-title').textContent = t.name;
     $('#lesson-tagline').textContent = t.tagline;
     $('#lesson-speech').textContent = t.speech;
     $('#lesson-mascot').innerHTML = MASCOT_SVG;
+
+    // Show the world splash when entering a new bucket
+    maybeShowWorldSplash(t.bucket);
 
     // Structure — render as colorful building blocks
     const structHost = $('#lesson-structure');
@@ -3562,22 +4558,25 @@ body { font-size: 18px; }
     structInner += `</div>`;
     structHost.innerHTML = structInner;
 
-    // Forms
+    // Forms — game-style labels: "Say it" / "Flip it" / "Ask it"
     const formsHost = $('#lesson-forms');
     formsHost.innerHTML = `
       <div class="form-card positive">
         <div class="form-card-icon">${ICONS.plus}</div>
-        <div class="form-card-label">Positive</div>
+        <div class="form-card-label">Say it</div>
+        <div class="form-card-sub">positive</div>
         <div class="form-card-text">${t.forms.positive}</div>
       </div>
       <div class="form-card negative">
         <div class="form-card-icon">${ICONS.minus}</div>
-        <div class="form-card-label">Negative</div>
+        <div class="form-card-label">Flip it</div>
+        <div class="form-card-sub">negative</div>
         <div class="form-card-text">${t.forms.negative}</div>
       </div>
       <div class="form-card question">
         <div class="form-card-icon">${ICONS.question}</div>
-        <div class="form-card-label">Question</div>
+        <div class="form-card-label">Ask it</div>
+        <div class="form-card-sub">question</div>
         <div class="form-card-text">${t.forms.question}</div>
       </div>
     `;
@@ -3605,53 +4604,163 @@ body { font-size: 18px; }
       exHost.appendChild(row);
     });
 
-    // Irregular verbs (only for tenses that have them — currently past_simple)
+    // Spelling rules — for tenses with quirky -s / -ed / -ing patterns
+    const spellSection = $('#lesson-spelling-section');
+    if (t.spellingRules) {
+      spellSection.style.display = '';
+      $('#lesson-spelling-intro').textContent = t.spellingRules.intro;
+      const spellHost = $('#lesson-spelling');
+      spellHost.innerHTML = '';
+      t.spellingRules.rules.forEach(rule => {
+        const card = document.createElement('div');
+        card.className = 'spelling-rule';
+        const exHTML = rule.examples.map(ex => `
+          <div class="spelling-example">
+            <span class="spelling-base">${ex.base}</span>
+            <span class="spelling-arrow">→</span>
+            <span class="spelling-form">${ex.form}</span>
+          </div>
+        `).join('');
+        card.innerHTML = `
+          <div class="spelling-rule-title">${rule.title}</div>
+          <div class="spelling-examples">${exHTML}</div>
+        `;
+        spellHost.appendChild(card);
+      });
+    } else {
+      spellSection.style.display = 'none';
+    }
+
+    // Irregular verbs — V2 for past_simple, V3 for present_perfect / past_perfect.
+    // Per-tense overrides: irregularTitle, irregularHelper, pastFormLabel.
     const irregSection = $('#lesson-irreg-section');
     const irregHost = $('#lesson-irreg');
     if (t.irregularVerbs && t.irregularVerbs.length) {
       irregSection.style.display = '';
-      irregHost.innerHTML = '';
-      t.irregularVerbs.forEach((pair, idx) => {
-        const cell = document.createElement('div');
-        cell.className = 'irreg-pair';
-        cell.innerHTML = `
-          <div class="irreg-card irreg-base" data-pair-idx="${idx}">
-            <div class="irreg-label">Base</div>
-            <div class="irreg-word">${pair.base}</div>
-          </div>
-          <div class="irreg-arrow">↓</div>
-          <div class="irreg-card irreg-past" data-pair-idx="${idx}">
-            <div class="irreg-flipper">
-              <div class="irreg-front">
-                <div class="irreg-label">Past</div>
-                <div class="irreg-word">?</div>
-              </div>
-              <div class="irreg-back">
-                <div class="irreg-label">Past</div>
-                <div class="irreg-word">${pair.past}</div>
+      $('#lesson-irreg-title').textContent =
+        t.irregularTitle || '🎯 Tricky irregular verbs — tap to reveal!';
+      $('#lesson-irreg-helper').textContent =
+        t.irregularHelper || "Some verbs don't follow the +ed rule. Tap the cards to test yourself.";
+      const pastLabel = t.pastFormLabel || 'Past';
+      const PAGE_SIZE = 10;
+      let shownCount = PAGE_SIZE;
+
+      function renderIrregCards() {
+        irregHost.innerHTML = '';
+        const total = t.irregularVerbs.length;
+        const visible = t.irregularVerbs.slice(0, shownCount);
+
+        // Render the grid of paired cards
+        const gridWrap = document.createElement('div');
+        gridWrap.className = 'irreg-page';
+        visible.forEach((pair, idx) => {
+          const cell = document.createElement('div');
+          cell.className = 'irreg-pair';
+          cell.innerHTML = `
+            <div class="irreg-card irreg-base" data-pair-idx="${idx}">
+              <div class="irreg-label">Base</div>
+              <div class="irreg-word">${pair.base}</div>
+            </div>
+            <div class="irreg-arrow">↓</div>
+            <div class="irreg-card irreg-past" data-pair-idx="${idx}">
+              <div class="irreg-flipper">
+                <div class="irreg-front">
+                  <div class="irreg-label">${pastLabel}</div>
+                  <div class="irreg-word">?</div>
+                </div>
+                <div class="irreg-back">
+                  <div class="irreg-label">${pastLabel}</div>
+                  <div class="irreg-word">${pair.past}</div>
+                </div>
               </div>
             </div>
-          </div>
-        `;
-        irregHost.appendChild(cell);
-      });
-      // Wire up tap handlers — tapping either card in a pair toggles the past card
-      irregHost.querySelectorAll('.irreg-pair').forEach(pair => {
-        const pastCard = pair.querySelector('.irreg-past');
-        pair.querySelectorAll('.irreg-card').forEach(card => {
-          card.addEventListener('click', () => {
-            const wasRevealed = pastCard.classList.contains('revealed');
-            pastCard.classList.toggle('revealed');
-            if (!wasRevealed) beep && beep('click');
+          `;
+          gridWrap.appendChild(cell);
+        });
+        irregHost.appendChild(gridWrap);
+
+        // Wire up tap-to-flip on the visible cards
+        gridWrap.querySelectorAll('.irreg-pair').forEach(pair => {
+          const pastCard = pair.querySelector('.irreg-past');
+          pair.querySelectorAll('.irreg-card').forEach(card => {
+            card.addEventListener('click', () => {
+              const wasRevealed = pastCard.classList.contains('revealed');
+              pastCard.classList.toggle('revealed');
+              if (!wasRevealed) beep && beep('click');
+            });
           });
         });
-      });
+
+        // Footer: progress + show-more / show-fewer controls
+        const footer = document.createElement('div');
+        footer.className = 'irreg-footer';
+        const progress = `<div class="irreg-progress">${shownCount} of ${total} shown</div>`;
+        let controls = '';
+        if (shownCount < total) {
+          const remaining = total - shownCount;
+          const nextBatch = Math.min(PAGE_SIZE, remaining);
+          controls = `<button class="irreg-more-btn" id="irreg-show-more">↓ Show ${nextBatch} more</button>`;
+        } else if (total > PAGE_SIZE) {
+          controls = `<button class="irreg-more-btn ghost" id="irreg-show-fewer">↑ Show fewer</button>`;
+        }
+        footer.innerHTML = progress + controls;
+        irregHost.appendChild(footer);
+
+        const moreBtn = footer.querySelector('#irreg-show-more');
+        if (moreBtn) {
+          moreBtn.addEventListener('click', () => {
+            shownCount = Math.min(shownCount + PAGE_SIZE, total);
+            renderIrregCards();
+            beep && beep('click');
+          });
+        }
+        const fewerBtn = footer.querySelector('#irreg-show-fewer');
+        if (fewerBtn) {
+          fewerBtn.addEventListener('click', () => {
+            shownCount = PAGE_SIZE;
+            renderIrregCards();
+            // Scroll back up to the section so the kid sees the start again
+            irregSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        }
+      }
+      renderIrregCards();
     } else {
       irregSection.style.display = 'none';
     }
 
     // Practice games
     renderGameCards(t);
+
+    // "Drive to next tense" panel — only when current tense is mastered
+    const advanceEl = $('#lesson-advance');
+    if (isMastered(key)) {
+      const nextKey = getNextTense();
+      if (nextKey) {
+        // There's an unmastered tense to move to — recommend it
+        const nextT = TENSES[nextKey];
+        $('#advance-icon').textContent = '🎉';
+        $('#advance-eyebrow').textContent = "You've mastered " + t.name + "!";
+        $('#advance-title').textContent = `Ready for ${shortenTenseName(nextT.name)}?`;
+        $('#advance-btn').textContent = `🚗 Drive to ${shortenTenseName(nextT.name)}  →`;
+        $('#advance-btn').onclick = () => {
+          state.activeStop = nextKey;
+          state.hasStarted = true;
+          saveState();
+          openLesson(nextKey);
+        };
+      } else {
+        // All 12 mastered — celebrate
+        $('#advance-icon').textContent = '🏆';
+        $('#advance-eyebrow').textContent = 'All 12 tenses mastered!';
+        $('#advance-title').textContent = "You're a true Grammar Time Champion!";
+        $('#advance-btn').textContent = 'Back to home';
+        $('#advance-btn').onclick = () => { showView('home'); renderHome(); };
+      }
+      advanceEl.style.display = '';
+    } else {
+      advanceEl.style.display = 'none';
+    }
 
     showView('lesson');
   }
@@ -3665,12 +4774,26 @@ body { font-size: 18px; }
       { key: 'fix', name: 'Fix the mistake', desc: 'Find and fix the wrong word.', icon: ICONS.fix, color: 'future' },
     ];
     host.innerHTML = '';
+    const isMasteredTense = isMastered(t.key);
+    const anyProgress = Object.values(stars).some(v => v > 0);
     games.forEach(g => {
       const earned = stars[g.key] || 0;
       const starsHTML = [1,2,3].map(n => `<svg viewBox="0 0 24 24" fill="currentColor" class="${n <= earned ? 'earned' : ''}"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.4 5.7 21.2l1.7-7L2 9.5l7.1-.6z"/></svg>`).join('');
+      // Recommended badge:
+      // - "START HERE" on MCQ if no game played yet for this tense
+      // - "REPLAY" on MCQ once the tense is mastered (invites a victory lap)
+      let pillHTML = '';
+      if (g.key === 'mcq') {
+        if (!anyProgress && !isMasteredTense) {
+          pillHTML = '<div class="start-here-pill">★ Start here</div>';
+        } else if (isMasteredTense) {
+          pillHTML = '<div class="start-here-pill">↻ Replay</div>';
+        }
+      }
       const card = document.createElement('button');
       card.className = 'game-card';
       card.innerHTML = `
+        ${pillHTML}
         <div class="game-card-icon" style="background: var(--${g.color}-50); color: var(--${g.color}-700);">${g.icon}</div>
         <div class="game-card-name">${g.name}</div>
         <div class="game-card-desc">${g.desc}</div>
@@ -3730,6 +4853,8 @@ body { font-size: 18px; }
       correct: 0,
       mistakes: 0,
       perfect: true,
+      streak: 0,
+      maxStreak: 0,
     };
 
     $('#game-title').textContent = `${t.name} — ${gameType === 'mcq' ? 'Multiple choice' : gameType === 'build' ? 'Build the sentence' : 'Fix the mistake'}`;
@@ -3767,6 +4892,7 @@ body { font-size: 18px; }
     $('#btn-game-action').textContent = 'Next →';
     // Default action: advance. renderBuild will override this to checkBuild.
     $('#btn-game-action').onclick = goToNextStep;
+    updateStreakBadge();
 
     if (g.type === 'mcq') renderMCQ();
     else if (g.type === 'build') renderBuild();
@@ -3803,22 +4929,79 @@ body { font-size: 18px; }
     const g = session.game;
     const item = g.items[g.idx];
     if (idx === item.a) {
-      btn.classList.add('right');
+      btn.classList.add('right', 'pop-correct');
       $$('#mcq-options .mcq-opt').forEach(b => b.disabled = true);
       g.correct++;
-      const phrases = ['Correct!', 'Great!', 'Yes!', 'Perfect!', 'Spot on!'];
+      g.streak++;
+      if (g.streak > g.maxStreak) g.maxStreak = g.streak;
+      const phrases = ['Correct!', 'Nice!', 'Yes!', 'Spot on!', 'Boom!', 'Perfect!'];
       $('#game-feedback').textContent = phrases[Math.floor(Math.random() * phrases.length)];
       $('#game-feedback').className = 'feedback win';
       $('#btn-game-action').disabled = false;
       beep('good');
+      // Flying "+10" score pop with streak bonus
+      const points = 10 + (g.streak >= 3 ? 5 : 0) + (g.streak >= 5 ? 10 : 0);
+      spawnScorePop(btn, '+' + points);
+      maybeFireStreak(g.streak);
     } else {
-      btn.classList.add('bad');
+      btn.classList.add('bad', 'shake-bad');
       btn.disabled = true;
       g.mistakes++;
       g.perfect = false;
+      g.streak = 0;
       $('#game-feedback').textContent = item.hint || 'Hmm, try again!';
       $('#game-feedback').className = 'feedback bad';
       beep('bad');
+    }
+    updateStreakBadge();
+  }
+
+  // Spawn a flying "+10" element from an origin element that drifts up and fades
+  function spawnScorePop(originEl, text) {
+    const rect = originEl.getBoundingClientRect();
+    const el = document.createElement('div');
+    el.className = 'score-pop';
+    el.textContent = text;
+    el.style.left = (rect.left + rect.width * 0.7) + 'px';
+    el.style.top  = (rect.top  + rect.height * 0.3) + 'px';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1300);
+  }
+
+  // Show a fly-in callout when the kid hits a streak milestone
+  function maybeFireStreak(streak) {
+    const milestones = {
+      3: { msg: '🔥 3 in a row!',     label: 'On fire!' },
+      5: { msg: '⚡ 5 streak!',       label: 'Unstoppable!' },
+      7: { msg: '🌟 7 STREAK!',       label: 'Legendary!' },
+      10:{ msg: '🏆 10 PERFECT!',     label: 'GRAMMAR GOD!' },
+    };
+    const m = milestones[streak];
+    if (!m) return;
+    showToast(m.msg + ' ' + m.label, 'celebrate');
+    celebrate && celebrate(streak >= 7 ? 35 : 18);
+  }
+
+  // Render the streak badge in the game stage when streak > 0
+  function updateStreakBadge() {
+    const g = session.game;
+    let el = $('#streak-badge');
+    if (!el) {
+      const host = $('#game-header') || $('#game-progress')?.parentNode;
+      if (!host) return;
+      el = document.createElement('div');
+      el.id = 'streak-badge';
+      el.className = 'streak-badge';
+      host.appendChild(el);
+    }
+    if (g && g.streak >= 2) {
+      el.innerHTML = `<span class="streak-flame">🔥</span><span class="streak-num">${g.streak}</span><span class="streak-label">streak</span>`;
+      el.classList.add('show');
+      el.classList.remove('cool');
+      if (g.streak >= 5) el.classList.add('hot');
+      else el.classList.remove('hot');
+    } else {
+      el.classList.remove('show', 'hot');
     }
   }
 
@@ -4047,11 +5230,20 @@ body { font-size: 18px; }
     saveState();
     updateStars();
 
+    // World completion check — fires when this mastery completed all 4 in a zone
+    let worldJustCompleted = null;
+    if (newlyMastered && isWorldComplete(t.bucket)) {
+      worldJustCompleted = WORLDS[t.bucket];
+    }
+
     // Build summary screen — kid-celebration style
     const body = $('#game-body');
 
     let bigTitle, subTitle;
-    if (newlyMastered) {
+    if (worldJustCompleted) {
+      bigTitle = `✨ ${worldJustCompleted.name.toUpperCase()} COMPLETE! ✨`;
+      subTitle = `You mastered every tense in ${worldJustCompleted.name}! ${worldJustCompleted.emoji}`;
+    } else if (newlyMastered) {
       bigTitle = '🏆 PERFECT DRIVER!';
       subTitle = `You mastered <strong>${t.name}</strong>!`;
     } else if (g.perfect) {
@@ -4093,21 +5285,52 @@ body { font-size: 18px; }
       </div>
     `;
     $('#game-feedback').textContent = '';
-    $('#btn-game-action').textContent = 'Back to lesson';
-    $('#btn-game-action').disabled = false;
-    $('#btn-game-action').onclick = () => {
-      session.game = null;
-      openLesson(g.tense);
-    };
+
+    // Wire the celebration CTA based on what just happened.
+    // - Newly mastered + a next tense was unlocked → primary button drives to next
+    // - Otherwise → stay on the current lesson
+    const actionBtn = $('#btn-game-action');
+    actionBtn.disabled = false;
+    if (newlyMastered && unlockedNext) {
+      const nextT = TENSES[unlockedNext];
+      actionBtn.textContent = `🚗 Drive to ${shortenTenseName(nextT.name)}  →`;
+      actionBtn.onclick = () => {
+        session.game = null;
+        state.activeStop = unlockedNext;
+        state.hasStarted = true;
+        saveState();
+        openLesson(unlockedNext);
+      };
+      // Add a small "Stay here" secondary action below the CTA row
+      const footer = actionBtn.closest('.game-footer');
+      let stayLink = $('#btn-game-stay');
+      if (!stayLink && footer) {
+        stayLink = document.createElement('button');
+        stayLink.id = 'btn-game-stay';
+        stayLink.className = 'btn-game-stay';
+        footer.appendChild(stayLink);
+      }
+      if (stayLink) {
+        stayLink.textContent = `Stay and review ${t.name}`;
+        stayLink.style.display = '';
+        stayLink.onclick = () => { session.game = null; openLesson(g.tense); };
+      }
+    } else {
+      actionBtn.textContent = 'Back to lesson';
+      actionBtn.onclick = () => { session.game = null; openLesson(g.tense); };
+      const stayLink = $('#btn-game-stay');
+      if (stayLink) stayLink.style.display = 'none';
+    }
+
     $('#game-progress').innerHTML = '';
 
     if (newlyMastered) {
-      celebrate(60);
+      celebrate(worldJustCompleted ? 140 : 60);
       beep('win');
-      showToast(newLevel ? `🎉 Level ${newLevel} unlocked!` : `★ ${t.name} mastered!`, 'celebrate');
-      // After dismissing, also advance the active stop to the next tense
-      if (unlockedNext) {
-        setTimeout(() => { state.activeStop = unlockedNext; saveState(); }, 200);
+      if (worldJustCompleted) {
+        showToast(`✨ ${worldJustCompleted.name} complete! ${worldJustCompleted.emoji}`, 'celebrate');
+      } else {
+        showToast(newLevel ? `🎉 Level ${newLevel} unlocked!` : `★ ${t.name} mastered!`, 'celebrate');
       }
     } else if (g.perfect) {
       celebrate(20);
@@ -4129,7 +5352,7 @@ body { font-size: 18px; }
   }
 
   function celebrate(count) {
-    const colors = ['#C77A1F','#15A35F','#6B4EE0','#D14242','#F5B71B','#2D70CC','#D14282'];
+    const colors = ['#C77A1F','#15A35F','#6B4EE0','#D14242','#FFC940','#2D70CC','#D14282'];
     const layer = document.createElement('div');
     layer.className = 'confetti';
     document.body.appendChild(layer);
