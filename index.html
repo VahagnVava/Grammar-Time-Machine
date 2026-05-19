@@ -1349,6 +1349,39 @@ h1, h2, h3, h4 {
 }
 .hwy-station-circle svg { width: 30px; height: 30px; }
 .hwy-station-num { font-size: 18px; font-weight: 700; line-height: 1; }
+/* Per-tense identity emoji shown in unlocked stations */
+.hwy-station-emoji {
+  font-size: 26px;
+  line-height: 1;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,0.25));
+  transition: transform 0.25s cubic-bezier(.5,1.6,.4,1);
+  pointer-events: none;
+}
+.hwy-station:hover .hwy-station-emoji { transform: scale(1.18) rotate(-6deg); }
+/* Mastered: a spinning gold halo behind the emoji + a tiny sparkle */
+.hwy-station-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--gold), #FFE8A8, var(--gold), #FFE8A8, var(--gold));
+  -webkit-mask: radial-gradient(transparent 60%, #000 62%, #000 95%, transparent 96%);
+          mask: radial-gradient(transparent 60%, #000 62%, #000 95%, transparent 96%);
+  animation: masteredRingSpin 5s linear infinite;
+  pointer-events: none;
+  opacity: 0.85;
+}
+@keyframes masteredRingSpin { to { transform: rotate(360deg); } }
+.hwy-station-sparkle {
+  position: absolute;
+  top: -6px; right: -6px;
+  font-size: 16px;
+  animation: masteredSparkle 1.8s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes masteredSparkle {
+  0%, 100% { transform: scale(0.7) rotate(0); opacity: 0.6; }
+  50%      { transform: scale(1.15) rotate(20deg); opacity: 1; }
+}
 .hwy-station.bucket-past .hwy-station-circle    { background: var(--past-500); }
 .hwy-station.bucket-present .hwy-station-circle { background: var(--present-500); }
 .hwy-station.bucket-future .hwy-station-circle  { background: var(--future-500); }
@@ -1361,7 +1394,9 @@ h1, h2, h3, h4 {
 .hwy-station.mastered .hwy-station-circle {
   background: var(--gold);
   color: var(--past-700);
-  box-shadow: 0 4px 0 var(--past-700), 0 0 0 3px var(--past-700), 0 0 22px rgba(245,183,27,0.5);
+  box-shadow: 0 4px 0 var(--past-700), 0 0 0 3px var(--past-700), 0 0 28px rgba(255,201,64,0.55);
+  position: relative;
+  overflow: visible;
 }
 .hwy-station.next:not(.mastered) .hwy-station-circle {
   animation: pulseStation 1.8s ease-in-out infinite;
@@ -1877,6 +1912,400 @@ body { font-size: 18px; }
   from { background: conic-gradient(from 0deg, #FFE8A8, #FFC940, #FFE8A8, #FFC940, #FFE8A8); }
   to   { background: conic-gradient(from 360deg, #FFE8A8, #FFC940, #FFE8A8, #FFC940, #FFE8A8); }
 }
+
+/* ============================================================
+   JOURNEY UPGRADE — themed node icons, world portals, meta chips
+   ============================================================ */
+
+/* Per-tense emoji icon inside unlocked station circles */
+.hwy-station-icon {
+  font-size: 26px;
+  line-height: 1;
+  display: inline-block;
+  filter: drop-shadow(0 1px 0 rgba(58,47,34,0.25));
+  transition: transform 0.2s ease;
+}
+.hwy-station:not(.locked) .hwy-station-circle:hover .hwy-station-icon {
+  transform: scale(1.15) rotate(-4deg);
+}
+.hwy-station.active .hwy-station-icon {
+  animation: stationIconBob 1.8s ease-in-out infinite;
+}
+@keyframes stationIconBob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-2px); }
+}
+
+/* World portal arches at boundaries (33% and 67% of road) */
+.hwy-portal {
+  position: absolute;
+  bottom: 30%;
+  width: 140px;
+  height: 110px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 8;
+  opacity: 0.85;
+  animation: portalPulse 3.2s ease-in-out infinite;
+}
+.hwy-portal svg { width: 100%; height: 100%; overflow: visible; }
+.hwy-portal-present { animation-delay: 0s; }
+.hwy-portal-future  { animation-delay: 1.6s; }
+@keyframes portalPulse {
+  0%, 100% { transform: translateX(-50%) translateY(0); filter: drop-shadow(0 0 8px rgba(255,255,255,0.4)); }
+  50%      { transform: translateX(-50%) translateY(-3px); filter: drop-shadow(0 0 16px rgba(255,255,255,0.65)); }
+}
+
+/* Now-card meta chips: difficulty / duration / rewards preview */
+.now-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 12px;
+}
+.now-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.7);
+  border: 1.5px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+.now-chip:hover {
+  transform: translateY(-1px);
+  background: #fff;
+}
+.now-chip-icon {
+  font-size: 14px;
+  line-height: 1;
+  display: inline-block;
+}
+
+@media (max-width: 600px) {
+  .hwy-portal { width: 100px; height: 80px; bottom: 28%; }
+  .hwy-station-icon { font-size: 22px; }
+  .now-meta { gap: 6px; }
+  .now-chip { font-size: 12px; padding: 4px 10px; }
+}
+
+/* ============================================================
+   FORM COMPARISON GRID — side-by-side positive / negative / question
+   Aligned tiles teach helper inversion, negation insertion, and structure
+   ============================================================ */
+.form-grid-host {
+  display: block;
+  background: linear-gradient(180deg, #FFFCF1 0%, #FFFFFF 100%);
+  border: 2.5px solid var(--line-strong);
+  border-radius: 22px;
+  box-shadow: 0 4px 0 var(--line-strong), 0 8px 24px rgba(58,47,34,0.06);
+  padding: 18px 18px 16px;
+  position: relative;
+}
+
+/* Subject + verb picker chips above the grid */
+.form-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 2px dashed var(--line-strong);
+}
+.form-control-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.form-control-label {
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--ink-soft);
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+.form-chip-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.form-chip {
+  background: var(--paper);
+  border: 2px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.form-chip:hover {
+  transform: translateY(-2px);
+  border-color: var(--past-500);
+  color: var(--ink);
+}
+.form-chip.active {
+  background: var(--ink);
+  color: #FFE8A8;
+  border-color: var(--ink);
+  box-shadow: 0 3px 0 rgba(58,47,34,0.25);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: minmax(98px, auto) repeat(var(--slot-count), minmax(56px, 1fr));
+  gap: 8px;
+  align-items: stretch;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+}
+.form-grid-label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: var(--display);
+  font-weight: 800;
+  color: var(--ink);
+  padding-right: 12px;
+  border-right: 2px dashed var(--line-strong);
+  margin-right: 2px;
+  min-height: 50px;
+}
+.form-grid-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 900;
+  margin-bottom: 3px;
+  border: 2px solid currentColor;
+}
+.row-pos .form-grid-icon { background: #E5F8DE; color: #1F6B1F; border-color: #4FC44F; }
+.row-neg .form-grid-icon { background: #FCE5E5; color: #A02020; border-color: #FF5A5A; }
+.row-que .form-grid-icon { background: #DFF0FE; color: #0C5A9E; border-color: #2C9CFF; }
+.form-grid-label-text { font-size: 16px; line-height: 1.1; }
+.form-grid-sub {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* Compact "lego block" tile sizing */
+.form-tile {
+  background: #fff;
+  border: 2.5px solid var(--line-strong);
+  border-radius: 12px;
+  padding: 10px 8px;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 16px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  min-width: 48px;
+  position: relative;
+  transition: transform 0.2s cubic-bezier(.5,1.6,.4,1), box-shadow 0.2s ease;
+  box-shadow: 0 3px 0 rgba(58,47,34,0.14);
+  animation: tileDropIn 0.5s cubic-bezier(.4,1.4,.4,1) backwards;
+  cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.form-tile:hover { transform: translateY(-3px) rotate(-1.5deg); box-shadow: 0 6px 0 rgba(58,47,34,0.18); }
+.form-tile:active { cursor: grabbing; transform: translateY(0); box-shadow: 0 1px 0 rgba(58,47,34,0.12); }
+
+/* Role color-coding */
+.form-tile.role-s { background: #DFF0FE; border-color: #7AC1F5; color: #0C5A9E; }
+.form-tile.role-h { background: #FFEAD0; border-color: #FF8A3D; color: #9E4400; }
+.form-tile.role-n {
+  background: #FCE5E5; border-color: #FF5A5A; color: #A02020;
+  /* "Not" pops in + softly pulses to stay attention-grabbing */
+  animation:
+    tileNotPop 0.55s cubic-bezier(.4,1.7,.4,1) 0.5s backwards,
+    notSoftGlow 2.6s ease-in-out 1.5s infinite;
+}
+.form-tile.role-n::before {
+  content: '+';
+  position: absolute;
+  top: -7px; right: -5px;
+  width: 18px; height: 18px;
+  background: #FF5A5A;
+  color: #fff;
+  border-radius: 50%;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid #fff;
+}
+.form-tile.role-v { background: #E5F8DE; border-color: #4FC44F; color: #1F6B1F; }
+.form-tile.role-o { background: #fff; border-color: var(--line-strong); color: var(--ink); }
+.form-tile.role-_ {
+  background: rgba(58,47,34,0.02);
+  border: 2px dashed rgba(58,47,34,0.18);
+  box-shadow: none;
+  cursor: default;
+  animation: none;
+}
+.form-tile.role-_:hover { transform: none; box-shadow: none; }
+
+/* Faint placeholder labels INSIDE empty cells of consistent-role slots */
+.form-tile-placeholder {
+  font-family: var(--body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: rgba(58,47,34,0.32);
+}
+
+/* Glow on tiles that visibly MOVED for question formation (helper to front, subject to middle) */
+.form-tile.is-moved {
+  animation:
+    tileDropIn 0.5s cubic-bezier(.4,1.4,.4,1) backwards,
+    movedGlow 2.6s ease-in-out 0.8s infinite;
+}
+@keyframes movedGlow {
+  0%, 100% { box-shadow: 0 3px 0 rgba(58,47,34,0.14), 0 0 0 0 rgba(255,201,64,0); }
+  50%      { box-shadow: 0 3px 0 rgba(58,47,34,0.14), 0 0 0 6px rgba(255,201,64,0.45); }
+}
+@keyframes notSoftGlow {
+  0%, 100% { box-shadow: 0 3px 0 rgba(160,32,32,0.16), 0 0 0 0 rgba(255,90,90,0); }
+  50%      { box-shadow: 0 3px 0 rgba(160,32,32,0.16), 0 0 0 5px rgba(255,90,90,0.32); }
+}
+
+@keyframes tileDropIn {
+  0%   { opacity: 0; transform: translateY(-12px) scale(0.85); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes tileNotPop {
+  0%   { opacity: 0; transform: scale(0.2) rotate(-15deg); }
+  60%  { opacity: 1; transform: scale(1.25) rotate(8deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+/* Transform arrows between rows */
+.form-grid-arrow {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 2px 0 0;
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  opacity: 0.7;
+  margin: -2px 0;
+}
+.form-grid-arrow .arrow-icon {
+  font-size: 16px;
+  color: var(--past-500);
+  animation: arrowBob 1.8s ease-in-out infinite;
+}
+@keyframes arrowBob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(2px); }
+}
+
+/* Legend below the grid */
+.form-grid-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+.legend-dot {
+  width: 13px; height: 13px;
+  border-radius: 5px;
+  border: 2px solid var(--line-strong);
+  flex-shrink: 0;
+}
+.legend-dot.role-s { background: #DFF0FE; border-color: #7AC1F5; }
+.legend-dot.role-h { background: #FFEAD0; border-color: #FF8A3D; }
+.legend-dot.role-n { background: #FCE5E5; border-color: #FF5A5A; }
+.legend-dot.role-v { background: #E5F8DE; border-color: #4FC44F; }
+
+.form-grid-hint {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  background: rgba(255, 201, 64, 0.10);
+  border: 1.5px dashed var(--gold);
+  border-radius: 12px;
+  padding: 8px 12px;
+}
+
+@media (max-width: 720px) {
+  .form-grid-host { padding: 14px 12px 14px; }
+  .form-tile { font-size: 13px; padding: 8px 6px; min-height: 42px; min-width: 42px; border-width: 2px; }
+  .form-grid-label { padding-right: 10px; min-height: 42px; }
+  .form-grid-label-text { font-size: 13px; }
+  .form-grid-icon { width: 22px; height: 22px; font-size: 12px; }
+  .form-grid-sub { font-size: 9px; }
+  .form-grid { grid-template-columns: minmax(76px, auto) repeat(var(--slot-count), minmax(46px, 1fr)); gap: 6px; }
+  .form-tile-placeholder { font-size: 10px; }
+  .legend-item { font-size: 11px; }
+  .form-grid-hint { font-size: 12px; }
+  .form-controls { gap: 12px; }
+  .form-chip { font-size: 13px; padding: 5px 11px; }
+  .form-control-label { font-size: 11px; }
+}
+
+/* ============================================================
+   WORLD BADGE in now-card eyebrow
+   ============================================================ */
+.now-eyebrow-v2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.now-world-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px 4px;
+  border-radius: 999px;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.now-world-badge.bucket-past    { background: #FFEAD0; color: #9E4400; border: 1.5px solid #FF8A3D; }
+.now-world-badge.bucket-present { background: #E5F8DE; color: #1F6B1F; border: 1.5px solid #4FC44F; }
+.now-world-badge.bucket-future  { background: #DFF0FE; color: #0C5A9E; border: 1.5px solid #2C9CFF; }
+.now-eyebrow-divider { color: var(--ink-faint); font-weight: 800; }
 
 /* ============================================================
    WHEN-TO-USE-IT CARD — the headline rule shown first in every lesson
@@ -2964,17 +3393,6 @@ body { font-size: 18px; }
         <div class="hwy-bg hwy-bg-present" id="hwy-bg-present"></div>
         <div class="hwy-bg hwy-bg-future"  id="hwy-bg-future"></div>
 
-        <!-- era zone tags above the road -->
-        <div class="hwy-zone hwy-zone-past">
-          <span>🦖</span> Dino Valley
-        </div>
-        <div class="hwy-zone hwy-zone-present">
-          <span>🏙️</span> Green City
-        </div>
-        <div class="hwy-zone hwy-zone-future">
-          <span>🚀</span> Tomorrow Land
-        </div>
-
         <!-- the road -->
         <div class="hwy-road">
           <div class="hwy-road-edge top"></div>
@@ -3043,6 +3461,7 @@ body { font-size: 18px; }
         <div class="now-eyebrow-v2" id="now-eyebrow">Currently parked at</div>
         <div class="now-title-v2" id="now-title">Simple Present</div>
         <div class="now-tagline-v2" id="now-tagline">Habits, routines, and facts that are always true.</div>
+        <div class="now-meta" id="now-meta"></div>
         <div class="now-stars-v2" id="now-stars"></div>
       </div>
       <button class="now-cta-v2" id="now-cta">
@@ -3238,7 +3657,9 @@ body { font-size: 18px; }
     /* ============== LEVEL 1 — Simple ============== */
     present_simple: {
       key: 'present_simple', name: 'Simple Present', bucket: 'present',
+      tenseEmoji: '☀️',
       level: 1, pos: 5, icon: ICONS.simple,
+      nodeIcon: '☀️',
       tagline: 'Habits, routines, and facts that are always true.',
       speech: "I'm for things that always happen — daily habits, routines, and facts about the world.",
       usage: {
@@ -3260,6 +3681,13 @@ body { font-size: 18px; }
         negative: 'I do not play soccer every day.',
         question: 'Do you play soccer every day?',
       },
+      formBlocks: [
+        [{t:"I",r:'s'},{t:"I",r:'s'},{t:"Do",r:'h'}],
+        [{t:"",r:'_'},{t:"do",r:'h'},{t:"I",r:'s'}],
+        [{t:"",r:'_'},{t:"not",r:'n'},{t:"",r:'_'}],
+        [{t:"play",r:'v'},{t:"play",r:'v'},{t:"play",r:'v'}],
+        [{t:"soccer.",r:'o'},{t:"soccer.",r:'o'},{t:"soccer?",r:'o'}]
+      ],
       timeWords: ['every day', 'always', 'usually', 'often', 'sometimes', 'never', 'on Mondays'],
       spellingRules: {
         intro: "For he / she / it, add -s. Watch out for these patterns:",
@@ -3320,7 +3748,9 @@ body { font-size: 18px; }
     },
     past_simple: {
       key: 'past_simple', name: 'Simple Past', bucket: 'past',
+      tenseEmoji: '🦴',
       level: 1, pos: 4, icon: ICONS.simple,
+      nodeIcon: '⏳',
       tagline: 'Things that happened before now and are finished.',
       speech: "Roll back in time! I'm for actions that started AND finished in the past.",
       usage: {
@@ -3342,6 +3772,13 @@ body { font-size: 18px; }
         negative: 'I did not play soccer yesterday.',
         question: 'Did you play soccer yesterday?',
       },
+      formBlocks: [
+        [{t:"I",r:'s'},{t:"I",r:'s'},{t:"Did",r:'h'}],
+        [{t:"",r:'_'},{t:"did",r:'h'},{t:"I",r:'s'}],
+        [{t:"",r:'_'},{t:"not",r:'n'},{t:"",r:'_'}],
+        [{t:"played",r:'v'},{t:"play",r:'v'},{t:"play",r:'v'}],
+        [{t:"soccer.",r:'o'},{t:"soccer.",r:'o'},{t:"soccer?",r:'o'}]
+      ],
       timeWords: ['yesterday', 'last week', 'last year', 'two days ago', 'in 2010', 'when I was 5'],
       spellingRules: {
         intro: "Regular verbs add -ed. Watch out for these patterns:",
@@ -3434,7 +3871,9 @@ body { font-size: 18px; }
     },
     future_simple: {
       key: 'future_simple', name: 'Simple Future', bucket: 'future',
+      tenseEmoji: '🚀',
       level: 1, pos: 9, icon: ICONS.simple,
+      nodeIcon: '🚀',
       tagline: 'Things that will happen later. Predictions, promises, and plans.',
       speech: "Zoom into the future! I'm for things that haven't happened yet, but they will.",
       usage: {
@@ -3455,6 +3894,13 @@ body { font-size: 18px; }
         negative: 'I will not play soccer tomorrow.',
         question: 'Will you play soccer tomorrow?',
       },
+      formBlocks: [
+        [{t:"I",r:'s'},{t:"I",r:'s'},{t:"Will",r:'h'}],
+        [{t:"will",r:'h'},{t:"will",r:'h'},{t:"I",r:'s'}],
+        [{t:"",r:'_'},{t:"not",r:'n'},{t:"",r:'_'}],
+        [{t:"play",r:'v'},{t:"play",r:'v'},{t:"play",r:'v'}],
+        [{t:"soccer.",r:'o'},{t:"soccer.",r:'o'},{t:"soccer?",r:'o'}]
+      ],
       timeWords: ['tomorrow', 'next week', 'next year', 'in two days', 'soon', 'later'],
       examples: [
         { pre: 'Tomorrow we', verb: 'will visit', post: 'the zoo.', emoji: '🦁' },
@@ -3492,7 +3938,9 @@ body { font-size: 18px; }
     /* ============== LEVEL 2 — Continuous ============== */
     present_continuous: {
       key: 'present_continuous', name: 'Present Continuous', bucket: 'present',
+      tenseEmoji: '🎬',
       level: 2, pos: 6, icon: ICONS.cont,
+      nodeIcon: '⚡',
       tagline: 'Things happening right now, at this very moment.',
       speech: "Watch out — I'm for actions happening RIGHT NOW, while you're speaking!",
       usage: {
@@ -3515,6 +3963,12 @@ body { font-size: 18px; }
         negative: 'I am not playing soccer now.',
         question: 'Are you playing soccer now?',
       },
+      formBlocks: [
+        [{t:"I",r:'s'},{t:"I",r:'s'},{t:"Am",r:'h'}],
+        [{t:"am",r:'h'},{t:"am",r:'h'},{t:"I",r:'s'}],
+        [{t:"",r:'_'},{t:"not",r:'n'},{t:"",r:'_'}],
+        [{t:"playing.",r:'v'},{t:"playing.",r:'v'},{t:"playing?",r:'v'}]
+      ],
       timeWords: ['now', 'right now', 'at this moment', 'currently', 'today', 'this week'],
       spellingRules: {
         intro: "To make -ing forms, follow these spelling rules:",
@@ -3577,7 +4031,9 @@ body { font-size: 18px; }
     },
     past_continuous: {
       key: 'past_continuous', name: 'Past Continuous', bucket: 'past',
+      tenseEmoji: '🌋',
       level: 2, pos: 3, icon: ICONS.cont,
+      nodeIcon: '🎬',
       tagline: 'Things that were happening at a moment in the past — like a movie scene.',
       speech: "I show actions in PROGRESS in the past — like rewinding a movie scene.",
       usage: {
@@ -3599,6 +4055,12 @@ body { font-size: 18px; }
         negative: 'I was not playing when she called.',
         question: 'Were you playing when she called?',
       },
+      formBlocks: [
+        [{t:"I",r:'s'},{t:"I",r:'s'},{t:"Was",r:'h'}],
+        [{t:"was",r:'h'},{t:"was",r:'h'},{t:"I",r:'s'}],
+        [{t:"",r:'_'},{t:"not",r:'n'},{t:"",r:'_'}],
+        [{t:"playing.",r:'v'},{t:"playing.",r:'v'},{t:"playing?",r:'v'}]
+      ],
       timeWords: ['while', 'when', 'at 8 pm yesterday', 'all morning', 'this time last week'],
       examples: [
         { pre: 'I', verb: 'was sleeping', post: 'when the phone rang.', emoji: '😴' },
@@ -3634,7 +4096,9 @@ body { font-size: 18px; }
     },
     future_continuous: {
       key: 'future_continuous', name: 'Future Continuous', bucket: 'future',
+      tenseEmoji: '🛸',
       level: 2, pos: 10, icon: ICONS.cont,
+      nodeIcon: '🛸',
       tagline: 'Something that will be happening at a specific moment in the future.',
       speech: "I show actions in PROGRESS in the future — imagine watching tomorrow's movie!",
       usage: {
@@ -3655,6 +4119,13 @@ body { font-size: 18px; }
         negative: 'I will not be sleeping at midnight.',
         question: 'Will you be sleeping at midnight?',
       },
+      formBlocks: [
+        [{t:"I",r:'s'},{t:"I",r:'s'},{t:"Will",r:'h'}],
+        [{t:"will",r:'h'},{t:"will",r:'h'},{t:"I",r:'s'}],
+        [{t:"",r:'_'},{t:"not",r:'n'},{t:"",r:'_'}],
+        [{t:"be",r:'h'},{t:"be",r:'h'},{t:"be",r:'h'}],
+        [{t:"playing.",r:'v'},{t:"playing.",r:'v'},{t:"playing?",r:'v'}]
+      ],
       timeWords: ['at 3 pm tomorrow', 'this time next week', 'all morning tomorrow', 'while', 'when'],
       examples: [
         { pre: 'I', verb: 'will be sleeping', post: 'at midnight tonight.', emoji: '🌙' },
@@ -3692,7 +4163,9 @@ body { font-size: 18px; }
     /* ============== LEVEL 3 — Perfect ============== */
     present_perfect: {
       key: 'present_perfect', name: 'Present Perfect', bucket: 'present',
+      tenseEmoji: '📦',
       level: 3, pos: 7, icon: ICONS.perf,
+      nodeIcon: '🌱',
       tagline: 'Actions that started in the past but matter now.',
       speech: "I bridge past and present! The action started before, but the effect is HERE NOW.",
       usage: {
@@ -3714,6 +4187,12 @@ body { font-size: 18px; }
         negative: 'I have not visited Paris.',
         question: 'Have you visited Paris?',
       },
+      formBlocks: [
+        [{t:"I",r:'s'},{t:"I",r:'s'},{t:"Have",r:'h'}],
+        [{t:"have",r:'h'},{t:"have",r:'h'},{t:"I",r:'s'}],
+        [{t:"",r:'_'},{t:"not",r:'n'},{t:"",r:'_'}],
+        [{t:"played.",r:'v'},{t:"played.",r:'v'},{t:"played?",r:'v'}]
+      ],
       timeWords: ['ever', 'never', 'already', 'yet', 'just', 'since 2020', 'for 3 years'],
       irregularTitle: '🎯 Past participles (V3) — tap to reveal!',
       irregularHelper: 'After have / has we use the V3 form. Some look like the past tense, others change again!',
@@ -3784,7 +4263,9 @@ body { font-size: 18px; }
     },
     past_perfect: {
       key: 'past_perfect', name: 'Past Perfect', bucket: 'past',
+      tenseEmoji: '🗿',
       level: 3, pos: 2, icon: ICONS.perf,
+      nodeIcon: '📜',
       tagline: 'A past action that finished BEFORE another past action.',
       speech: "I'm the EARLIEST past — for things that happened before something else in the past.",
       usage: {
@@ -3805,6 +4286,12 @@ body { font-size: 18px; }
         negative: 'I had not finished dinner before she arrived.',
         question: 'Had you finished dinner before she arrived?',
       },
+      formBlocks: [
+        [{t:"I",r:'s'},{t:"I",r:'s'},{t:"Had",r:'h'}],
+        [{t:"had",r:'h'},{t:"had",r:'h'},{t:"I",r:'s'}],
+        [{t:"",r:'_'},{t:"not",r:'n'},{t:"",r:'_'}],
+        [{t:"played.",r:'v'},{t:"played.",r:'v'},{t:"played?",r:'v'}]
+      ],
       timeWords: ['by the time', 'before', 'after', 'already', 'by Friday'],
       irregularTitle: '🎯 Past participles (V3) — tap to reveal!',
       irregularHelper: 'After had we use the V3 form. Same list as Present Perfect — practice makes perfect!',
@@ -3875,7 +4362,9 @@ body { font-size: 18px; }
     },
     future_perfect: {
       key: 'future_perfect', name: 'Future Perfect', bucket: 'future',
+      tenseEmoji: '🎯',
       level: 3, pos: 11, icon: ICONS.perf,
+      nodeIcon: '🏁',
       tagline: 'An action that will be finished by a specific point in the future.',
       speech: "Look ahead in time! I show what will be DONE by a future moment.",
       usage: {
@@ -3896,6 +4385,13 @@ body { font-size: 18px; }
         negative: 'I will not have finished by Sunday.',
         question: 'Will you have finished by Sunday?',
       },
+      formBlocks: [
+        [{t:"I",r:'s'},{t:"I",r:'s'},{t:"Will",r:'h'}],
+        [{t:"will",r:'h'},{t:"will",r:'h'},{t:"I",r:'s'}],
+        [{t:"",r:'_'},{t:"not",r:'n'},{t:"",r:'_'}],
+        [{t:"have",r:'h'},{t:"have",r:'h'},{t:"have",r:'h'}],
+        [{t:"played.",r:'v'},{t:"played.",r:'v'},{t:"played?",r:'v'}]
+      ],
       timeWords: ['by next year', 'by 6 pm', 'by then', 'before', 'by the time'],
       examples: [
         { pre: 'I', verb: 'will have finished', post: 'my book by Sunday.', emoji: '📕' },
@@ -3933,7 +4429,9 @@ body { font-size: 18px; }
     /* ============== LEVEL 4 — Perfect Continuous ============== */
     present_perfect_continuous: {
       key: 'present_perfect_continuous', name: 'Present Perfect Continuous', bucket: 'present',
+      tenseEmoji: '🌱',
       level: 4, pos: 8, icon: ICONS.perfCont,
+      nodeIcon: '🌳',
       tagline: 'Actions that started in the past and are STILL going on now.',
       speech: "I'm the longest-running tense! Started in the past AND still happening NOW.",
       usage: {
@@ -3955,6 +4453,13 @@ body { font-size: 18px; }
         negative: 'I have not been studying for two hours.',
         question: 'Have you been studying for two hours?',
       },
+      formBlocks: [
+        [{t:"I",r:'s'},{t:"I",r:'s'},{t:"Have",r:'h'}],
+        [{t:"have",r:'h'},{t:"have",r:'h'},{t:"I",r:'s'}],
+        [{t:"",r:'_'},{t:"not",r:'n'},{t:"",r:'_'}],
+        [{t:"been",r:'h'},{t:"been",r:'h'},{t:"been",r:'h'}],
+        [{t:"playing.",r:'v'},{t:"playing.",r:'v'},{t:"playing?",r:'v'}]
+      ],
       timeWords: ['for', 'since', 'all day', 'lately', 'recently', 'how long'],
       examples: [
         { pre: 'I', verb: 'have been studying', post: 'for two hours.', emoji: '⏰' },
@@ -3990,7 +4495,9 @@ body { font-size: 18px; }
     },
     past_perfect_continuous: {
       key: 'past_perfect_continuous', name: 'Past Perfect Continuous', bucket: 'past',
+      tenseEmoji: '⌛',
       level: 4, pos: 1, icon: ICONS.perfCont,
+      nodeIcon: '🦴',
       tagline: 'A past action that had been going on for a while before something else happened.',
       speech: "I'm the deepest past! Action was already in progress for a while when something else happened.",
       usage: {
@@ -4011,6 +4518,13 @@ body { font-size: 18px; }
         negative: 'I had not been waiting long when she arrived.',
         question: 'Had you been waiting long when she arrived?',
       },
+      formBlocks: [
+        [{t:"I",r:'s'},{t:"I",r:'s'},{t:"Had",r:'h'}],
+        [{t:"had",r:'h'},{t:"had",r:'h'},{t:"I",r:'s'}],
+        [{t:"",r:'_'},{t:"not",r:'n'},{t:"",r:'_'}],
+        [{t:"been",r:'h'},{t:"been",r:'h'},{t:"been",r:'h'}],
+        [{t:"playing.",r:'v'},{t:"playing.",r:'v'},{t:"playing?",r:'v'}]
+      ],
       timeWords: ['for', 'since', 'by the time', 'before', 'all morning'],
       examples: [
         { pre: 'I', verb: 'had been studying', post: 'for hours when she called.', emoji: '📖' },
@@ -4046,7 +4560,9 @@ body { font-size: 18px; }
     },
     future_perfect_continuous: {
       key: 'future_perfect_continuous', name: 'Future Perfect Continuous', bucket: 'future',
+      tenseEmoji: '⭐',
       level: 4, pos: 12, icon: ICONS.perfCont,
+      nodeIcon: '⭐',
       tagline: 'An action that will have been going on for some time by a future point.',
       speech: "I'm the trickiest! By a future time, this action will have been happening for a while.",
       usage: {
@@ -4066,6 +4582,14 @@ body { font-size: 18px; }
         negative: 'By next year I will not have been studying for ten years.',
         question: 'By next year, will you have been studying for ten years?',
       },
+      formBlocks: [
+        [{t:"I",r:'s'},{t:"I",r:'s'},{t:"Will",r:'h'}],
+        [{t:"will",r:'h'},{t:"will",r:'h'},{t:"I",r:'s'}],
+        [{t:"",r:'_'},{t:"not",r:'n'},{t:"",r:'_'}],
+        [{t:"have",r:'h'},{t:"have",r:'h'},{t:"have",r:'h'}],
+        [{t:"been",r:'h'},{t:"been",r:'h'},{t:"been",r:'h'}],
+        [{t:"playing.",r:'v'},{t:"playing.",r:'v'},{t:"playing?",r:'v'}]
+      ],
       timeWords: ['by next year for', 'by then for', 'by the time', 'for ___ by'],
       examples: [
         { pre: 'By next year I', verb: 'will have been studying', post: 'English for 10 years.', emoji: '🌍' },
@@ -4601,14 +5125,22 @@ body { font-size: 18px; }
       btn.style.left = stationPct(i) + '%';
       btn.dataset.tense = key;
 
-      // Difficulty stars based on level (1-4)
-      const diffStars = '⭐'.repeat(t.level);
-
-      const inner = mastered
-        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
-        : !unlocked
-          ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="11" width="12" height="9" rx="1.5"/><path d="M9 11V8a3 3 0 0 1 6 0v3"/></svg>'
-          : `<span class="hwy-station-num">${diffStars}</span>`;
+      // Build the inner circle content based on station state
+      let inner;
+      if (mastered) {
+        // Mastered: tense emoji on a gold-glowing disc with a spinning ring overlay + sparkle
+        inner = `
+          <span class="hwy-station-ring"></span>
+          <span class="hwy-station-emoji">${t.tenseEmoji || '⭐'}</span>
+          <span class="hwy-station-sparkle">✨</span>
+        `;
+      } else if (!unlocked) {
+        // Locked: padlock icon
+        inner = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="11" width="12" height="9" rx="1.5"/><path d="M9 11V8a3 3 0 0 1 6 0v3"/></svg>';
+      } else {
+        // Unlocked: the tense's unique emoji identity
+        inner = `<span class="hwy-station-emoji">${t.tenseEmoji || '⭐'}</span>`;
+      }
 
       btn.innerHTML = `
         <span class="hwy-station-label">${shortenTenseName(t.name)}</span>
@@ -4690,7 +5222,16 @@ body { font-size: 18px; }
     const cta = $('#now-cta');
     const ctaText = $('#now-cta-text');
 
-    if (eyebrow) eyebrow.textContent = `Level ${t.level} · ${t.bucket.charAt(0).toUpperCase() + t.bucket.slice(1)} world`;
+    if (eyebrow) {
+      const world = WORLDS[t.bucket];
+      eyebrow.innerHTML = `
+        <span class="now-world-badge bucket-${t.bucket}">
+          ${world.emoji} ${world.name}
+        </span>
+        <span class="now-eyebrow-divider">·</span>
+        Level ${t.level}
+      `;
+    }
     if (title) title.textContent = t.name;
     if (tagline) tagline.textContent = t.tagline;
 
@@ -4699,6 +5240,21 @@ body { font-size: 18px; }
     const stars = Object.values(tenseStarsObj).reduce((m, v) => Math.max(m, v || 0), 0);
     if (starsHost) {
       starsHost.innerHTML = [0,1,2].map(n => `<span class="hwy-star ${n < stars ? 'on' : ''}"></span>`).join('') + ` <span class="now-stars-text">${stars}/3 stars</span>`;
+    }
+
+    // Meta chips: difficulty (level), duration estimate, rewards preview
+    const metaHost = $('#now-meta');
+    if (metaHost) {
+      const diffStars = '⭐'.repeat(t.level);
+      // Rough duration estimate: ~25 sec per question, MCQ has 8 items
+      const mins = Math.max(2, Math.ceil((t.mcq?.length || 8) * 25 / 60));
+      const mastered = isMastered(t.key);
+      const rewardText = mastered ? 'Replay for fun' : '🏆 Master this tense';
+      metaHost.innerHTML = `
+        <span class="now-chip"><span class="now-chip-icon">${diffStars}</span><span>Level ${t.level}</span></span>
+        <span class="now-chip"><span class="now-chip-icon">⏱</span><span>~${mins} min</span></span>
+        <span class="now-chip"><span class="now-chip-icon">🎁</span><span>${rewardText}</span></span>
+      `;
     }
 
     if (cta) {
@@ -4934,6 +5490,244 @@ body { font-size: 18px; }
     return '📌';
   }
 
+  /* -----------------------------------------------------------
+     LIVE COMPARISON GRID — interactive subject + verb that
+     regenerates all three forms in real time.
+     ----------------------------------------------------------- */
+  // 5 kid-friendly verbs with all conjugations the grid needs
+  const LIVE_VERBS = {
+    play:  { base: 'play',  past: 'played',  ing: 'playing',  v3: 'played',  third: 'plays' },
+    eat:   { base: 'eat',   past: 'ate',     ing: 'eating',   v3: 'eaten',   third: 'eats' },
+    run:   { base: 'run',   past: 'ran',     ing: 'running',  v3: 'run',     third: 'runs' },
+    go:    { base: 'go',    past: 'went',    ing: 'going',    v3: 'gone',    third: 'goes' },
+    study: { base: 'study', past: 'studied', ing: 'studying', v3: 'studied', third: 'studies' },
+  };
+  // Subjects with capitalization rules
+  const SUBJ_INFO = {
+    I:    { lower: 'I',    cap: 'I',    third: false },
+    you:  { lower: 'you',  cap: 'You',  third: false },
+    he:   { lower: 'he',   cap: 'He',   third: true  },
+    she:  { lower: 'she',  cap: 'She',  third: true  },
+    we:   { lower: 'we',   cap: 'We',   third: false },
+    they: { lower: 'they', cap: 'They', third: false },
+  };
+  const ROLE_LABELS = { s: 'Subject', h: 'Helper', n: 'Not', v: 'Verb', o: 'Object' };
+
+  function _cap(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
+
+  // Builds the slot data for a given tense + subject + verb.
+  // Each slot is [positive-cell, negative-cell, question-cell], cells are {t,r}.
+  function buildFormBlocks(tenseKey, subjKey, verbKey) {
+    const s = SUBJ_INFO[subjKey] || SUBJ_INFO.I;
+    const v = LIVE_VERBS[verbKey] || LIVE_VERBS.play;
+    const third = s.third;
+    const gap = { t: '', r: '_' };
+
+    switch (tenseKey) {
+      case 'present_simple': {
+        const aux = third ? 'does' : 'do';
+        const posVerb = third ? v.third : v.base;
+        return [
+          [{t:s.cap,r:'s'}, {t:s.cap,r:'s'}, {t:_cap(aux),r:'h'}],
+          [gap,             {t:aux,r:'h'},   {t:s.lower,r:'s'}],
+          [gap,             {t:'not',r:'n'}, gap],
+          [{t:posVerb+'.',r:'v'}, {t:v.base+'.',r:'v'}, {t:v.base+'?',r:'v'}],
+        ];
+      }
+      case 'past_simple':
+        return [
+          [{t:s.cap,r:'s'}, {t:s.cap,r:'s'}, {t:'Did',r:'h'}],
+          [gap,             {t:'did',r:'h'}, {t:s.lower,r:'s'}],
+          [gap,             {t:'not',r:'n'}, gap],
+          [{t:v.past+'.',r:'v'}, {t:v.base+'.',r:'v'}, {t:v.base+'?',r:'v'}],
+        ];
+      case 'future_simple':
+        return [
+          [{t:s.cap,r:'s'},  {t:s.cap,r:'s'},  {t:'Will',r:'h'}],
+          [{t:'will',r:'h'}, {t:'will',r:'h'}, {t:s.lower,r:'s'}],
+          [gap,              {t:'not',r:'n'},  gap],
+          [{t:v.base+'.',r:'v'}, {t:v.base+'.',r:'v'}, {t:v.base+'?',r:'v'}],
+        ];
+      case 'present_continuous': {
+        const aux = ({I:'am',you:'are',he:'is',she:'is',we:'are',they:'are'})[subjKey];
+        return [
+          [{t:s.cap,r:'s'}, {t:s.cap,r:'s'}, {t:_cap(aux),r:'h'}],
+          [{t:aux,r:'h'},   {t:aux,r:'h'},   {t:s.lower,r:'s'}],
+          [gap,             {t:'not',r:'n'}, gap],
+          [{t:v.ing+'.',r:'v'}, {t:v.ing+'.',r:'v'}, {t:v.ing+'?',r:'v'}],
+        ];
+      }
+      case 'past_continuous': {
+        const aux = ({I:'was',you:'were',he:'was',she:'was',we:'were',they:'were'})[subjKey];
+        return [
+          [{t:s.cap,r:'s'}, {t:s.cap,r:'s'}, {t:_cap(aux),r:'h'}],
+          [{t:aux,r:'h'},   {t:aux,r:'h'},   {t:s.lower,r:'s'}],
+          [gap,             {t:'not',r:'n'}, gap],
+          [{t:v.ing+'.',r:'v'}, {t:v.ing+'.',r:'v'}, {t:v.ing+'?',r:'v'}],
+        ];
+      }
+      case 'future_continuous':
+        return [
+          [{t:s.cap,r:'s'},  {t:s.cap,r:'s'},  {t:'Will',r:'h'}],
+          [{t:'will',r:'h'}, {t:'will',r:'h'}, {t:s.lower,r:'s'}],
+          [gap,              {t:'not',r:'n'},  gap],
+          [{t:'be',r:'h'},   {t:'be',r:'h'},   {t:'be',r:'h'}],
+          [{t:v.ing+'.',r:'v'}, {t:v.ing+'.',r:'v'}, {t:v.ing+'?',r:'v'}],
+        ];
+      case 'present_perfect': {
+        const aux = third ? 'has' : 'have';
+        return [
+          [{t:s.cap,r:'s'}, {t:s.cap,r:'s'}, {t:_cap(aux),r:'h'}],
+          [{t:aux,r:'h'},   {t:aux,r:'h'},   {t:s.lower,r:'s'}],
+          [gap,             {t:'not',r:'n'}, gap],
+          [{t:v.v3+'.',r:'v'}, {t:v.v3+'.',r:'v'}, {t:v.v3+'?',r:'v'}],
+        ];
+      }
+      case 'past_perfect':
+        return [
+          [{t:s.cap,r:'s'}, {t:s.cap,r:'s'}, {t:'Had',r:'h'}],
+          [{t:'had',r:'h'}, {t:'had',r:'h'}, {t:s.lower,r:'s'}],
+          [gap,             {t:'not',r:'n'}, gap],
+          [{t:v.v3+'.',r:'v'}, {t:v.v3+'.',r:'v'}, {t:v.v3+'?',r:'v'}],
+        ];
+      case 'future_perfect':
+        return [
+          [{t:s.cap,r:'s'},  {t:s.cap,r:'s'},  {t:'Will',r:'h'}],
+          [{t:'will',r:'h'}, {t:'will',r:'h'}, {t:s.lower,r:'s'}],
+          [gap,              {t:'not',r:'n'},  gap],
+          [{t:'have',r:'h'}, {t:'have',r:'h'}, {t:'have',r:'h'}],
+          [{t:v.v3+'.',r:'v'}, {t:v.v3+'.',r:'v'}, {t:v.v3+'?',r:'v'}],
+        ];
+      case 'present_perfect_continuous': {
+        const aux = third ? 'has' : 'have';
+        return [
+          [{t:s.cap,r:'s'}, {t:s.cap,r:'s'}, {t:_cap(aux),r:'h'}],
+          [{t:aux,r:'h'},   {t:aux,r:'h'},   {t:s.lower,r:'s'}],
+          [gap,             {t:'not',r:'n'}, gap],
+          [{t:'been',r:'h'},{t:'been',r:'h'},{t:'been',r:'h'}],
+          [{t:v.ing+'.',r:'v'}, {t:v.ing+'.',r:'v'}, {t:v.ing+'?',r:'v'}],
+        ];
+      }
+      case 'past_perfect_continuous':
+        return [
+          [{t:s.cap,r:'s'}, {t:s.cap,r:'s'}, {t:'Had',r:'h'}],
+          [{t:'had',r:'h'}, {t:'had',r:'h'}, {t:s.lower,r:'s'}],
+          [gap,             {t:'not',r:'n'}, gap],
+          [{t:'been',r:'h'},{t:'been',r:'h'},{t:'been',r:'h'}],
+          [{t:v.ing+'.',r:'v'}, {t:v.ing+'.',r:'v'}, {t:v.ing+'?',r:'v'}],
+        ];
+      case 'future_perfect_continuous':
+        return [
+          [{t:s.cap,r:'s'},  {t:s.cap,r:'s'},  {t:'Will',r:'h'}],
+          [{t:'will',r:'h'}, {t:'will',r:'h'}, {t:s.lower,r:'s'}],
+          [gap,              {t:'not',r:'n'},  gap],
+          [{t:'have',r:'h'}, {t:'have',r:'h'}, {t:'have',r:'h'}],
+          [{t:'been',r:'h'}, {t:'been',r:'h'}, {t:'been',r:'h'}],
+          [{t:v.ing+'.',r:'v'}, {t:v.ing+'.',r:'v'}, {t:v.ing+'?',r:'v'}],
+        ];
+    }
+    return null;
+  }
+
+  // Render the live comparison grid with subject + verb pickers above.
+  // Re-render itself on chip click; staggered animations replay each time.
+  function renderLiveFormGrid(t) {
+    const host = $('#lesson-forms');
+    host.className = 'form-grid-host';
+    const subj = session.formSubject || 'I';
+    const verb = session.formVerb || 'play';
+    const slots = buildFormBlocks(t.key, subj, verb);
+    if (!slots) {
+      // Should never happen given all 12 tenses are covered, but graceful fallback:
+      host.innerHTML = `<div class="form-grid-hint">Comparison grid unavailable for this tense.</div>`;
+      return;
+    }
+    const N = slots.length;
+
+    // Slot labels: only when ALL non-gap cells in a slot share role
+    const slotLabels = slots.map(slot => {
+      const roles = [...new Set(slot.map(c => c.r).filter(r => r !== '_'))];
+      return (roles.length === 1) ? ROLE_LABELS[roles[0]] : '';
+    });
+
+    const ROWS = [
+      { idx: 0, key: 'pos', icon: '✓', label: 'Say it',  sub: 'positive' },
+      { idx: 1, key: 'neg', icon: '✗', label: 'Flip it', sub: 'negative' },
+      { idx: 2, key: 'que', icon: '?', label: 'Ask it',  sub: 'question' },
+    ];
+
+    let rowsHTML = '';
+    ROWS.forEach((row, r) => {
+      rowsHTML += `<div class="form-grid-label row-${row.key}">
+        <span class="form-grid-icon">${row.icon}</span>
+        <span class="form-grid-label-text">${row.label}</span>
+        <span class="form-grid-sub">${row.sub}</span>
+      </div>`;
+      slots.forEach((slot, slotIdx) => {
+        const cell = slot[row.idx];
+        const delay = (r * 0.10 + slotIdx * 0.035).toFixed(2);
+        // is-moved: the helper at front of question, and the subject that moved to slot 2 of question
+        const isMovedHelper = (row.idx === 2 && cell.r === 'h' && slotIdx === 0);
+        const isMovedSubj   = (row.idx === 2 && cell.r === 's' && slotIdx > 0);
+        const moveClass = (isMovedHelper || isMovedSubj) ? ' is-moved' : '';
+        // Placeholder: in empty cells of consistent-role slots, show the role label faintly
+        const placeholder = (cell.r === '_' && slotLabels[slotIdx])
+          ? `<span class="form-tile-placeholder">${slotLabels[slotIdx]}</span>`
+          : '';
+        rowsHTML += `<div class="form-tile role-${cell.r}${moveClass}" style="animation-delay: ${delay}s">${cell.t || placeholder}</div>`;
+      });
+      // Transform arrow between rows (after pos and after neg, not after que)
+      if (r < ROWS.length - 1) {
+        const arrowText = r === 0 ? 'add "not"' : 'flip helper + subject';
+        rowsHTML += `<div class="form-grid-arrow"><span class="arrow-icon">↓</span><span class="arrow-text">${arrowText}</span></div>`;
+      }
+    });
+
+    const subjChips = Object.keys(SUBJ_INFO).map(k =>
+      `<button class="form-chip${k === subj ? ' active' : ''}" data-subj="${k}">${SUBJ_INFO[k].cap}</button>`
+    ).join('');
+    const verbChips = Object.keys(LIVE_VERBS).map(k =>
+      `<button class="form-chip${k === verb ? ' active' : ''}" data-verb="${k}">${k}</button>`
+    ).join('');
+
+    host.innerHTML = `
+      <div class="form-controls">
+        <div class="form-control-group">
+          <span class="form-control-label">Subject</span>
+          <div class="form-chip-row">${subjChips}</div>
+        </div>
+        <div class="form-control-group">
+          <span class="form-control-label">Verb</span>
+          <div class="form-chip-row">${verbChips}</div>
+        </div>
+      </div>
+      <div class="form-grid" style="--slot-count: ${N};">${rowsHTML}</div>
+      <div class="form-grid-legend">
+        <span class="legend-item"><span class="legend-dot role-s"></span>Subject</span>
+        <span class="legend-item"><span class="legend-dot role-h"></span>Helper</span>
+        <span class="legend-item"><span class="legend-dot role-n"></span>Not</span>
+        <span class="legend-item"><span class="legend-dot role-v"></span>Verb</span>
+      </div>
+      <div class="form-grid-hint">💡 Try changing the subject or verb — watch all three sentences update at once!</div>
+    `;
+
+    // Wire up the pickers
+    host.querySelectorAll('[data-subj]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        session.formSubject = btn.dataset.subj;
+        renderLiveFormGrid(t);
+        beep && beep('click');
+      });
+    });
+    host.querySelectorAll('[data-verb]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        session.formVerb = btn.dataset.verb;
+        renderLiveFormGrid(t);
+        beep && beep('click');
+      });
+    });
+  }
+
   function openLesson(key) {
     if (!isUnlocked(key)) return;
     state.hasStarted = true;
@@ -4988,28 +5782,10 @@ body { font-size: 18px; }
     structInner += `</div>`;
     structHost.innerHTML = structInner;
 
-    // Forms — game-style labels: "Say it" / "Flip it" / "Ask it"
-    const formsHost = $('#lesson-forms');
-    formsHost.innerHTML = `
-      <div class="form-card positive">
-        <div class="form-card-icon">${ICONS.plus}</div>
-        <div class="form-card-label">Say it</div>
-        <div class="form-card-sub">positive</div>
-        <div class="form-card-text">${t.forms.positive}</div>
-      </div>
-      <div class="form-card negative">
-        <div class="form-card-icon">${ICONS.minus}</div>
-        <div class="form-card-label">Flip it</div>
-        <div class="form-card-sub">negative</div>
-        <div class="form-card-text">${t.forms.negative}</div>
-      </div>
-      <div class="form-card question">
-        <div class="form-card-icon">${ICONS.question}</div>
-        <div class="form-card-label">Ask it</div>
-        <div class="form-card-sub">question</div>
-        <div class="form-card-text">${t.forms.question}</div>
-      </div>
-    `;
+    // Forms — live comparison grid with subject + verb pickers
+    session.formSubject = 'I';
+    session.formVerb = 'play';
+    renderLiveFormGrid(t);
 
     // Time words — render as colorful emoji chips matching the tense's era
     const chipHost = $('#lesson-chips');
